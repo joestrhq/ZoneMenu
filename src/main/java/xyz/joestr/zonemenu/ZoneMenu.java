@@ -33,8 +33,8 @@ import xyz.joestr.zonemenu.tabcomplete.ZoneTabComplete;
 
 public class ZoneMenu extends JavaPlugin implements Listener {
 	
-	public YMLDelegate config = new YMLDelegate(this, "config", "resources/config.yml");
-	public YMLDelegate id = new YMLDelegate(this, "id", "resources/id.yml");
+	public YMLDelegate config = new YMLDelegate(this, "config", "config.yml");
+	public YMLDelegate id = new YMLDelegate(this, "id", "id.yml");
 	
 	public ArrayList<YMLDelegate> ymldelegates = new ArrayList<YMLDelegate>();
 	
