@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>xyz.joestr</groupId>
+  <artifactId>zonemenu-mvn</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>ZoneMenu-Maven</name>
+  <description>ZoneMenu-Maven</description>
+  <repositories>
+    <repository>
+      <id>spigot-repo</id>
+      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+    </repository>
+    <repository>
+        <id>sk89q-repo</id>
+        <url>http://maven.sk89q.com/repo/</url>
+    </repository>
+  </repositories>
+  <dependencies>
+    <!--Spigot API-->
+    <dependency>
+      <groupId>org.spigotmc</groupId>
+      <artifactId>spigot-api</artifactId>
+      <version>1.12.1-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <!--Bukkit API-->
+    <!--<dependency>
+      <groupId>org.bukkit</groupId>
+      <artifactId>bukkit</artifactId>
+      <version>1.12.1-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+	</dependency>-->
+    <dependency>
+    	<groupId>com.sk89q.worldguard</groupId>
+    	<artifactId>worldguard-legacy</artifactId>
+    	<version>6.1.2</version>
+    	<scope>provided</scope>
+    </dependency>
+    <dependency>
+    	<groupId>com.sk89q.worldedit</groupId>
+    	<artifactId>worldedit-bukkit</artifactId>
+    	<version>6.1.2</version>
+    	<scope>provided</scope>
+    </dependency>
+  </dependencies>
+</project>

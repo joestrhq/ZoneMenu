@@ -1,0 +1,24 @@
+name: ZoneMenu
+version: 0.0.4
+description: ZoneMenu
+author: joestr
+authors: [Doskozil, SpamCapsWerbung, _joestr_]
+website: https://repo.joestr.xyz/ZoneMenu
+
+main: xyz.joestr.zonemenu.ZoneMenu
+database: false
+depend: [WorldEdit, WorldGuard]
+
+commands:
+  zone:
+    description: List all possible sub-commands.
+    #permission: zonemenu.*
+    #permission-message: You need zonemenu.*.
+    usage: Please use /zone.
+    
+permissions:
+  zonemenu.*:
+    description: Permission to list all possible sub-commands.
+    default: true
+    #children:
+    #  zonemenu.*: true
