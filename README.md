@@ -1,3 +1,6 @@
+# ZoneMenu  
+Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players.
+
 **Important**  
 This plugin requires [WorldEdit](https://github.com/sk89q/WorldEdit) and [WorldGuard](https://github.com/sk89q/WorldGuard)!
 
