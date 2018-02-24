@@ -46,4 +46,4 @@ public class ActionBarMessageEvent extends Event {
 		this.cancelled = cancelled;
 	}
 }
-//--- end
+// --- end

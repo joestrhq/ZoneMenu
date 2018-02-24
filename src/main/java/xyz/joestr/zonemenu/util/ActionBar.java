@@ -13,14 +13,18 @@ public class ActionBar {
 	public static boolean works = true;
 	static boolean useOldMethods = false;
 	public static Plugin plugin;
-	
+
 	public static void sendActionBar(Player player, String message) {
-		if (!player.isOnline()) { return; }
-		
+		if (!player.isOnline()) {
+			return;
+		}
+
 		ActionBarMessageEvent actionBarMessageEvent = new ActionBarMessageEvent(player, message);
 		Bukkit.getPluginManager().callEvent(actionBarMessageEvent);
-		
-		if (actionBarMessageEvent.isCancelled()) { return; }
+
+		if (actionBarMessageEvent.isCancelled()) {
+			return;
+		}
 
 		if (nmsver.startsWith("v1_12_")) {
 			sendActionBarPost112(player, message);
@@ -30,7 +34,9 @@ public class ActionBar {
 	}
 
 	private static void sendActionBarPost112(Player player, String message) {
-		if (!player.isOnline()) { return; }
+		if (!player.isOnline()) {
+			return;
+		}
 
 		try {
 			Class<?> craftPlayerClass = Class.forName("org.bukkit.craftbukkit." + nmsver + ".entity.CraftPlayer");
@@ -43,13 +49,15 @@ public class ActionBar {
 			Class<?> chatMessageTypeClass = Class.forName("net.minecraft.server." + nmsver + ".ChatMessageType");
 			Object[] chatMessageTypes = chatMessageTypeClass.getEnumConstants();
 			Object chatMessageType = null;
-			
+
 			for (Object obj : chatMessageTypes) {
-				if (obj.toString().equals("GAME_INFO")) { chatMessageType = obj; }
+				if (obj.toString().equals("GAME_INFO")) {
+					chatMessageType = obj;
+				}
 			}
-			
-			Object o = c2.getConstructor(new Class<?>[]{String.class}).newInstance(message);
-			ppoc = c4.getConstructor(new Class<?>[]{c3, chatMessageTypeClass}).newInstance(o, chatMessageType);
+
+			Object o = c2.getConstructor(new Class<?>[] { String.class }).newInstance(message);
+			ppoc = c4.getConstructor(new Class<?>[] { c3, chatMessageTypeClass }).newInstance(o, chatMessageType);
 			Method m1 = craftPlayerClass.getDeclaredMethod("getHandle");
 			Object h = m1.invoke(craftPlayer);
 			Field f1 = h.getClass().getDeclaredField("playerConnection");
@@ -63,7 +71,9 @@ public class ActionBar {
 	}
 
 	private static void sendActionBarPre112(Player player, String message) {
-		if (!player.isOnline()) { return; }
+		if (!player.isOnline()) {
+			return;
+		}
 
 		try {
 			Class<?> craftPlayerClass = Class.forName("org.bukkit.craftbukkit." + nmsver + ".entity.CraftPlayer");
@@ -71,20 +81,20 @@ public class ActionBar {
 			Object ppoc;
 			Class<?> c4 = Class.forName("net.minecraft.server." + nmsver + ".PacketPlayOutChat");
 			Class<?> c5 = Class.forName("net.minecraft.server." + nmsver + ".Packet");
-			
+
 			if (useOldMethods) {
 				Class<?> c2 = Class.forName("net.minecraft.server." + nmsver + ".ChatSerializer");
 				Class<?> c3 = Class.forName("net.minecraft.server." + nmsver + ".IChatBaseComponent");
 				Method m3 = c2.getDeclaredMethod("a", String.class);
 				Object cbc = c3.cast(m3.invoke(c2, "{\"text\": \"" + message + "\"}"));
-				ppoc = c4.getConstructor(new Class<?>[]{c3, byte.class}).newInstance(cbc, (byte) 2);
+				ppoc = c4.getConstructor(new Class<?>[] { c3, byte.class }).newInstance(cbc, (byte) 2);
 			} else {
 				Class<?> c2 = Class.forName("net.minecraft.server." + nmsver + ".ChatComponentText");
 				Class<?> c3 = Class.forName("net.minecraft.server." + nmsver + ".IChatBaseComponent");
-				Object o = c2.getConstructor(new Class<?>[]{String.class}).newInstance(message);
-				ppoc = c4.getConstructor(new Class<?>[]{c3, byte.class}).newInstance(o, (byte) 2);
+				Object o = c2.getConstructor(new Class<?>[] { String.class }).newInstance(message);
+				ppoc = c4.getConstructor(new Class<?>[] { c3, byte.class }).newInstance(o, (byte) 2);
 			}
-			
+
 			Method m1 = craftPlayerClass.getDeclaredMethod("getHandle");
 			Object h = m1.invoke(craftPlayer);
 			Field f1 = h.getClass().getDeclaredField("playerConnection");
@@ -102,21 +112,29 @@ public class ActionBar {
 
 		if (duration >= 0) {
 			new BukkitRunnable() {
-				public void run() { sendActionBar(player, ""); }
+				public void run() {
+					sendActionBar(player, "");
+				}
 			}.runTaskLater(plugin, duration + 1);
 		}
 
 		while (duration > 40) {
 			duration -= 40;
 			new BukkitRunnable() {
-				public void run() { sendActionBar(player, message); }
+				public void run() {
+					sendActionBar(player, message);
+				}
 			}.runTaskLater(plugin, (long) duration);
 		}
 	}
 
-	public static void sendActionBarToAllPlayers(String message) { sendActionBarToAllPlayers(message, -1); }
+	public static void sendActionBarToAllPlayers(String message) {
+		sendActionBarToAllPlayers(message, -1);
+	}
 
 	public static void sendActionBarToAllPlayers(String message, int duration) {
-		for (Player p : Bukkit.getOnlinePlayers()) { sendActionBar(p, message, duration); }
+		for (Player p : Bukkit.getOnlinePlayers()) {
+			sendActionBar(p, message, duration);
+		}
 	}
 }
