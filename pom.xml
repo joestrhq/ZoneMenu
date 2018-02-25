@@ -1,10 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>xyz.joestr</groupId>
-  <artifactId>zonemenu-mvn</artifactId>
+  <artifactId>zonemenu</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>ZoneMenu-Maven</name>
-  <description>ZoneMenu-Maven</description>
+  <name>ZoneMenu</name>
   <repositories>
     <repository>
       <id>spigot-repo</id>
@@ -43,4 +42,6 @@
     	<scope>provided</scope>
     </dependency>
   </dependencies>
+  <description>Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)</description>
+  <url>https://repo.joestr.xyz/zonemenu</url>
 </project>
