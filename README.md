@@ -116,13 +116,13 @@ id: <Map>
 *console_msg: \<String\>* (Replaced by *console_message: \<String\>* in version 0.0.4)  
 *zone_id_search: \<String\>* (Replaced by *zone_wait_message: \<String\>* in version 0.0.4)  
 *zone_id: \<String\>* (Exported to *id.yml* in version 0.0.4)  
-*zone_id_counter: \<Int\>* (Exported to *id.yml* in version 0.0.4)  
+*zone_id_counter: \<Int\>* (Exported to *id.yml* in version 0.0.4)
 
 **Note**  
 Since version 0.0.3 missing config entries will be automatically placed while older versions (0.0.1, 0.0.2) don't do that.
-  
+
 **Version history**  
 0.0.1; 0.0.2; 0.0.3; 0.0.4; build_5 *latest*
 
-**Builds**
+**Builds**  
 Builds are available [here](https://jenkins.joestr.xyz/job/ZoneMenu/).
