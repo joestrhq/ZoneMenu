@@ -93,7 +93,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 		// Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GOLD +
 		// "[ZoneMenu] Deactivated.");
 	}
-
+	
+	// Get Worldedit here
 	public WorldEditPlugin getWorldEdit() {
 
 		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldEdit");
@@ -108,7 +109,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
 		return (WorldEditPlugin) plugin;
 	}
-
+	
+	// Get worldguard here
 	public WorldGuardPlugin getWorldGuard() {
 
 		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
@@ -123,18 +125,21 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
 		return (WorldGuardPlugin) plugin;
 	}
-
+	
+	// <Alternative colorcode> -> §
 	public String colorCode(String s, String t) {
 		return t.replace(s, "§");
 	}
-
+	
+	// § -> <Alternative colorcode>
 	public String alternaticeColorCode(String s, String t) {
 		return t.replace("§", s);
 	}
 
+	// Reset a shown beacon via a blockchange
 	@SuppressWarnings({ "deprecation" })
 	public void resetCorner(Player player, Map<String, Location> map) {
-
+		
 		if (!map.containsKey(player.getName())) {
 			return;
 		}
@@ -169,7 +174,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 			}
 		}
 	}
-
+	
+	// Show player a beacon (blockchange)
 	// From: https://bukkit.org/threads/lib-beacon-creator.179399/ (modified)
 	// --- start
 	@SuppressWarnings("deprecation")
@@ -210,6 +216,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	// --- end
 
 	@SuppressWarnings("deprecation")
+	// Send a blockchange with a slight delay (10 ticks)
 	public void laterSet(final Location location, final Player player, final Material material, final byte data) {
 
 		// 10 ticks delay (just for safety)
@@ -220,17 +227,20 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 			}
 		}, 10L);
 	}
-
+	
+	// Calculate a difference between two numbers
 	public int difference(int num1, int num2) {
 		return num1 > num2 ? num1 - num2 : num2 - num1;
 	}
-
+	
+	// Get a players region
 	public ProtectedRegion getRegion(Player player) throws InterruptedException, ExecutionException {
 
 		return this.getRegion(player, true);
 	}
-
-	public ProtectedRegion getRegion(final Player player, Boolean showmessage)
+	
+	// Get a players region an control whether you like to show find a message during search or not
+	public ProtectedRegion getRegion(final Player player, boolean showmessage)
 			throws InterruptedException, ExecutionException {
 
 		if (showmessage) {
@@ -275,7 +285,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
 		return p;
 	}
-
+	
+	// Get a list of players regions an control if you want him to show a message during search or not
 	public List<ProtectedRegion> getRegions(final Player player, Boolean showmessage)
 			throws InterruptedException, ExecutionException {
 

@@ -11,9 +11,13 @@
     </repository>
     <repository>
         <id>sk89q-repo</id>
-        <url>http://maven.sk89q.com/repo/</url>
+        <url>http://repo.joestr.xyz/zonemenu/</url>
     </repository>
-  </repositories>
+  <repository>
+    <id>Internal company repository</id>
+    <url>file://${basedir}/lib</url>
+  </repository>
+</repositories>
   <dependencies>
     <!--Spigot API-->
     <dependency>
@@ -30,15 +34,15 @@
       <scope>provided</scope>
 	</dependency>-->
     <dependency>
-    	<groupId>com.sk89q.worldguard</groupId>
-    	<artifactId>worldguard-legacy</artifactId>
-    	<version>6.1.2</version>
+    	<groupId>com.sk89q</groupId>
+    	<artifactId>worldguard</artifactId>
+    	<version>6.2.1</version>
     	<scope>provided</scope>
     </dependency>
     <dependency>
-    	<groupId>com.sk89q.worldedit</groupId>
+    	<groupId>com.sk89q</groupId>
     	<artifactId>worldedit-bukkit</artifactId>
-    	<version>6.1.2</version>
+    	<version>6.1.7.3</version>
     	<scope>provided</scope>
     </dependency>
   </dependencies>

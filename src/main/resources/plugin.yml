@@ -1,9 +1,9 @@
 name: ZoneMenu
-version: 0.0.4
+version: build_5
 description: ZoneMenu
 author: joestr
-authors: [Doskozil, SpamCapsWerbung, _joestr_]
-website: https://repo.joestr.xyz/ZoneMenu
+authors: [Joe83, Joe84, 9YB]
+website: https://repo.joestr.xyz/zonemenu
 
 main: xyz.joestr.zonemenu.ZoneMenu
 database: false

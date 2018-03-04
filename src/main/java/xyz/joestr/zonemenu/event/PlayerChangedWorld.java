@@ -18,7 +18,8 @@ public class PlayerChangedWorld implements Listener {
 
 	@EventHandler
 	public void onChangedWorld(PlayerChangedWorldEvent event) {
-
+		
+		// Player changed world, so clean up all except tool-map
 		// plugin.Tool.remove(event.getPlayer().getName());
 		this.plugin.findlocations.remove(event.getPlayer().getName());
 		this.plugin.worlds.remove(event.getPlayer().getName());

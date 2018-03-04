@@ -4,12 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.WeatherType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import com.sk89q.worldguard.domains.DefaultDomain;
+import com.sk89q.worldguard.protection.flags.BooleanFlag;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.DoubleFlag;
+import com.sk89q.worldguard.protection.flags.EnumFlag;
+import com.sk89q.worldguard.protection.flags.Flag;
+import com.sk89q.worldguard.protection.flags.IntegerFlag;
+import com.sk89q.worldguard.protection.flags.LocationFlag;
+import com.sk89q.worldguard.protection.flags.SetFlag;
+import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.flags.StringFlag;
 
 import xyz.joestr.zonemenu.ZoneMenu;
 
@@ -22,7 +35,9 @@ public class ZoneTabComplete implements TabCompleter {
 	}
 
 	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-
+		
+		// TODO: Comments
+		
 		List<String> list = new ArrayList<String>();
 		List<String> l = new ArrayList<String>();
 
@@ -34,7 +49,6 @@ public class ZoneTabComplete implements TabCompleter {
 			if (!player.hasPermission("zonemenu.*")) {
 				return list;
 			}
-			;
 
 			if (args.length <= 1) {
 
@@ -43,6 +57,7 @@ public class ZoneTabComplete implements TabCompleter {
 				list.add("create");
 				list.add("addmember");
 				list.add("removemember");
+				list.add("flag");
 				list.add("info");
 				list.add("delete");
 				list.add("cancel");
@@ -122,8 +137,84 @@ public class ZoneTabComplete implements TabCompleter {
 						list = l;
 					}
 				}
+				
+				if(args[0].equalsIgnoreCase("flag")) {
+					
+					for(Flag<?> f : DefaultFlag.getDefaultFlags()) {
+						list.add(f.getName());
+					}
+					
+					if (args.length == 2) {
+
+						for (String key : list) {
+
+							if (key.startsWith(args[1])) {
+								l.add(key);
+							}
+						}
+
+						list = l;
+					}
+				}
 
 				return list;
+			}
+			
+			if(args.length <= 3) {
+				
+				if(args[0].equalsIgnoreCase("flag")) {
+					
+					for(Flag<?> f : DefaultFlag.getDefaultFlags()) {
+						if(f.getName().equalsIgnoreCase(args[1])) {
+							if (f instanceof StateFlag) {
+								list.add("allow");list.add("deny");list.add("none");
+							} else if (f instanceof SetFlag<?>) {
+								if(DefaultFlag.DENY_SPAWN.getName().equalsIgnoreCase(((SetFlag<?>) f).getName())) {
+									for(EntityType et : EntityType.values()) {
+										list.add(et.name().toLowerCase());
+									}
+								}
+							} else if (f instanceof StringFlag) {
+								
+							} else if (f instanceof BooleanFlag) {
+								list.add("false");list.add("true");
+							} else if (f instanceof IntegerFlag) {
+								
+							} else if (f instanceof DoubleFlag) {
+								
+							} else if (f instanceof LocationFlag) {
+								list.add("here");
+							} else if (f instanceof EnumFlag<?>) {
+								if (DefaultFlag.GAME_MODE.getName().equalsIgnoreCase(((EnumFlag<?>) f).getName())) {
+									for(GameMode gm : GameMode.values()) {
+										list.add(gm.name().toLowerCase());
+									}
+								} else if (DefaultFlag.WEATHER_LOCK.getName().equalsIgnoreCase(((EnumFlag<?>) f).getName())) {
+									for(WeatherType wt : WeatherType.values()){
+										list.add(wt.name().toLowerCase());
+									}
+								}
+							} else {
+								
+							}
+						}
+					}
+					
+					if (args.length == 3) {
+						
+						for (String key : list) {
+
+							if (key.startsWith(args[2])) {
+								l.add(key);
+							}
+						}
+
+						list = l;
+					}
+				}
+
+				return list;
+				
 			}
 
 			return list;
