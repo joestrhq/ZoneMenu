@@ -14,7 +14,7 @@ config:
   removemember: "&b>> Remove a player from your zone."
   removemember_hover: "&b/zone removemember <Player>"
   flag: "&b>> Modify the flag of your zone."
-  info_hover: "&b/zone flag <Flag> <Flagvalue>"
+  flag_hover: "&b/zone flag <Flag> <Flagvalue>"
   info: "&b>> Get information about your zone."
   info_hover: "&b/zone info"
   delete: "&b>> Delete your zone."
