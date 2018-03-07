@@ -7,7 +7,7 @@ This plugin requires [WorldEdit](https://github.com/sk89q/WorldEdit) and [WorldG
 **ZoneMenu**  
 Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)
 
-**Commands (version 0.0.4)**  
+**Commands (build_5)**  
 */zone* - Display interactive menu.  
 */zone find* - Find zones.  
 */zone sign* - Sign the start- and ending point of your new zone.  
@@ -15,12 +15,14 @@ Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for
 */zone cancel* - Cancel your zone creation.  
 */zone addmember \<player\>* - Add a member to your zone.  
 */zone removemember \<player\>* - Remove a member from your zone.  
+*/zone flag \<Flag\> \<Flagvalue\>* - Change flags of your zone.  
+*/zone info* - Get information about your zone.  
 */zone delete* - Delete your zone.  
 
-**Permissions (version 0.0.4)**  
+**Permissions (build_5)**  
 */zone* - zonemenu.\*
 
-**Config entries (version 0.0.4)**  
+**Config entries (build_5)**  
 **config.yml**  
 ```
 config: <Map>
@@ -38,6 +40,8 @@ config: <Map>
   addmember_hover: <String>
   removemember: <String>
   removemember_hover: <String>
+  flag: <String>
+  flag_hover: <String>
   info: <String>
   info_hover: <String>
   delete: <String>
@@ -61,10 +65,13 @@ config: <Map>
   zone_addmember: <String>
   zone_removemember_unknownplayer: <String>
   zone_removemember: <String>
+  zone_flag_not_found: <String>
+  zone_flag_changed: <String>
   zone_info_id: <String>
   zone_info_priority: <String>
   zone_info_owners: <String>
   zone_info_members: <String>
+  zone_info_flag: <String>
   zone_info_start: <String>
   zone_info_end: <String>
   zone_info_area: <String>
@@ -109,7 +116,13 @@ id: <Map>
 *console_msg: \<String\>* (Replaced by *console_message: \<String\>* in version 0.0.4)  
 *zone_id_search: \<String\>* (Replaced by *zone_wait_message: \<String\>* in version 0.0.4)  
 *zone_id: \<String\>* (Exported to *id.yml* in version 0.0.4)  
-*zone_id_counter: \<Int\>* (Exported to *id.yml* in version 0.0.4)  
+*zone_id_counter: \<Int\>* (Exported to *id.yml* in version 0.0.4)
 
 **Note**  
 Since version 0.0.3 missing config entries will be automatically placed while older versions (0.0.1, 0.0.2) don't do that.
+
+**Version history**  
+0.0.1; 0.0.2; 0.0.3; 0.0.4; build_5 *latest*
+
+**Builds**  
+Builds are available [here](https://jenkins.joestr.xyz/job/ZoneMenu/).
