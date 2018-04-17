@@ -815,7 +815,7 @@ public class ZoneCommand implements CommandExecutor {
 				// /zone delete
 				if ((args[0].equalsIgnoreCase("delete")) && (args.length < 2)) {
 
-					// Initialise new region
+					// Initialise region
 					ProtectedRegion protectedregion = null;
 
 					// Try to get a region

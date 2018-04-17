@@ -14,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import xyz.joestr.zonemenu.ZoneMenu;
-import xyz.joestr.zonemenu.util.ActionBar;
 
 public class PlayerInteract implements Listener {
 
@@ -92,7 +91,7 @@ public class PlayerInteract implements Listener {
 				}
 				
 				// Send player a actionbar message
-				ActionBar.sendActionBar(player, this.plugin.colorCode("&", find1 + find2));
+				plugin.sendActionBarToPlayer(player, this.plugin.colorCode("&", find1 + find2));
 			}
 		}
 
@@ -167,7 +166,7 @@ public class PlayerInteract implements Listener {
 				}
 				
 				// Send actiobar message to the player
-				ActionBar.sendActionBar(player, this.plugin.colorCode("&", sign1));
+				plugin.sendActionBarToPlayer(player, this.plugin.colorCode("&", sign1));
 			} else if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 				
 				// Exact same behaviour as above, except
@@ -219,7 +218,7 @@ public class PlayerInteract implements Listener {
 					sign1 = (String) plugin.config.getMap().get("event_sign_second");
 				}
 
-				ActionBar.sendActionBar(player, this.plugin.colorCode("&", sign1));
+				plugin.sendActionBarToPlayer(player, this.plugin.colorCode("&", sign1));
 			}
 		}
 	}

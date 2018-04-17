@@ -4,6 +4,9 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +26,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import xyz.joestr.zonemenu.util.ActionBar;
 import xyz.joestr.zonemenu.util.YMLDelegate;
 import xyz.joestr.zonemenu.command.ZoneCommand;
 import xyz.joestr.zonemenu.event.PlayerChangedWorld;
@@ -135,6 +137,10 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	public String alternaticeColorCode(String s, String t) {
 		return t.replace("§", s);
 	}
+	
+	public void sendActionBarToPlayer(Player player, String message) {
+		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
+	}
 
 	// Reset a shown beacon via a blockchange
 	@SuppressWarnings({ "deprecation" })
@@ -244,7 +250,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 			throws InterruptedException, ExecutionException {
 
 		if (showmessage) {
-			ActionBar.sendActionBar(player,
+			this.sendActionBarToPlayer(player,
 					this.colorCode("&", (String) this.config.getMap().get("zone_wait_message")));
 		}
 
@@ -291,7 +297,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 			throws InterruptedException, ExecutionException {
 
 		if (showmessage) {
-			ActionBar.sendActionBar(player,
+			this.sendActionBarToPlayer(player,
 					this.colorCode("&", (String) this.config.getMap().get("zone_wait_message")));
 		}
 
