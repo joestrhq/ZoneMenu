@@ -7,7 +7,7 @@ This plugin requires [WorldEdit](https://github.com/sk89q/WorldEdit) and [WorldG
 **ZoneMenu**  
 Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)
 
-**Commands (build_5)**  
+**Commands (since build_5)**  
 */zone* - Display interactive menu.  
 */zone find* - Find zones.  
 */zone sign* - Sign the start- and ending point of your new zone.  
@@ -19,10 +19,10 @@ Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for
 */zone info* - Get information about your zone.  
 */zone delete* - Delete your zone.  
 
-**Permissions (build_5)**  
+**Permissions (since build_5)**  
 */zone* - zonemenu.\*
 
-**Config entries (build_5)**  
+**Config entries (since build_5)**  
 **config.yml**  
 ```
 config: <Map>
@@ -122,7 +122,7 @@ id: <Map>
 Since version 0.0.3 missing config entries will be automatically placed while older versions (0.0.1, 0.0.2) don't do that.
 
 **Version history**  
-0.0.1; 0.0.2; 0.0.3; 0.0.4; build_5 *latest*
+0.0.1; 0.0.2; 0.0.3; 0.0.4; build\_5; *build\_6 (latest)*
 
 **Builds**  
 Builds are available [here](https://jenkins.joestr.xyz/job/ZoneMenu/).
