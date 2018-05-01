@@ -25,8 +25,9 @@ public class PlayerChangedWorld implements Listener {
 		this.plugin.worlds.remove(event.getPlayer().getName());
 		this.plugin.firstlocations.remove(event.getPlayer().getName());
 		this.plugin.secondlocations.remove(event.getPlayer().getName());
-		this.plugin.worldeditplugin.getSession(event.getPlayer())
-				.getRegionSelector(plugin.worldeditplugin.getSession(event.getPlayer()).getSelectionWorld()).clear();
+		if(this.plugin.worldeditplugin.getSession(event.getPlayer()).getSelectionWorld() != null) {
+			this.plugin.worldeditplugin.getSession(event.getPlayer()).getRegionSelector(this.plugin.worldeditplugin.getSession(event.getPlayer()).getSelectionWorld()).clear();
+		}
 		this.plugin.resetCorner(event.getPlayer(), this.plugin.corner1);
 		this.plugin.resetCorner(event.getPlayer(), this.plugin.corner2);
 		this.plugin.resetCorner(event.getPlayer(), this.plugin.corner3);
