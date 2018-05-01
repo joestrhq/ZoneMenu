@@ -351,8 +351,10 @@ public class ZoneCommand implements CommandExecutor {
 					this.plugin.worlds.remove(player.getName());
 					this.plugin.firstlocations.remove(player.getName());
 					this.plugin.secondlocations.remove(player.getName());
-					this.plugin.worldeditplugin.getSession(player)
-							.getRegionSelector(plugin.worldeditplugin.getSession(player).getSelectionWorld()).clear();
+					
+					if(this.plugin.worldeditplugin.getSession(player).getSelectionWorld() != null) {
+						this.plugin.worldeditplugin.getSession(player).getRegionSelector(this.plugin.worldeditplugin.getSession(player).getSelectionWorld()).clear();
+					}
 
 					// Reset beacons
 					this.plugin.resetCorner(player, this.plugin.corner1);
