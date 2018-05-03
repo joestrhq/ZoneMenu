@@ -11,11 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -38,21 +33,21 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	public YMLDelegate config = new YMLDelegate(this, "config", "config.yml");
 	public YMLDelegate id = new YMLDelegate(this, "id", "id.yml");
 
-	public ArrayList<YMLDelegate> ymldelegates = new ArrayList<YMLDelegate>();
+	public List<YMLDelegate> ymldelegates = new ArrayList<YMLDelegate>();
 
 	public WorldEditPlugin worldeditplugin;
 	public WorldGuardPlugin worldguardplugin;
 
-	public HashMap<String, Location> findlocations = new HashMap<String, Location>();
-	public HashMap<String, World> worlds = new HashMap<String, World>();
-	public HashMap<String, Location> firstlocations = new HashMap<String, Location>();
-	public HashMap<String, Location> secondlocations = new HashMap<String, Location>();
-	public HashMap<String, String> tool = new HashMap<String, String>();
-	// public HashMap<String, Object> Config = new HashMap<String, Object>();
-	public HashMap<String, Location> corner1 = new HashMap<String, Location>();
-	public HashMap<String, Location> corner2 = new HashMap<String, Location>();
-	public HashMap<String, Location> corner3 = new HashMap<String, Location>();
-	public HashMap<String, Location> corner4 = new HashMap<String, Location>();
+	public Map<String, Location> findlocations = new HashMap<String, Location>();
+	public Map<String, World> worlds = new HashMap<String, World>();
+	public Map<String, Location> firstlocations = new HashMap<String, Location>();
+	public Map<String, Location> secondlocations = new HashMap<String, Location>();
+	public Map<String, String> tool = new HashMap<String, String>();
+	// public Map<String, Object> Config = new HashMap<String, Object>();
+	public Map<String, Location> corner1 = new HashMap<String, Location>();
+	public Map<String, Location> corner2 = new HashMap<String, Location>();
+	public Map<String, Location> corner3 = new HashMap<String, Location>();
+	public Map<String, Location> corner4 = new HashMap<String, Location>();
 
 	public void onEnable() {
 
@@ -95,7 +90,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 		// Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GOLD +
 		// "[ZoneMenu] Deactivated.");
 	}
-	
+
 	// Get Worldedit here
 	public WorldEditPlugin getWorldEdit() {
 
@@ -111,7 +106,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
 		return (WorldEditPlugin) plugin;
 	}
-	
+
 	// Get worldguard here
 	public WorldGuardPlugin getWorldGuard() {
 
@@ -127,17 +122,17 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
 		return (WorldGuardPlugin) plugin;
 	}
-	
+
 	// <Alternative colorcode> -> §
 	public String colorCode(String s, String t) {
 		return t.replace(s, "§");
 	}
-	
+
 	// § -> <Alternative colorcode>
 	public String alternaticeColorCode(String s, String t) {
 		return t.replace("§", s);
 	}
-	
+
 	public void sendActionBarToPlayer(Player player, String message) {
 		player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
 	}
@@ -145,7 +140,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	// Reset a shown beacon via a blockchange
 	@SuppressWarnings({ "deprecation" })
 	public void resetCorner(Player player, Map<String, Location> map) {
-		
+
 		if (!map.containsKey(player.getName())) {
 			return;
 		}
@@ -180,7 +175,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 			}
 		}
 	}
-	
+
 	// Show player a beacon (blockchange)
 	// From: https://bukkit.org/threads/lib-beacon-creator.179399/ (modified)
 	// --- start
@@ -233,21 +228,20 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 			}
 		}, 10L);
 	}
-	
+
 	// Calculate a difference between two numbers
 	public int difference(int num1, int num2) {
 		return num1 > num2 ? num1 - num2 : num2 - num1;
 	}
-	
-	// Get a players region
-	public ProtectedRegion getRegion(Player player) throws InterruptedException, ExecutionException {
 
+	// Get a players region
+	public ProtectedRegion getRegion(Player player) {
 		return this.getRegion(player, true);
 	}
-	
-	// Get a players region an control whether you like to show find a message during search or not
-	public ProtectedRegion getRegion(final Player player, boolean showmessage)
-			throws InterruptedException, ExecutionException {
+
+	// Get a players region an control whether you like to show find a message
+	// during search or not
+	public ProtectedRegion getRegion(final Player player, boolean showmessage) {
 
 		if (showmessage) {
 			this.sendActionBarToPlayer(player,
@@ -255,46 +249,22 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 		}
 
 		ProtectedRegion p = null;
-		ExecutorService executor = Executors.newFixedThreadPool(1);
 
-		FutureTask<ProtectedRegion> futureTask = new FutureTask<ProtectedRegion>(new Callable<ProtectedRegion>() {
+		for (String s : worldguardplugin.getRegionManager(player.getWorld()).getRegions().keySet()) {
 
-			public ProtectedRegion call() {
-
-				ProtectedRegion p = null;
-
-				for (String s : worldguardplugin.getRegionManager(player.getWorld()).getRegions().keySet()) {
-
-					if (worldguardplugin.getRegionManager(player.getWorld()).getRegions().get(s)
-							.isOwner(worldguardplugin.wrapPlayer(player))) {
-
-						p = worldguardplugin.getRegionManager(player.getWorld()).getRegions().get(s);
-					}
-				}
-
-				return p;
-			}
-		});
-
-		executor.execute(futureTask);
-
-		while (!futureTask.isDone()) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			if (worldguardplugin.getRegionManager(player.getWorld()).getRegions().get(s)
+					.isOwner(worldguardplugin.wrapPlayer(player))) {
+				
+				p = worldguardplugin.getRegionManager(player.getWorld()).getRegions().get(s);
 			}
 		}
 
-		p = futureTask.get();
-		executor.shutdown();
-
 		return p;
 	}
-	
-	// Get a list of players regions an control if you want him to show a message during search or not
-	public List<ProtectedRegion> getRegions(final Player player, Boolean showmessage)
-			throws InterruptedException, ExecutionException {
+
+	// Get a list of players regions an control if you want him to show a message
+	// during search or not
+	public List<ProtectedRegion> getRegions(final Player player, Boolean showmessage) {
 
 		if (showmessage) {
 			this.sendActionBarToPlayer(player,
@@ -302,40 +272,15 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 		}
 
 		List<ProtectedRegion> lp = new ArrayList<ProtectedRegion>();
-		ExecutorService executor = Executors.newFixedThreadPool(1);
 
-		FutureTask<List<ProtectedRegion>> futureTask = new FutureTask<List<ProtectedRegion>>(
-				new Callable<List<ProtectedRegion>>() {
+		for (String s : worldguardplugin.getRegionManager(player.getWorld()).getRegions().keySet()) {
 
-					public List<ProtectedRegion> call() {
+			if (worldguardplugin.getRegionManager(player.getWorld()).getRegions().get(s)
+					.isOwner(worldguardplugin.wrapPlayer(player))) {
 
-						List<ProtectedRegion> lp = new ArrayList<ProtectedRegion>();
-
-						for (String s : worldguardplugin.getRegionManager(player.getWorld()).getRegions().keySet()) {
-
-							if (worldguardplugin.getRegionManager(player.getWorld()).getRegions().get(s)
-									.isOwner(worldguardplugin.wrapPlayer(player))) {
-
-								lp.add(worldguardplugin.getRegionManager(player.getWorld()).getRegions().get(s));
-							}
-						}
-
-						return lp;
-					}
-				});
-
-		executor.execute(futureTask);
-
-		while (!futureTask.isDone()) {
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+				lp.add(worldguardplugin.getRegionManager(player.getWorld()).getRegions().get(s));
 			}
 		}
-
-		lp = futureTask.get();
-		executor.shutdown();
 
 		return lp;
 	}
