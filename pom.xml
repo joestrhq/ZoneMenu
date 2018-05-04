@@ -2,8 +2,12 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>xyz.joestr</groupId>
   <artifactId>zonemenu_dev</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>ZoneMenu</name>
+  <version>build_7_pre_2</version>
+  <name>ZoneMenu_Dev</name>
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
   <repositories>
     <repository>
       <id>spigot-repo</id>
@@ -13,11 +17,7 @@
         <id>sk89q-repo</id>
         <url>http://repo.joestr.xyz/zonemenu/</url>
     </repository>
-  <repository>
-    <id>Internal company repository</id>
-    <url>file://${basedir}/lib</url>
-  </repository>
-</repositories>
+  </repositories>
   <dependencies>
     <!--Spigot API-->
     <dependency>
@@ -48,4 +48,14 @@
   </dependencies>
   <description>Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)</description>
   <url>https://repo.joestr.xyz/zonemenu</url>
+  <build>
+    <resources>
+      <resource>
+        <directory>
+          src/main/resources
+        </directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+  </build>
 </project>
