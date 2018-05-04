@@ -48,6 +48,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import xyz.joestr.zonemenu.ZoneMenu;
+import xyz.joestr.zonemenu.enumeration.ZoneMenuTool;
 
 @SuppressWarnings("deprecation")
 public class ZoneCommand implements CommandExecutor {
@@ -74,74 +75,241 @@ public class ZoneCommand implements CommandExecutor {
 				// /zone
 				if (args.length < 1) {
 
-					player.spigot().sendMessage(new ComponentBuilder(this.plugin.colorCode("&",
-							(String) this.plugin.config.Map().get("head")
-									+ (String) this.plugin.config.Map().get("head_extra"))).append("\n"
-											+ this.plugin.colorCode("&", (String) this.plugin.config.Map().get("find")))
-											.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-													new ComponentBuilder(this.plugin.colorCode("&",
-															(String) this.plugin.config.Map().get("find_hover")))
-																	.create()))
-											.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/zone find"))
-											.append("\n" + this.plugin.colorCode("&",
-													(String) this.plugin.config.Map().get("sign")))
-											.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-													new ComponentBuilder(this.plugin.colorCode("&",
-															(String) this.plugin.config.Map().get("sign_hover")))
-																	.create()))
-											.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/zone sign"))
-											.append("\n" + this.plugin.colorCode("&",
-													(String) this.plugin.config.Map().get("create")))
-											.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-													new ComponentBuilder(this.plugin.colorCode("&",
-															(String) this.plugin.config.Map().get("create_hover")))
-																	.create()))
-											.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/zone create"))
-											.append("\n" + this.plugin.colorCode("&",
-													(String) this.plugin.config.Map().get("cancel")))
-											.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-													new ComponentBuilder(this.plugin.colorCode("&",
-															(String) this.plugin.config.Map().get("cancel_hover")))
-																	.create()))
-											.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/zone cancel"))
-											.append("\n" + this.plugin.colorCode("&",
-													(String) this.plugin.config.Map().get("addmember")))
-											.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-													new ComponentBuilder(this.plugin.colorCode("&",
-															(String) this.plugin.config.Map().get("addmember_hover")))
-																	.create()))
-											.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
-													"/zone addmember "))
-											.append("\n" + this.plugin.colorCode("&",
-													(String) this.plugin.config.Map().get("removemember")))
-											.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-													new ComponentBuilder(this.plugin.colorCode("&",
-															(String) this.plugin.config.Map()
-																	.get("removemember_hover"))).create()))
-											.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
-													"/zone removemember "))
-											.append("\n" + this.plugin.colorCode("&",
-													(String) this.plugin.config.Map().get("info")))
-											.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-													new ComponentBuilder(this.plugin.colorCode("&",
-															(String) this.plugin.config.Map().get("info_hover")))
-																	.create()))
-											.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/zone info"))
-											.append("\n" + this.plugin.colorCode("&",
-													(String) this.plugin.config.Map().get("flag")))
-											.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-													new ComponentBuilder(this.plugin.colorCode("&",
-															(String) this.plugin.config.Map().get("flag_hover")))
-																	.create()))
-											.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/zone flag"))
-											.append("\n" + this.plugin.colorCode("&",
-													(String) this.plugin.config.Map().get("delete")))
-											.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-													new ComponentBuilder(this.plugin.colorCode("&",
-															(String) this.plugin.config.Map().get("delete_hover")))
-																	.create()))
-											.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/zone delete"))
-											.create());
+					player.spigot().sendMessage(
+							new ComponentBuilder(
+									this.plugin.colorCode(
+											"&",
+											(String) this.plugin.configDelegate.Map().get("head") +
+											(String) this.plugin.configDelegate.Map().get("head_extra")
+									)
+							)
+							.append(
+									"\n" +
+									this.plugin.colorCode(
+											"&",
+											(String) this.plugin.configDelegate.Map().get("find")
+									)
+							)
+							.event(
+									new HoverEvent(
+											HoverEvent.Action.SHOW_TEXT,
+											new ComponentBuilder(
+													this.plugin.colorCode(
+															"&",
+															(String) this.plugin.configDelegate.Map().get("find_hover")
+													)
+											)
+											.create()
+									)
+							)
+							.event(
+									new ClickEvent(
+											ClickEvent.Action.RUN_COMMAND,
+											"/zone find"
+									)
+							)
+							.append(
+									"\n" +
+									this.plugin.colorCode(
+											"&",
+											(String) this.plugin.configDelegate.Map().get("sign")
+									)
+							)
+							.event(
+									new HoverEvent(
+											HoverEvent.Action.SHOW_TEXT,
+											new ComponentBuilder(
+													this.plugin.colorCode(
+															"&",
+															(String) this.plugin.configDelegate.Map().get("sign_hover")
+													)
+											)
+											.create()
+									)
+							)
+							.event(
+									new ClickEvent(
+											ClickEvent.Action.RUN_COMMAND,
+											"/zone sign"
+									)
+							)
+							.append(
+									"\n" +
+									this.plugin.colorCode(
+											"&",
+											(String) this.plugin.configDelegate.Map().get("create")
+									)
+							)
+							.event(
+									new HoverEvent(
+											HoverEvent.Action.SHOW_TEXT,
+											new ComponentBuilder(
+													this.plugin.colorCode(
+															"&",
+															(String) this.plugin.configDelegate.Map().get("create_hover")
+													)
+											)
+											.create()
+									)
+							)
+							.event(
+									new ClickEvent(
+											ClickEvent.Action.RUN_COMMAND,
+											"/zone create"
+									)
+							)
+							.append(
+									"\n" +
+									this.plugin.colorCode(
+											"&",
+											(String) this.plugin.configDelegate.Map().get("cancel")
+									)
+							)
+							.event(
+									new HoverEvent(
+											HoverEvent.Action.SHOW_TEXT,
+											new ComponentBuilder(
+													this.plugin.colorCode(
+															"&",
+															(String) this.plugin.configDelegate.Map().get("cancel_hover")
+													)
+											)
+											.create()
+									)
+							)
+							.event(
+									new ClickEvent(
+											ClickEvent.Action.RUN_COMMAND,
+											"/zone cancel"
+									)
+							)
+							.append(
+									"\n" +
+									this.plugin.colorCode(
+											"&",
+											(String) this.plugin.configDelegate.Map().get("addmember")
+									)
+							)
+							.event(
+									new HoverEvent(
+											HoverEvent.Action.SHOW_TEXT,
+											new ComponentBuilder(
+													this.plugin.colorCode(
+															"&",
+															(String) this.plugin.configDelegate.Map().get("addmember_hover")
+													)
+											)
+											.create()
+									)
+							)
+							.event(
+									new ClickEvent(
+											ClickEvent.Action.SUGGEST_COMMAND,
+											"/zone addmember "
+									)
+							)
+							.append(
+									"\n" +
+									this.plugin.colorCode(
+											"&",
+											(String) this.plugin.configDelegate.Map().get("removemember")
+									)
+							)
+							.event(
+									new HoverEvent(
+											HoverEvent.Action.SHOW_TEXT,
+											new ComponentBuilder(
+													this.plugin.colorCode(
+															"&",
+															(String) this.plugin.configDelegate.Map().get("removemember_hover")
+													)
+											)
+											.create()
+									)
+							)
+							.event(
+									new ClickEvent(
+											ClickEvent.Action.SUGGEST_COMMAND,
+											"/zone removemember "
+									)
+							)
+							.append(
+									"\n" +
+									this.plugin.colorCode(
+											"&",
+											(String) this.plugin.configDelegate.Map().get("info")
+									)
+							)
+							.event(
+									new HoverEvent(
+											HoverEvent.Action.SHOW_TEXT,
+											new ComponentBuilder(
+													this.plugin.colorCode(
+															"&",
+															(String) this.plugin.configDelegate.Map().get("info_hover")
+													)
+											)
+											.create()
+									)
+							)
+							.event(
+									new ClickEvent(
+											ClickEvent.Action.RUN_COMMAND,
+											"/zone info"
+									)
+							)
+							.append(
+									"\n" +
+									this.plugin.colorCode(
+											"&",
+											(String) this.plugin.configDelegate.Map().get("flag")
+									)
+							)
+							.event(
+									new HoverEvent(
+											HoverEvent.Action.SHOW_TEXT,
+											new ComponentBuilder(
+													this.plugin.colorCode(
+															"&",
+															(String) this.plugin.configDelegate.Map().get("flag_hover")
+													)
+											)
+											.create()
+									)
+							)
+							.event(
+									new ClickEvent(
+											ClickEvent.Action.SUGGEST_COMMAND,
+											"/zone flag"
+									)
+							)
+							.append(
+									"\n" +
+									this.plugin.colorCode(
+											"&",
+											(String) this.plugin.configDelegate.Map().get("delete")
+									)
+							)
+							.event(
+									new HoverEvent(
+											HoverEvent.Action.SHOW_TEXT,
+											new ComponentBuilder(
+													this.plugin.colorCode(
+															"&",
+															(String) this.plugin.configDelegate.Map().get("delete_hover")
+													)
+											)
+											.create()
+									)
+							)
+							.event(
+									new ClickEvent(
+											ClickEvent.Action.SUGGEST_COMMAND,
+											"/zone delete"
+									)
+							)
+							.create()
+					);
 					return true;
 				}
 
@@ -156,11 +324,11 @@ public class ZoneCommand implements CommandExecutor {
 					}
 
 					// Send player a message
-					player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
-					player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("zone_find")));
+					player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
+					player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_find")));
 
 					// Put player into a map where his name and the current action are stored
-					this.plugin.tool.put(player.getName(), "find");
+					this.plugin.tool.put(player, ZoneMenuTool.FIND);
 
 					return true;
 				}
@@ -176,11 +344,11 @@ public class ZoneCommand implements CommandExecutor {
 					}
 
 					// Send player a message
-					player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
-					player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("zone_sign")));
+					player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
+					player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_sign")));
 
 					// Put player into a map where his name and the current action are stored
-					this.plugin.tool.put(player.getName(), "sign");
+					this.plugin.tool.put(player, ZoneMenuTool.SIGN);
 
 					return true;
 				}
@@ -193,9 +361,9 @@ public class ZoneCommand implements CommandExecutor {
 						if (this.plugin.getRegion(player) != null) {
 
 							player.sendMessage(
-									this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
-							player.sendMessage(this.plugin.colorCode("&",
-									(String) this.plugin.config.Map().get("zone_create_already_have")));
+									this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
+							player.sendMessage(this.plugin.colorCode('&',
+									(String) this.plugin.configDelegate.Map().get("zone_create_already_have")));
 							return true;
 						}
 					} catch (Exception e) {
@@ -203,26 +371,26 @@ public class ZoneCommand implements CommandExecutor {
 					}
 
 					// Grab players worldedit selection
-					Selection selectedregion = this.plugin.getWorldEdit().getSelection(player);
+					Selection selectedregion = this.plugin.getWorldEditPlugin().getSelection(player);
 
 					// Check if selection is valid
 					if (selectedregion == null) {
 
-						player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
-						player.sendMessage(this.plugin.colorCode("&",
-								(String) this.plugin.config.Map().get("zone_create_not_signed")));
+						player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
+						player.sendMessage(this.plugin.colorCode('&',
+								(String) this.plugin.configDelegate.Map().get("zone_create_not_signed")));
 						return true;
 					}
 
 					// Check if selected area is smaller than the specified maximum area in the
 					// config file
 					if (selectedregion.getWidth() * selectedregion.getLength() < Integer
-							.parseInt(this.plugin.config.Map().get("zone_create_area_min").toString())) {
+							.parseInt(this.plugin.configDelegate.Map().get("zone_create_area_min").toString())) {
 
-						player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
+						player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
 						player.sendMessage(this.plugin
-								.colorCode("&", (String) this.plugin.config.Map().get("zone_create_area_under"))
-								.replace("{0}", this.plugin.config.Map().get("zone_create_area_min").toString()));
+								.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_create_area_under"))
+								.replace("{0}", this.plugin.configDelegate.Map().get("zone_create_area_min").toString()));
 
 						return true;
 					}
@@ -230,12 +398,12 @@ public class ZoneCommand implements CommandExecutor {
 					// Check if selected area is larger than the specified minimum area in the
 					// config file
 					if (selectedregion.getWidth() * selectedregion.getLength() > Integer
-							.parseInt(this.plugin.config.Map().get("zone_create_area_max").toString())) {
+							.parseInt(this.plugin.configDelegate.Map().get("zone_create_area_max").toString())) {
 
-						player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
+						player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
 						player.sendMessage(this.plugin
-								.colorCode("&", (String) this.plugin.config.Map().get("zone_create_area_over"))
-								.replace("{0}", this.plugin.config.Map().get("zone_create_area_max").toString()));
+								.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_create_area_over"))
+								.replace("{0}", this.plugin.configDelegate.Map().get("zone_create_area_max").toString()));
 
 						return true;
 					}
@@ -252,28 +420,28 @@ public class ZoneCommand implements CommandExecutor {
 
 					// Create a new WorldGuard region
 					ProtectedCuboidRegion protectedcuboidregion = new ProtectedCuboidRegion(
-							(String) this.plugin.id.Map().get("zone_id")
-									+ this.plugin.id.Map().get("zone_id_counter").toString(),
+							(String) this.plugin.idDelegate.Map().get("zone_id")
+									+ this.plugin.idDelegate.Map().get("zone_id_counter").toString(),
 							new BlockVector(first_x, first_y, first_z), new BlockVector(second_x, second_y, second_z));
 
 					// Increment the region id counter
-					this.plugin.id.Map().put("zone_id_counter",
-							Integer.parseInt(this.plugin.id.Map().get("zone_id_counter").toString()) + 1);
-					this.plugin.id.Save();
+					this.plugin.idDelegate.Map().put("zone_id_counter",
+							Integer.parseInt(this.plugin.idDelegate.Map().get("zone_id_counter").toString()) + 1);
+					this.plugin.idDelegate.Save();
 
 					// Check if region overlaps with unowned regions
-					if (this.plugin.getWorldGuard().getRegionManager(player.getWorld()).overlapsUnownedRegion(
-							protectedcuboidregion, this.plugin.getWorldGuard().wrapPlayer(player))) {
+					if (this.plugin.worldGuardPlugin.getRegionManager(player.getWorld()).overlapsUnownedRegion(
+							protectedcuboidregion, this.plugin.worldGuardPlugin.wrapPlayer(player))) {
 
-						player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
-						player.sendMessage(this.plugin.colorCode("&",
-								(String) this.plugin.config.Map().get("zone_create_overlaps_unowned")));
+						player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
+						player.sendMessage(this.plugin.colorCode('&',
+								(String) this.plugin.configDelegate.Map().get("zone_create_overlaps_unowned")));
 
 						return true;
 					}
 
 					// Check if Worldguards profileservice contains players name
-					ProfileService ps = this.plugin.worldguardplugin.getProfileService();
+					ProfileService ps = this.plugin.worldGuardPlugin.getProfileService();
 					try {
 						ps.findByName(player.getName());
 					} catch (Exception e) {
@@ -283,12 +451,12 @@ public class ZoneCommand implements CommandExecutor {
 					// Create a new domain
 					DefaultDomain domain = new DefaultDomain();
 					// Wrap player and add it to the domain
-					domain.addPlayer(this.plugin.worldguardplugin.wrapPlayer(player));
+					domain.addPlayer(this.plugin.worldGuardPlugin.wrapPlayer(player));
 					// Apply the domain to owners
 					protectedcuboidregion.setOwners(domain);
 					// Set the priority to the specified value in the config file
 					protectedcuboidregion.setPriority(
-							Integer.parseInt(this.plugin.config.Map().get("zone_create_priority").toString()));
+							Integer.parseInt(this.plugin.configDelegate.Map().get("zone_create_priority").toString()));
 
 					// Some flags
 					/*
@@ -307,27 +475,27 @@ public class ZoneCommand implements CommandExecutor {
 					 */
 
 					// Finally, add the region to worlds region manager
-					this.plugin.getWorldGuard().getRegionManager(player.getWorld()).addRegion(protectedcuboidregion);
+					this.plugin.worldGuardPlugin.getRegionManager(player.getWorld()).addRegion(protectedcuboidregion);
 
 					// Send player a message
-					player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
+					player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
 					player.sendMessage(
-							this.plugin.colorCode("&", (String) this.plugin.config.Map().get("zone_create")));
+							this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_create")));
 
 					// Clean up user
-					this.plugin.tool.remove(player.getName());
-					this.plugin.findlocations.remove(player.getName());
-					this.plugin.worlds.remove(player.getName());
-					this.plugin.firstlocations.remove(player.getName());
-					this.plugin.secondlocations.remove(player.getName());
-					this.plugin.worldeditplugin.getSession(player)
-							.getRegionSelector(plugin.worldeditplugin.getSession(player).getSelectionWorld()).clear();
+					this.plugin.tool.remove(player);
+					this.plugin.findLocations.remove(player);
+					this.plugin.worlds.remove(player);
+					this.plugin.selectedFirstLocations.remove(player);
+					this.plugin.selectedSecondLocations.remove(player);
+					this.plugin.worldEditPlugin.getSession(player)
+							.getRegionSelector(plugin.worldEditPlugin.getSession(player).getSelectionWorld()).clear();
 
 					// Reset Beacons
-					this.plugin.resetCorner(player, this.plugin.corner1);
-					this.plugin.resetCorner(player, this.plugin.corner2);
-					this.plugin.resetCorner(player, this.plugin.corner3);
-					this.plugin.resetCorner(player, this.plugin.corner4);
+					this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner1);
+					this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner2);
+					this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner3);
+					this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner4);
 
 					return true;
 				}
@@ -336,35 +504,35 @@ public class ZoneCommand implements CommandExecutor {
 				if ((args[0].equalsIgnoreCase("cancel")) && (args.length < 2)) {
 
 					// Check if player is in map
-					if (!this.plugin.tool.containsKey(player.getName())) {
+					if (!this.plugin.tool.containsKey(player)) {
 
-						player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
-						player.sendMessage(this.plugin.colorCode("&",
-								(String) this.plugin.config.Map().get("zone_cancel_not_running")));
+						player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
+						player.sendMessage(this.plugin.colorCode('&',
+								(String) this.plugin.configDelegate.Map().get("zone_cancel_not_running")));
 
 						return true;
 					}
 
 					// Clean up user
-					this.plugin.tool.remove(player.getName());
-					this.plugin.findlocations.remove(player.getName());
-					this.plugin.worlds.remove(player.getName());
-					this.plugin.firstlocations.remove(player.getName());
-					this.plugin.secondlocations.remove(player.getName());
+					this.plugin.tool.remove(player);
+					this.plugin.findLocations.remove(player);
+					this.plugin.worlds.remove(player);
+					this.plugin.selectedFirstLocations.remove(player);
+					this.plugin.selectedSecondLocations.remove(player);
 					
-					if(this.plugin.worldeditplugin.getSession(player).getSelectionWorld() != null) {
-						this.plugin.worldeditplugin.getSession(player).getRegionSelector(this.plugin.worldeditplugin.getSession(player).getSelectionWorld()).clear();
+					if(this.plugin.worldEditPlugin.getSession(player).getSelectionWorld() != null) {
+						this.plugin.worldEditPlugin.getSession(player).getRegionSelector(this.plugin.worldEditPlugin.getSession(player).getSelectionWorld()).clear();
 					}
 
 					// Reset beacons
-					this.plugin.resetCorner(player, this.plugin.corner1);
-					this.plugin.resetCorner(player, this.plugin.corner2);
-					this.plugin.resetCorner(player, this.plugin.corner3);
-					this.plugin.resetCorner(player, this.plugin.corner4);
+					this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner1);
+					this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner2);
+					this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner3);
+					this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner4);
 
-					player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
+					player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
 					player.sendMessage(
-							this.plugin.colorCode("&", (String) this.plugin.config.Map().get("zone_cancel")));
+							this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_cancel")));
 
 					return true;
 				}
@@ -385,9 +553,9 @@ public class ZoneCommand implements CommandExecutor {
 					// Check if region in invalid
 					if (protectedregion == null) {
 
-						player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
+						player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
 						player.sendMessage(
-								this.plugin.colorCode("&", (String) this.plugin.config.Map().get("no_zone")));
+								this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("no_zone")));
 
 						return true;
 					}
@@ -397,11 +565,11 @@ public class ZoneCommand implements CommandExecutor {
 
 					// Check if mebers list contains the specified player
 					if (domainmembers.contains(
-							plugin.worldguardplugin.wrapOfflinePlayer(plugin.getServer().getOfflinePlayer(args[1])))) {
+							plugin.worldGuardPlugin.wrapOfflinePlayer(plugin.getServer().getOfflinePlayer(args[1])))) {
 
-						player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
+						player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
 						player.sendMessage(this.plugin
-								.colorCode("&", (String) this.plugin.config.Map().get("zone_addmember_already_member"))
+								.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_addmember_already_member"))
 								.replace("{0}", args[1]));
 
 						return true;
@@ -420,7 +588,7 @@ public class ZoneCommand implements CommandExecutor {
 							.listeningDecorator(Executors.newCachedThreadPool());
 
 					String[] input = new String[] { args[1] };
-					ProfileService profiles = this.plugin.getWorldGuard().getProfileService();
+					ProfileService profiles = this.plugin.worldGuardPlugin.getProfileService();
 					DomainInputResolver resolver = new DomainInputResolver(profiles, input);
 					resolver.setLocatorPolicy(UserLocatorPolicy.UUID_AND_NAME);
 					ListenableFuture<DefaultDomain> future = executor.submit(resolver);
@@ -430,18 +598,18 @@ public class ZoneCommand implements CommandExecutor {
 
 						public void onSuccess(DefaultDomain result) {
 
-							protectedregionforguava.getMembers().addPlayer(plugin.worldguardplugin
+							protectedregionforguava.getMembers().addPlayer(plugin.worldGuardPlugin
 									.wrapOfflinePlayer(plugin.getServer().getOfflinePlayer(args[1])));
-							player.sendMessage(plugin.colorCode("&", (String) plugin.config.Map().get("head")));
-							player.sendMessage(plugin.colorCode("&", (String) plugin.config.Map().get("zone_addmember"))
+							player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.Map().get("head")));
+							player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.Map().get("zone_addmember"))
 									.replace("{0}", args[1]));
 						}
 
 						public void onFailure(Throwable throwable) {
 
-							player.sendMessage(plugin.colorCode("&", (String) plugin.config.Map().get("head")));
+							player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.Map().get("head")));
 							player.sendMessage(plugin
-									.colorCode("&", (String) plugin.config.Map().get("zone_addmember_not_existing"))
+									.colorCode('&', (String) plugin.configDelegate.Map().get("zone_addmember_not_existing"))
 									.replace("{0}", args[1]));
 						}
 					});
@@ -466,9 +634,9 @@ public class ZoneCommand implements CommandExecutor {
 					// Check if region in invalid
 					if (protectedregion == null) {
 
-						player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
+						player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
 						player.sendMessage(
-								this.plugin.colorCode("&", (String) this.plugin.config.Map().get("no_zone")));
+								this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("no_zone")));
 
 						return true;
 					}
@@ -477,14 +645,14 @@ public class ZoneCommand implements CommandExecutor {
 					DefaultDomain domainmembers = protectedregion.getMembers();
 
 					// Check if members does not contain the specified player
-					if (!domainmembers.contains(this.plugin.worldguardplugin
+					if (!domainmembers.contains(this.plugin.worldGuardPlugin
 							.wrapOfflinePlayer(plugin.getServer().getOfflinePlayer(args[1])))) {
 
-						player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
+						player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
 						player.sendMessage(
 								this.plugin
-										.colorCode("&",
-												(String) this.plugin.config.Map()
+										.colorCode('&',
+												(String) this.plugin.configDelegate.Map()
 														.get("zone_removemember_unknownplayer"))
 										.replace("{0}", args[1]));
 
@@ -492,15 +660,15 @@ public class ZoneCommand implements CommandExecutor {
 					}
 
 					// Remove specified player from the members
-					domainmembers.removePlayer(this.plugin.worldguardplugin
+					domainmembers.removePlayer(this.plugin.worldGuardPlugin
 							.wrapOfflinePlayer(plugin.getServer().getOfflinePlayer(args[1])));
 
 					// Set the new members
 					protectedregion.setMembers(domainmembers);
 
-					player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
+					player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
 					player.sendMessage(
-							this.plugin.colorCode("&", (String) this.plugin.config.Map().get("zone_removemember"))
+							this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_removemember"))
 									.replace("{0}", args[1]));
 
 					return true;
@@ -521,9 +689,9 @@ public class ZoneCommand implements CommandExecutor {
 
 					if (protectedregion == null) {
 
-						player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
+						player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
 						player.sendMessage(
-								this.plugin.colorCode("&", (String) this.plugin.config.Map().get("no_zone")));
+								this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("no_zone")));
 						return true;
 					}
 
@@ -537,24 +705,23 @@ public class ZoneCommand implements CommandExecutor {
 					all.replace(" ", "");
 
 					for (Flag<?> f : DefaultFlag.getDefaultFlags()) {
-
 						if (f.getName().equalsIgnoreCase(args[1])) {
 							if (f instanceof StateFlag) {
 								StateFlag sf = (StateFlag) f;
 								try {
 									protectedregion.setFlag(sf, sf.parseInput(FlagContext.create().setSender(player)
 											.setInput(all).setObject("region", protectedregion).build()));
-									player.sendMessage(this.plugin.colorCode("&",
-											(String) this.plugin.config.getMap().get("head")));
+									player.sendMessage(this.plugin.colorCode('&',
+											(String) this.plugin.configDelegate.getMap().get("head")));
 									player.sendMessage(
 											this.plugin
-													.colorCode("&",
-															(String) this.plugin.config.getMap()
+													.colorCode('&',
+															(String) this.plugin.configDelegate.getMap()
 																	.get("zone_flag_changed"))
 													.replace("{0}", f.getName()).replace("{1}", args[2]));
 								} catch (InvalidFlagFormat e) {
-									player.sendMessage(this.plugin.colorCode("&",
-											(String) this.plugin.config.getMap().get("head")));
+									player.sendMessage(this.plugin.colorCode('&',
+											(String) this.plugin.configDelegate.getMap().get("head")));
 									player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <allow|deny|none>");
 									return false;
 									// e.printStackTrace();
@@ -580,17 +747,17 @@ public class ZoneCommand implements CommandExecutor {
 								try {
 									protectedregion.setFlag(sfet, sfet.parseInput(FlagContext.create().setSender(player)
 											.setInput(args[2]).setObject("region", protectedregion).build()));
-									player.sendMessage(this.plugin.colorCode("&",
-											(String) this.plugin.config.getMap().get("head")));
+									player.sendMessage(this.plugin.colorCode('&',
+											(String) this.plugin.configDelegate.getMap().get("head")));
 									player.sendMessage(
 											this.plugin
-													.colorCode("&",
-															(String) this.plugin.config.getMap()
+													.colorCode('&',
+															(String) this.plugin.configDelegate.getMap()
 																	.get("zone_flag_changed"))
 													.replace("{0}", f.getName()).replace("{1}", args[2]));
 								} catch (InvalidFlagFormat e) {
-									player.sendMessage(this.plugin.colorCode("&",
-											(String) this.plugin.config.getMap().get("head")));
+									player.sendMessage(this.plugin.colorCode('&',
+											(String) this.plugin.configDelegate.getMap().get("head")));
 									player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <"
 											+ type.getTypeName() + "[," + type.getTypeName() + " ...]>");
 									// e.printStackTrace();
@@ -600,17 +767,17 @@ public class ZoneCommand implements CommandExecutor {
 								try {
 									protectedregion.setFlag(sf, sf.parseInput(FlagContext.create().setSender(player)
 											.setInput(args[2]).setObject("region", protectedregion).build()));
-									player.sendMessage(this.plugin.colorCode("&",
-											(String) this.plugin.config.getMap().get("head")));
+									player.sendMessage(this.plugin.colorCode('&',
+											(String) this.plugin.configDelegate.getMap().get("head")));
 									player.sendMessage(
 											this.plugin
-													.colorCode("&",
-															(String) this.plugin.config.getMap()
+													.colorCode('&',
+															(String) this.plugin.configDelegate.getMap()
 																	.get("zone_flag_changed"))
 													.replace("{0}", f.getName()).replace("{1}", args[2]));
 								} catch (InvalidFlagFormat e) {
-									player.sendMessage(this.plugin.colorCode("&",
-											(String) this.plugin.config.getMap().get("head")));
+									player.sendMessage(this.plugin.colorCode('&',
+											(String) this.plugin.configDelegate.getMap().get("head")));
 									player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <String...>");
 									// e.printStackTrace();
 								}
@@ -619,17 +786,17 @@ public class ZoneCommand implements CommandExecutor {
 								try {
 									protectedregion.setFlag(bf, bf.parseInput(FlagContext.create().setSender(player)
 											.setInput(args[2]).setObject("region", protectedregion).build()));
-									player.sendMessage(this.plugin.colorCode("&",
-											(String) this.plugin.config.getMap().get("head")));
+									player.sendMessage(this.plugin.colorCode('&',
+											(String) this.plugin.configDelegate.getMap().get("head")));
 									player.sendMessage(
 											this.plugin
-													.colorCode("&",
-															(String) this.plugin.config.getMap()
+													.colorCode('&',
+															(String) this.plugin.configDelegate.getMap()
 																	.get("zone_flag_changed"))
 													.replace("{0}", f.getName()).replace("{1}", args[2]));
 								} catch (InvalidFlagFormat e) {
-									player.sendMessage(this.plugin.colorCode("&",
-											(String) this.plugin.config.getMap().get("head")));
+									player.sendMessage(this.plugin.colorCode('&',
+											(String) this.plugin.configDelegate.getMap().get("head")));
 									player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <true|false>");
 									// e.printStackTrace();
 								}
@@ -638,17 +805,17 @@ public class ZoneCommand implements CommandExecutor {
 								try {
 									protectedregion.setFlag(inf, inf.parseInput(FlagContext.create().setSender(player)
 											.setInput(args[2]).setObject("region", protectedregion).build()));
-									player.sendMessage(this.plugin.colorCode("&",
-											(String) this.plugin.config.getMap().get("head")));
+									player.sendMessage(this.plugin.colorCode('&',
+											(String) this.plugin.configDelegate.getMap().get("head")));
 									player.sendMessage(
 											this.plugin
-													.colorCode("&",
-															(String) this.plugin.config.getMap()
+													.colorCode('&',
+															(String) this.plugin.configDelegate.getMap()
 																	.get("zone_flag_changed"))
 													.replace("{0}", f.getName()).replace("{1}", args[2]));
 								} catch (InvalidFlagFormat e) {
-									player.sendMessage(this.plugin.colorCode("&",
-											(String) this.plugin.config.getMap().get("head")));
+									player.sendMessage(this.plugin.colorCode('&',
+											(String) this.plugin.configDelegate.getMap().get("head")));
 									player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <Integer>");
 									// e.printStackTrace();
 								}
@@ -657,17 +824,17 @@ public class ZoneCommand implements CommandExecutor {
 								try {
 									protectedregion.setFlag(df, df.parseInput(FlagContext.create().setSender(player)
 											.setInput(args[2]).setObject("region", protectedregion).build()));
-									player.sendMessage(this.plugin.colorCode("&",
-											(String) this.plugin.config.getMap().get("head")));
+									player.sendMessage(this.plugin.colorCode('&',
+											(String) this.plugin.configDelegate.getMap().get("head")));
 									player.sendMessage(
 											this.plugin
-													.colorCode("&",
-															(String) this.plugin.config.getMap()
+													.colorCode('&',
+															(String) this.plugin.configDelegate.getMap()
 																	.get("zone_flag_changed"))
 													.replace("{0}", f.getName()).replace("{1}", args[2]));
 								} catch (InvalidFlagFormat e) {
-									player.sendMessage(this.plugin.colorCode("&",
-											(String) this.plugin.config.getMap().get("head")));
+									player.sendMessage(this.plugin.colorCode('&',
+											(String) this.plugin.configDelegate.getMap().get("head")));
 									player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <Double>");
 									// e.printStackTrace();
 								}
@@ -676,17 +843,17 @@ public class ZoneCommand implements CommandExecutor {
 								try {
 									protectedregion.setFlag(lf, lf.parseInput(FlagContext.create().setSender(player)
 											.setInput(args[2]).setObject("region", protectedregion).build()));
-									player.sendMessage(this.plugin.colorCode("&",
-											(String) this.plugin.config.getMap().get("head")));
+									player.sendMessage(this.plugin.colorCode('&',
+											(String) this.plugin.configDelegate.getMap().get("head")));
 									player.sendMessage(
 											this.plugin
-													.colorCode("&",
-															(String) this.plugin.config.getMap()
+													.colorCode('&',
+															(String) this.plugin.configDelegate.getMap()
 																	.get("zone_flag_changed"))
 													.replace("{0}", f.getName()).replace("{1}", args[2]));
 								} catch (InvalidFlagFormat e) {
-									player.sendMessage(this.plugin.colorCode("&",
-											(String) this.plugin.config.getMap().get("head")));
+									player.sendMessage(this.plugin.colorCode('&',
+											(String) this.plugin.configDelegate.getMap().get("head")));
 									player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <here|X,Y,Z>");
 									// e.printStackTrace();
 								}
@@ -697,17 +864,17 @@ public class ZoneCommand implements CommandExecutor {
 										protectedregion.setFlag(efgm,
 												efgm.parseInput(FlagContext.create().setSender(player).setInput(args[2])
 														.setObject("region", protectedregion).build()));
-										player.sendMessage(this.plugin.colorCode("&",
-												(String) this.plugin.config.getMap().get("head")));
+										player.sendMessage(this.plugin.colorCode('&',
+												(String) this.plugin.configDelegate.getMap().get("head")));
 										player.sendMessage(
 												this.plugin
-														.colorCode("&",
-																(String) this.plugin.config.getMap()
+														.colorCode('&',
+																(String) this.plugin.configDelegate.getMap()
 																		.get("zone_flag_changed"))
 														.replace("{0}", f.getName()).replace("{1}", args[2]));
 									} catch (InvalidFlagFormat e) {
-										player.sendMessage(this.plugin.colorCode("&",
-												(String) this.plugin.config.getMap().get("head")));
+										player.sendMessage(this.plugin.colorCode('&',
+												(String) this.plugin.configDelegate.getMap().get("head")));
 										player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <Gamemode>");
 										// e.printStackTrace();
 									}
@@ -718,26 +885,26 @@ public class ZoneCommand implements CommandExecutor {
 										protectedregion.setFlag(efwt,
 												efwt.parseInput(FlagContext.create().setSender(player).setInput(args[2])
 														.setObject("region", protectedregion).build()));
-										player.sendMessage(this.plugin.colorCode("&",
-												(String) this.plugin.config.getMap().get("head")));
+										player.sendMessage(this.plugin.colorCode('&',
+												(String) this.plugin.configDelegate.getMap().get("head")));
 										player.sendMessage(
 												this.plugin
-														.colorCode("&",
-																(String) this.plugin.config.getMap()
+														.colorCode('&',
+																(String) this.plugin.configDelegate.getMap()
 																		.get("zone_flag_changed"))
 														.replace("{0}", f.getName()).replace("{1}", args[2]));
 									} catch (InvalidFlagFormat e) {
-										player.sendMessage(this.plugin.colorCode("&",
-												(String) this.plugin.config.getMap().get("head")));
+										player.sendMessage(this.plugin.colorCode('&',
+												(String) this.plugin.configDelegate.getMap().get("head")));
 										player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <Weathertype>");
 										// e.printStackTrace();
 									}
 								}
 							} else {
 								player.sendMessage(
-										this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
+										this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
 								player.sendMessage(this.plugin
-										.colorCode("&", (String) this.plugin.config.Map().get("zone_flag_not_found"))
+										.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_flag_not_found"))
 										.replace("{0}", args[1]));
 							}
 						}
@@ -762,9 +929,9 @@ public class ZoneCommand implements CommandExecutor {
 					// Check if region in invalid
 					if (protectedregion == null) {
 
-						player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
+						player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
 						player.sendMessage(
-								this.plugin.colorCode("&", (String) this.plugin.config.Map().get("no_zone")));
+								this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("no_zone")));
 
 						return true;
 					}
@@ -779,37 +946,37 @@ public class ZoneCommand implements CommandExecutor {
 					int area = (this.plugin.difference(min_x, max_x) + 1) * (this.plugin.difference(min_z, max_z) + 1);
 
 					// Send infos to player
-					player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
-					player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("zone_info_id"))
+					player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
+					player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_info_id"))
 							+ protectedregion.getId());
 					player.sendMessage(
-							this.plugin.colorCode("&", (String) this.plugin.config.Map().get("zone_info_priority"))
+							this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_info_priority"))
 									+ protectedregion.getPriority());
 					player.sendMessage(
-							this.plugin.colorCode("&", (String) this.plugin.config.Map().get("zone_info_owners"))
-									+ domainowners.toPlayersString(this.plugin.worldguardplugin.getProfileCache())
+							this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_info_owners"))
+									+ domainowners.toPlayersString(this.plugin.worldGuardPlugin.getProfileCache())
 											.replace("*", ""));
 					player.sendMessage(
-							this.plugin.colorCode("&", (String) this.plugin.config.Map().get("zone_info_members"))
-									+ regionmembers.toPlayersString(this.plugin.worldguardplugin.getProfileCache())
+							this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_info_members"))
+									+ regionmembers.toPlayersString(this.plugin.worldGuardPlugin.getProfileCache())
 											.replace("*", ""));
 					
 					Iterator<Entry<Flag<?>, Object>>  it = protectedregion.getFlags().entrySet().iterator();
 					while(it.hasNext()) {
 						Entry<Flag<?>, Object> e = it.next();
 						player.sendMessage(
-								this.plugin.colorCode("&", (String) this.plugin.config.getMap().get("zone_info_flag"))
+								this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_info_flag"))
 										.replace("{0}", e.getKey().getName()).replace("{1}", e.getValue().toString()));
 					}
 					
 					player.sendMessage(
-							this.plugin.colorCode("&", (String) this.plugin.config.Map().get("zone_info_start"))
+							this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_info_start"))
 									.replace("{0}", Integer.toString(min_x)).replace("{1}", Integer.toString(min_z)));
 					player.sendMessage(
-							this.plugin.colorCode("&", (String) this.plugin.config.Map().get("zone_info_end"))
+							this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_info_end"))
 									.replace("{0}", Integer.toString(max_x)).replace("{1}", Integer.toString(max_z)));
 					player.sendMessage(
-							this.plugin.colorCode("&", (String) this.plugin.config.Map().get("zone_info_area"))
+							this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_info_area"))
 									.replace("{0}", Integer.toString(area)));
 					return true;
 				}
@@ -830,36 +997,36 @@ public class ZoneCommand implements CommandExecutor {
 					// Check if region in invalid
 					if (protectedregion == null) {
 
-						player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
+						player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
 						player.sendMessage(
-								this.plugin.colorCode("&", (String) this.plugin.config.Map().get("no_zone")));
+								this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("no_zone")));
 
 						return true;
 					}
 
 					// Remove the region from worlds region manager
-					this.plugin.getWorldGuard().getRegionManager(player.getWorld())
+					this.plugin.worldGuardPlugin.getRegionManager(player.getWorld())
 							.removeRegion(protectedregion.getId());
 
 					// Send a message to the player
-					player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
+					player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
 					player.sendMessage(
-							this.plugin.colorCode("&", (String) this.plugin.config.Map().get("zone_delete")));
+							this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("zone_delete")));
 
 					return true;
 				}
 
 				// Wrong usage of the /zone command
-				player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
-				player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("usage_message"))
+				player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
+				player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("usage_message"))
 						.replace("{0}", "/zone"));
 
 				return true;
 			}
 
 			// Permission zonemenu.* is missing
-			player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
-			player.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("permission_message"))
+			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
+			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("permission_message"))
 					.replace("{0}", "zonemenu.*"));
 
 			return true;
@@ -867,8 +1034,8 @@ public class ZoneCommand implements CommandExecutor {
 
 		// Console
 		this.plugin.getServer().getConsoleSender()
-				.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("head")));
-		sender.sendMessage(this.plugin.colorCode("&", (String) this.plugin.config.Map().get("console_message")));
+				.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
+		sender.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("console_message")));
 		return true;
 	}
 }

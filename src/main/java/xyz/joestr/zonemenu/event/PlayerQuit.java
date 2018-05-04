@@ -20,11 +20,11 @@ public class PlayerQuit implements Listener {
 	public void onQuit(PlayerQuitEvent event) {
 
 		// Clean up player
-		this.plugin.tool.remove(event.getPlayer().getName());
-		this.plugin.findlocations.remove(event.getPlayer().getName());
-		this.plugin.worlds.remove(event.getPlayer().getName());
-		this.plugin.firstlocations.remove(event.getPlayer().getName());
-		this.plugin.secondlocations.remove(event.getPlayer().getName());
+		this.plugin.tool.remove(event.getPlayer());
+		this.plugin.findLocations.remove(event.getPlayer());
+		this.plugin.worlds.remove(event.getPlayer());
+		this.plugin.selectedFirstLocations.remove(event.getPlayer());
+		this.plugin.selectedSecondLocations.remove(event.getPlayer());
 		// Next actions are not necessary to perform
 		// this.plugin.worldeditplugin.getSession(event.getPlayer()).getRegionSelector(plugin.worldeditplugin.getSession(event.getPlayer()).getSelectionWorld()).clear();
 		// this.plugin.resetCorner(event.getPlayer(), this.plugin.corner1);

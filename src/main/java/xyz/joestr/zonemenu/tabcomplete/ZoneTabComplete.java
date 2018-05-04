@@ -118,7 +118,7 @@ public class ZoneTabComplete implements TabCompleter {
 						return list;
 					}
 
-					String[] str = domain.toPlayersString(this.plugin.worldguardplugin.getProfileCache())
+					String[] str = domain.toPlayersString(this.plugin.worldGuardPlugin.getProfileCache())
 							.replace("*", "").split(", ");
 
 					for (String s : str) {

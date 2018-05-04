@@ -21,16 +21,16 @@ public class PlayerChangedWorld implements Listener {
 		
 		// Player changed world, so clean up all except tool-map
 		// plugin.Tool.remove(event.getPlayer().getName());
-		this.plugin.findlocations.remove(event.getPlayer().getName());
-		this.plugin.worlds.remove(event.getPlayer().getName());
-		this.plugin.firstlocations.remove(event.getPlayer().getName());
-		this.plugin.secondlocations.remove(event.getPlayer().getName());
-		if(this.plugin.worldeditplugin.getSession(event.getPlayer()).getSelectionWorld() != null) {
-			this.plugin.worldeditplugin.getSession(event.getPlayer()).getRegionSelector(this.plugin.worldeditplugin.getSession(event.getPlayer()).getSelectionWorld()).clear();
+		this.plugin.findLocations.remove(event.getPlayer());
+		this.plugin.worlds.remove(event.getPlayer());
+		this.plugin.selectedFirstLocations.remove(event.getPlayer());
+		this.plugin.selectedSecondLocations.remove(event.getPlayer());
+		if(this.plugin.worldEditPlugin.getSession(event.getPlayer()).getSelectionWorld() != null) {
+			this.plugin.worldEditPlugin.getSession(event.getPlayer()).getRegionSelector(this.plugin.worldEditPlugin.getSession(event.getPlayer()).getSelectionWorld()).clear();
 		}
-		this.plugin.resetCorner(event.getPlayer(), this.plugin.corner1);
-		this.plugin.resetCorner(event.getPlayer(), this.plugin.corner2);
-		this.plugin.resetCorner(event.getPlayer(), this.plugin.corner3);
-		this.plugin.resetCorner(event.getPlayer(), this.plugin.corner4);
+		this.plugin.resetBeaconCorner(event.getPlayer(), this.plugin.beaconCorner1);
+		this.plugin.resetBeaconCorner(event.getPlayer(), this.plugin.beaconCorner2);
+		this.plugin.resetBeaconCorner(event.getPlayer(), this.plugin.beaconCorner3);
+		this.plugin.resetBeaconCorner(event.getPlayer(), this.plugin.beaconCorner4);
 	}
 }

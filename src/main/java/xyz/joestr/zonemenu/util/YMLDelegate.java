@@ -18,8 +18,8 @@ import org.bukkit.plugin.Plugin;
  * YMLDelegate class which can handle functions for YML-Files.
  * 
  * @author Joel
- * @since version_1
- * @version version_5
+ * @since build_1
+ * @version build_7_pre_2
  */
 public class YMLDelegate {
 
