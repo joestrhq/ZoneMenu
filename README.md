@@ -122,7 +122,7 @@ id: <Map>
 Since version 0.0.3 missing config entries will be automatically placed while older versions (0.0.1, 0.0.2) don't do that.
 
 **Version history**  
-0.0.1; 0.0.2; 0.0.3; 0.0.4; build\_5; build\_6; *build\_7\_pre\_1 latest*
+0.0.1; 0.0.2; 0.0.3; 0.0.4; build\_5; build\_6; build\_7\_pre\_1; *build\_7\_pre\_2 latest*
 
 **Builds**  
 Builds are available [here](https://jenkins.joestr.xyz/job/ZoneMenu_Dev/).
