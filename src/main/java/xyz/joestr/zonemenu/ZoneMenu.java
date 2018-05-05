@@ -2,6 +2,7 @@ package xyz.joestr.zonemenu;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import net.md_5.bungee.api.ChatMessageType;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -397,7 +400,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	}
 	
 	/**
-	 * Get a players region an control whether you like to show a message or not.
+	 * Calls {@linkplain #getRegions(Player, boolean)} with parameters and returns the first element or {@code null}.
 	 * @author joestr
 	 * @since build_7_pre_2
 	 * @version build_7_pre_2
@@ -405,30 +408,15 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	 * @param player {@linkplain boolean} Show a message
 	 * @return {@linkplain ProtectedRegion} Region of a player
 	 */
-	// Get a players region an control whether you like to show find a message
-	// during search or not
 	public ProtectedRegion getRegion(final Player player, boolean showMessage) {
 
-		if (showMessage) {
-			this.sendActionBarToPlayer(
-					player,
-					this.colorCode(
-							"&", (String) this.configDelegate.getMap().get("zone_wait_message")
-					)
-			);
+		List<ProtectedRegion> lp = getRegions(player, showMessage);
+		
+		if(lp.isEmpty()) {
+			return null;
+		} else {
+			return lp.get(0);
 		}
-
-		ProtectedRegion p = null;
-
-		for (String s : worldGuardPlugin.getRegionManager(player.getWorld()).getRegions().keySet()) {
-			if (worldGuardPlugin.getRegionManager(player.getWorld()).getRegions().get(s)
-					.isOwner(worldGuardPlugin.wrapPlayer(player))) {
-				
-				p = worldGuardPlugin.getRegionManager(player.getWorld()).getRegions().get(s);
-			}
-		}
-
-		return p;
 	}
 	
 	/**
@@ -440,27 +428,62 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	 * @param player {@linkplain boolean} Show a message
 	 * @return {@linkplain List}<{@linkplain ProtectedRegion}> List of regions of a player
 	 */
-	public List<ProtectedRegion> getRegions(final Player player, Boolean showMessage) {
-
+	public List<ProtectedRegion> getRegions(final Player player, final Boolean showMessage) {
+		
 		if (showMessage) {
-			this.sendActionBarToPlayer(player,
+			this.sendActionBarToPlayer(
+					player,
 					this.colorCode(
-							"&", (String) this.configDelegate.getMap().get("zone_wait_message")
+							"&",
+							(String) this.configDelegate.getMap().get("zone_wait_message")
 					)
 			);
 		}
-
+		
 		List<ProtectedRegion> lp = new ArrayList<ProtectedRegion>();
+		RegionManager rm = worldGuardPlugin.getRegionManager(player.getWorld());
+		
+		for (String s : rm.getRegions().keySet()) {
 
-		for (String s : worldGuardPlugin.getRegionManager(player.getWorld()).getRegions().keySet()) {
-
-			if (worldGuardPlugin.getRegionManager(player.getWorld()).getRegions().get(s)
-					.isOwner(worldGuardPlugin.wrapPlayer(player))) {
-
-				lp.add(worldGuardPlugin.getRegionManager(player.getWorld()).getRegions().get(s));
+			if (rm.getRegions().get(s).isOwner(worldGuardPlugin.wrapPlayer(player))) {
+							
+				lp.add(rm.getRegions().get(s));
 			}
 		}
 
 		return lp;
+	}
+	
+	public CompletableFuture<List<ProtectedRegion>> futuristicRegionProcessing(final Player player, final boolean showMessage, final BiConsumer<List<ProtectedRegion>, Throwable> biconsumer) {
+		
+		return CompletableFuture.supplyAsync(
+				() -> {
+					// **********
+					// Deutsch:
+					// Hier ein Test ob der Hauptthread blockt.
+					// **********
+					
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					
+					RegionManager rm = worldGuardPlugin.getRegionManager(player.getWorld());
+					List<ProtectedRegion> lp = new ArrayList<ProtectedRegion>();
+					
+					for (String s : rm.getRegions().keySet()) {
+
+						if (rm.getRegions().get(s).isOwner(worldGuardPlugin.wrapPlayer(player))) {
+							
+							lp.add(rm.getRegions().get(s));
+						}
+					}
+					
+					return lp;
+				}
+		).whenComplete(
+				biconsumer
+		);
 	}
 }
