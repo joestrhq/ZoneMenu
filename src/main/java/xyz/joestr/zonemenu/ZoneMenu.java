@@ -458,17 +458,6 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 		
 		return CompletableFuture.supplyAsync(
 				() -> {
-					// **********
-					// Deutsch:
-					// Hier ein Test ob der Hauptthread blockt.
-					// **********
-					
-					try {
-						Thread.sleep(5000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					
 					RegionManager rm = worldGuardPlugin.getRegionManager(player.getWorld());
 					List<ProtectedRegion> lp = new ArrayList<ProtectedRegion>();
 					
