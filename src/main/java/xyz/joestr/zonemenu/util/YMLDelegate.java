@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -24,7 +24,7 @@ import org.bukkit.plugin.Plugin;
 public class YMLDelegate {
 
 	Plugin plugin = null;
-	Map<String, Object> hashMap = new HashMap<String, Object>();
+	Map<String, Object> hashMap = new LinkedHashMap<>();
 	String configurationSection = "";
 	String fileName = "";
 
