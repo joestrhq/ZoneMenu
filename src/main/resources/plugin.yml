@@ -1,5 +1,5 @@
 name: ZoneMenu
-version: build_6
+version: ${project.version}
 description: ZoneMenu
 author: joestr
 authors: [Joe83, Joe84, 9YB]
