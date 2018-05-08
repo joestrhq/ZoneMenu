@@ -29,12 +29,12 @@ public class SubCommandZoneCreate {
 			
 			// Initialise new region
 			ProtectedRegion protectedregion = null;
-
+			
 			if (!t.isEmpty()) {
 				protectedregion = t.get(0);
 			}
 			
-			if (protectedregion == null) {
+			if (protectedregion != null) {
 
 				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 				player.sendMessage(
@@ -44,7 +44,7 @@ public class SubCommandZoneCreate {
 			}
 
 			// Grab players worldedit selection
-			Selection selectedregion = plugin.getWorldEditPlugin().getSelection(player);
+			Selection selectedregion = plugin.worldEditPlugin.getSelection(player);
 
 			// Check if selection is valid
 			if (selectedregion == null) {
@@ -92,12 +92,12 @@ public class SubCommandZoneCreate {
 			// Create a new WorldGuard region
 			ProtectedCuboidRegion protectedcuboidregion = new ProtectedCuboidRegion(
 					(String) plugin.idDelegate.getMap().get("zone_id")
-							+ (String) plugin.idDelegate.getMap().get("zone_id_counter"),
+							+ plugin.idDelegate.getMap().get("zone_id_counter").toString(),
 					new BlockVector(first_x, first_y, first_z), new BlockVector(second_x, second_y, second_z));
 
 			// Increment the region id counter
 			plugin.idDelegate.getMap().put("zone_id_counter",
-					Integer.parseInt((String) plugin.idDelegate.getMap().get("zone_id_counter")) + 1);
+					Integer.parseInt(plugin.idDelegate.getMap().get("zone_id_counter").toString()) + 1);
 			plugin.idDelegate.Save();
 
 			// Check if region overlaps with unowned regions
@@ -128,7 +128,7 @@ public class SubCommandZoneCreate {
 			protectedcuboidregion.setOwners(domain);
 			// Set the priority to the specified value in the config file
 			protectedcuboidregion
-					.setPriority(Integer.parseInt((String) plugin.configDelegate.getMap().get("zone_create_priority")));
+					.setPriority(Integer.parseInt(plugin.configDelegate.getMap().get("zone_create_priority").toString()));
 
 			// Some flags
 			/*

@@ -129,12 +129,12 @@ public class PlayerInteract implements Listener {
 					this.plugin.createBeaconCorner(playerpos2, player, this.plugin.beaconCorner2, (byte) 2);
 					Location loc = playerpos1.clone();
 					loc.setX(playerpos2.getX());
-					this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner2);
-					this.plugin.createBeaconCorner(loc, player, this.plugin.beaconCorner2, (byte) 0);
+					this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner3);
+					this.plugin.createBeaconCorner(loc, player, this.plugin.beaconCorner3, (byte) 0);
 					loc = playerpos1.clone();
 					loc.setZ(playerpos2.getZ());
-					this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner2);
-					this.plugin.createBeaconCorner(loc, player, this.plugin.beaconCorner2, (byte) 0);
+					this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner4);
+					this.plugin.createBeaconCorner(loc, player, this.plugin.beaconCorner4, (byte) 0);
 					
 					// Make a worldedit selection
 					CuboidSelection cs = new CuboidSelection(playerworld, playerpos1, playerpos2);

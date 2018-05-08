@@ -301,56 +301,63 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	// --- start
 	@SuppressWarnings("deprecation")
 	public void createBeaconCorner(Location location, Player player, Map<Player, Location> playerLocationMap, byte glassColor) {
-
+		
+		playerLocationMap.put(player, location);
+		
 		int x = location.getBlockX();
 		int y = 0;
 		int z = location.getBlockZ();
 		World world = location.getWorld();
-
-		/*
-		 * 3x3 area on layer 0 1 Beacon at layer 1 1 Stained glass to passthrough blocks
-		 */
-
-		for (int xPoint = x - 1; xPoint <= x + 1; xPoint++) {
-			for (int zPoint = z - 1; zPoint <= z + 1; zPoint++) {
-				player.sendBlockChange(
-						world.getBlockAt(xPoint, y, zPoint).getLocation(),
-						Material.DIAMOND_BLOCK,
-						(byte) 0
-				);
-			}
-		}
 		
-		player.sendBlockChange(
-				world.getBlockAt(x, 1, z).getLocation(),
-				Material.BEACON,
-				(byte) 0
+		Bukkit.getServer().getScheduler().scheduleAsyncDelayedTask(
+				this,
+				() -> {
+					/*
+					 * 3x3 area on layer 0 1 Beacon at layer 1 1 Stained glass to passthrough blocks
+					 */
+
+					for (int xPoint = x - 1; xPoint <= x + 1; xPoint++) {
+						for (int zPoint = z - 1; zPoint <= z + 1; zPoint++) {
+							player.sendBlockChange(
+									world.getBlockAt(xPoint, y, zPoint).getLocation(),
+									Material.DIAMOND_BLOCK,
+									(byte) 0
+							);
+						}
+					}
+					
+					player.sendBlockChange(
+							world.getBlockAt(x, 1, z).getLocation(),
+							Material.BEACON,
+							(byte) 0
+					);
+					
+					int highestYPoint = 0;
+					for (int yPoint = 2; yPoint <= 255; yPoint++) {
+						if (world.getBlockAt(x, yPoint, z).getType() != Material.AIR) {
+							highestYPoint = yPoint;
+							player.sendBlockChange(
+									world.getBlockAt(x, yPoint, z).getLocation(),
+									Material.STAINED_GLASS,
+									glassColor
+							);
+						}
+					}
+					
+					player.sendBlockChange(
+							world.getBlockAt(x, highestYPoint, z).getLocation(),
+							Material.STAINED_GLASS,
+							glassColor
+					);
+				},
+				10L
 		);
-		
-		int yPoint = 2;
-		for (; yPoint <= 255; yPoint++) {
-			if (world.getBlockAt(x, yPoint, z).getType() != Material.AIR) {
-				player.sendBlockChange(
-						world.getBlockAt(x, yPoint, z).getLocation(),
-						Material.STAINED_GLASS,
-						glassColor
-				);
-			}
-		}
-		
-		laterSet(
-				world.getBlockAt(x, yPoint, z).getLocation(),
-				player,
-				Material.BEACON,
-				(byte) 0
-		);
-
-		playerLocationMap.put(player, location);
 	}
 	// --- end
 
 	/**
-	 * Send a blockhange with a little delay.
+	 * Send a blockchange with a little delay.
+	 * @deprecated Now implemented in {@linkplain #createBeaconCorner(Location, Player, Map, byte)}.
 	 * @author joestr
 	 * @since build_7_pre_2
 	 * @version build_7_pre_2
@@ -359,16 +366,14 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	 * @param playerLocationMap {@linkplain Material} The material to show
 	 * @param date {@linkplain byte} Bytedata of the block
 	 */
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unused" })
 	private void laterSet(final Location location, final Player player, final Material material, final byte data) {
 
 		// 10 ticks delay (just for safety)
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+		Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(
 				this,
-				new Runnable() {
-					public void run() {
-						player.sendBlockChange(location, material, data);
-					}
+				() -> {
+					player.sendBlockChange(location, material, data);
 				},
 				10L
 		);
@@ -454,9 +459,19 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 		return lp;
 	}
 	
-	public CompletableFuture<List<ProtectedRegion>> futuristicRegionProcessing(final Player player, final boolean showMessage, final BiConsumer<List<ProtectedRegion>, Throwable> biconsumer) {
+	public void futuristicRegionProcessing(final Player player, final boolean showMessage, final BiConsumer<List<ProtectedRegion>, Throwable> biconsumer) {
 		
-		return CompletableFuture.supplyAsync(
+		if (showMessage) {
+			this.sendActionBarToPlayer(
+					player,
+					this.colorCode(
+							'&',
+							(String) this.configDelegate.getMap().get("zone_wait_message")
+					)
+			);
+		}
+		
+		CompletableFuture.supplyAsync(
 				() -> {
 					RegionManager rm = worldGuardPlugin.getRegionManager(player.getWorld());
 					List<ProtectedRegion> lp = new ArrayList<ProtectedRegion>();
