@@ -211,7 +211,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	 * <br />
 	 * Use {@link #alternativeColorCode(char, String)} instead.
 	 */
-	public String alternaticeColorCode(String s, String t) {
+	public String alternativeColorCode(String s, String t) {
 		return t.replace("§", s);
 	}
 	
