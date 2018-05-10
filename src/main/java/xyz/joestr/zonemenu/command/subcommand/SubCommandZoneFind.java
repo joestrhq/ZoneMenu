@@ -1,4 +1,4 @@
-package xyz.joestr.zonemenu.subcommand;
+package xyz.joestr.zonemenu.command.subcommand;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -7,11 +7,11 @@ import org.bukkit.inventory.ItemStack;
 import xyz.joestr.zonemenu.ZoneMenu;
 import xyz.joestr.zonemenu.enumeration.ZoneMenuTool;
 
-public class SubCommandZoneSign {
+public class SubCommandZoneFind {
 	
 	ZoneMenu plugin = null;
 	
-	public SubCommandZoneSign(ZoneMenu plugin) {
+	public SubCommandZoneFind(ZoneMenu plugin) {
 		this.plugin = plugin;
 	}
 	
@@ -25,9 +25,9 @@ public class SubCommandZoneSign {
 
 		// Send player a message
 		player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-		player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_sign")));
+		player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_find")));
 
 		// Put player into a map where his name and the current action are stored
-		this.plugin.tool.put(player, ZoneMenuTool.SIGN);
+		this.plugin.tool.put(player, ZoneMenuTool.FIND);
 	}
 }

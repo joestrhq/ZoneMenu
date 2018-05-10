@@ -1,4 +1,4 @@
-package xyz.joestr.zonemenu.subcommand;
+package xyz.joestr.zonemenu.command.subcommand;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

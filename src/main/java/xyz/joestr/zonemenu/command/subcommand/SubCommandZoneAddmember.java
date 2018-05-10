@@ -1,4 +1,4 @@
-package xyz.joestr.zonemenu.subcommand;
+package xyz.joestr.zonemenu.command.subcommand;
 
 import java.util.List;
 import java.util.concurrent.Executors;

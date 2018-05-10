@@ -10,15 +10,15 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 
 import xyz.joestr.zonemenu.ZoneMenu;
-import xyz.joestr.zonemenu.subcommand.SubCommandZoneRemovemember;
-import xyz.joestr.zonemenu.subcommand.SubCommandZoneCancel;
-import xyz.joestr.zonemenu.subcommand.SubCommandZoneCreate;
-import xyz.joestr.zonemenu.subcommand.SubCommandZoneDelete;
-import xyz.joestr.zonemenu.subcommand.SubCommandZoneFind;
-import xyz.joestr.zonemenu.subcommand.SubCommandZoneFlag;
-import xyz.joestr.zonemenu.subcommand.SubCommandZoneInfo;
-import xyz.joestr.zonemenu.subcommand.SubCommandZoneAddmember;
-import xyz.joestr.zonemenu.subcommand.SubCommandZoneSign;
+import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneAddmember;
+import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneCancel;
+import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneCreate;
+import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneDelete;
+import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneFind;
+import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneFlag;
+import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneInfo;
+import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneRemovemember;
+import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneSign;
 
 @SuppressWarnings("deprecation")
 public class ZoneCommand implements CommandExecutor {
