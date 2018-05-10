@@ -223,7 +223,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	 * @param stringToInspect {@linkplain String} String to inspect
 	 * @return {@linkplain String} Modified string
 	 */
-	public String alternaticeColorCode(char alternativeCode, String stringToInspect) {
+	public String alternativeColorCode(char alternativeCode, String stringToInspect) {
 		return stringToInspect.replace(ChatColor.COLOR_CHAR, alternativeCode);
 	}
 	
