@@ -1,6 +1,7 @@
 package xyz.joestr.zonemenu;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldguard.bukkit.WGBukkit;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -118,7 +119,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 		
 		// Get WorldEdit
 		this.worldEditPlugin = getWorldEditPlugin();
-		this.worldGuardPlugin = getWorldGuardPlugin();
+		this.worldGuardPlugin = WGBukkit.getPlugin();
 	}
 	
 	/**
@@ -158,9 +159,10 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	 * @since build_1
 	 * @version build_7_pre_2
 	 * @return {@linkplain WorldGuardPlugin} WorldGuard plugin
+	 * @deprecated Use {@linkplain com.sk89q.worldguard.bukkit.WGBukkit#getPlugin()} instead.
 	 */
 	public WorldGuardPlugin getWorldGuardPlugin() {
-
+		
 		Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
 
 		if ((plugin == null) || (!(plugin instanceof WorldGuardPlugin))) {
