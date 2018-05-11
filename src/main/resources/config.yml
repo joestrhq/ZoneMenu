@@ -59,4 +59,4 @@ config:
   event_sign_area: " &bArea: &a{0}"
   zone_wait_message: "&aZoneMenu &c- &bPlease wait ..."
   flag_not_found: "&cFlag &b{0} &cdoes not exist."
-  console_message: "&cConsole? &bNo."
+  console_message: "&cNot a player?."
