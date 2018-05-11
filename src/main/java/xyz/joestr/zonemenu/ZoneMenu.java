@@ -181,12 +181,12 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	 * @version build_7_pre_2
 	 * @param s {@linkplain String} 
 	 * @return {@linkplain String} Modified string
-	 * @deprecated The future of the 'ง' as a color code character is not safe.
+	 * @deprecated The future of the 'ยง' as a color code character is not safe.
 	 * <br />
 	 * Use {@link #colorCode(char, String)} instead.
 	 */
 	public String colorCode(String s, String t) {
-		return t.replace(s, "ง");
+		return t.replace(s, "ยง");
 	}
 	
 	/**
@@ -202,17 +202,17 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	}
 	
 	/**
-	 * Replaces all occurrences of 'ง' with paramter {@code s}.
+	 * Replaces all occurrences of 'ยง' with paramter {@code s}.
 	 * @since build_1
 	 * @version build_7_pre_2
 	 * @param s {@linkplain String} 
 	 * @return {@linkplain String} Modified string
-	 * @deprecated The future of the 'ง' as a color code character is not safe.
+	 * @deprecated The future of the 'ยง' as a color code character is not safe.
 	 * <br />
 	 * Use {@link #alternativeColorCode(char, String)} instead.
 	 */
 	public String alternativeColorCode(String s, String t) {
-		return t.replace("ง", s);
+		return t.replace("ยง", s);
 	}
 	
 	/**
