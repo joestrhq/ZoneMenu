@@ -16,7 +16,6 @@ import org.bukkit.plugin.Plugin;
 
 /**
  * YMLDelegate class which can handle functions for YML-Files.
- * 
  * @author Joel
  * @since build_1
  * @version build_7_pre_2
@@ -29,16 +28,13 @@ public class YMLDelegate {
 	String fileName = "";
 
 	/**
-	 * Create a YMLDelegate instace.
-	 * 
+	 * Create a new YMLDelegate instace
 	 * @author joestr
-	 * @since version_1
-	 * @param plugin
-	 *            Instace of a plugin.
-	 * @param configurationSection
-	 *            Name of the configuration section.
-	 * @param fileName
-	 *            Name of the file.
+	 * @since build_1
+	 * @version build_7_pre_2
+	 * @param plugin {@linkplain Plugin} Instace of a plugin
+	 * @param configurationSection {@linkplain String} Name of the configuration section
+	 * @param fileName {@linkplain String} Name of the file
 	 */
 	public YMLDelegate(Plugin plugin, String configurationSection, String fileName) {
 
@@ -49,60 +45,59 @@ public class YMLDelegate {
 
 	/**
 	 * Get the name of the file.
-	 * 
 	 * @author joestr
-	 * @since version_1
-	 * @return Name of the file.
+	 * @since build_1
+	 * @version build_7_pre_2
+	 * @return {@linkplain String} Name of the file.
 	 */
 	public String getFileName() {
+		
 		return this.fileName;
 	}
 
 	/**
 	 * Get the configuration section as a map.
-	 * 
 	 * @author joestr
-	 * @since version_1
-	 * @return Map
+	 * @since build_1
+	 * @version build_7_pre_2
+	 * @return {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map with entries
 	 */
 	public Map<String, Object> getMap() {
+		
 		return this.hashMap;
 	}
 
 	/**
-	 * Set the configuration section with a map
-	 * 
+	 * Set the configuration section with a map.
 	 * @author joestr
-	 * @since version_1
-	 * @param map
-	 *            Map
+	 * @since build_1
+	 * @version build_7_pre_2
+	 * @param map {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map with entries
 	 */
 	public void setMap(Map<String, Object> map) {
+		
 		this.hashMap = map;
 	}
 
 	/**
 	 * Get the configuration section as a map.
-	 * 
-	 * @deprecated
-	 * @see YMLDelegate#getMap()
 	 * @author joestr
-	 * @since version_1
-	 * @return Map
+	 * @since build_1
+	 * @version build_7_pre_2
+	 * @return {@linkplain Map}<{@linkplain String}, {@linkplain Onject}> Map with entries
+	 * @deprecated Use {@linkplain #getMap()} instead.
 	 */
 	public Map<String, Object> Map() {
 		return this.getMap();
 	}
 
 	/**
-	 * Set the configuration section with a map
-	 * 
-	 * @deprecated
-	 * @see YMLDelegate#setMap(Map)
+	 * Set the configuration section with a map.
 	 * @author joestr
-	 * @since version_1
-	 * @param map
-	 *            Map
+	 * @since build_1
+	 * @version build_7_pre_2
+	 * @param map {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map with entries
+	 * @deprecated Use {@linkplain #setMap(Map)} instead.
 	 */
 	public void Map(Map<String, Object> map) {
 		this.setMap(map);
@@ -110,17 +105,24 @@ public class YMLDelegate {
 
 	/**
 	 * Load the file, get the configuration section and put it into a map.
-	 * 
 	 * @author joestr
-	 * @since version_1
+	 * @since build_1
+	 * @version build_7_pre_2
 	 */
 	public void Load() {
 
 		try {
-
+			
 			FileConfiguration fileConfiguration = YamlConfiguration
-					.loadConfiguration(new File(this.plugin.getDataFolder(), fileName));
-			hashMap.putAll(fileConfiguration.getConfigurationSection(configurationSection).getValues(true));
+					.loadConfiguration(
+							new File(
+									this.plugin.getDataFolder(),
+									fileName
+							)
+					);
+			hashMap.putAll(
+					fileConfiguration.getConfigurationSection(configurationSection).getValues(true)
+			);
 		} catch (Exception exception) {
 
 			exception.printStackTrace();
@@ -129,18 +131,27 @@ public class YMLDelegate {
 
 	/**
 	 * Save the map to the file.
-	 * 
 	 * @author joestr
-	 * @since version_1
+	 * @since build_1
+	 * @version build_7_pre_2
 	 */
 	public void Save() {
 
 		try {
 
-			FileConfiguration fileConfiguration = YamlConfiguration
-					.loadConfiguration(new File(this.plugin.getDataFolder(), fileName));
+			FileConfiguration fileConfiguration = YamlConfiguration.loadConfiguration(
+					new File(
+							this.plugin.getDataFolder(),
+							fileName
+					)
+			);
 			fileConfiguration.createSection(configurationSection, hashMap);
-			fileConfiguration.save(new File(this.plugin.getDataFolder(), fileName));
+			fileConfiguration.save(
+					new File(
+							this.plugin.getDataFolder(),
+							fileName
+					)
+			);
 		} catch (NullPointerException exception) {
 
 			exception.printStackTrace();
@@ -152,20 +163,20 @@ public class YMLDelegate {
 
 	/**
 	 * Reset the file with the ressource file.
-	 * 
 	 * @author joestr
-	 * @since version_1
+	 * @since build_1
+	 * @version build_7_pre_2
 	 */
 	public void Reset() {
 
 		try {
-
+			
 			this.plugin.saveResource(fileName, true);
 		} catch (Exception exception) {
 
 			exception.printStackTrace();
 		}
-
+		
 		Load();
 	}
 
@@ -188,80 +199,82 @@ public class YMLDelegate {
 
 	/**
 	 * Check for existing file.
-	 * 
 	 * @author joestr
-	 * @since version_1
+	 * @since build_1
+	 * @version build_7_pre_2
+	 * @return {@linkplain Boolean} If the file exists or not.
 	 */
 	public boolean Exist() {
 
-		boolean returnVariable = false;
+		boolean result = false;
 
 		File file = null;
 
 		try {
 
 			file = new File(this.plugin.getDataFolder(), fileName);
-
+			
 			if (file.exists()) {
 
-				returnVariable = true;
+				result = true;
 			}
 		} catch (NullPointerException exception) {
-
+			
 			exception.printStackTrace();
 		} catch (SecurityException exception) {
-
+			
 			exception.printStackTrace();
 		} catch (Exception exception) {
-
+			
 			exception.printStackTrace();
 		}
-
-		return returnVariable;
+		
+		return result;
 	}
-
+	
 	/**
 	 * Check if loaded file contains the same entries as the ressource file.
-	 * 
 	 * @author joestr
-	 * @since version_1
+	 * @since build_1
+	 * @version build_7_pre_2
+	 * @return {@linkplain Boolean} If the was successful or not.
 	 */
 	public boolean Check() {
 
-		boolean returnVariable = true;
+		boolean result = true;
 
 		Reader reader = null;
 
 		try {
-
+			
 			reader = new InputStreamReader(this.plugin.getResource(fileName), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-
+			
 			e.printStackTrace();
 		} catch (Exception exception) {
-
+			
 			exception.printStackTrace();
 		}
-
+		
 		for (String s : YamlConfiguration.loadConfiguration(reader).getConfigurationSection(configurationSection)
 				.getKeys(true)) {
-
+			
 			if (!this.hashMap.containsKey(s)) {
-
-				returnVariable = false;
+				
+				result = false;
 				break;
 			}
 		}
-
-		return returnVariable;
+		
+		return result;
 	}
 
 	/**
-	 * Check if loaded file contains the same entries as the ressource file and if
-	 * not add the missing entries to the map.
-	 * 
-	 * @author joestr
-	 * @since version_1
+	 * Check if loaded file contains the same entries as the ressource file
+	 * and if not add the missing entries to the map.
+	 * @since build_1
+	 * @version build_7_pre_2
+	 * @return {@linkplain Boolean} If an entry was added.
 	 */
 	public boolean EntryCheck() {
 
@@ -272,7 +285,6 @@ public class YMLDelegate {
 		try {
 
 			reader = new InputStreamReader(this.plugin.getResource(fileName), "UTF-8");
-
 		} catch (UnsupportedEncodingException exception) {
 
 			exception.printStackTrace();
