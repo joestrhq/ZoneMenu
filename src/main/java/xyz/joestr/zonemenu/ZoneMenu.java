@@ -48,6 +48,12 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	// This files contains the entries for the region IDs
 	public YMLDelegate idDelegate = new YMLDelegate(this, "id", "id.yml");
 	
+	// This file contains the entries for the zone names
+	public YMLDelegate nameDelegate = new YMLDelegate(this, "name", "name.yml");
+	
+	// This file contains contains Worldguard-Region-IDs and their corresponding name
+	public YMLDelegate id2nameDelegate = new YMLDelegate(this, "id2name", "id2name.yml");
+	
 	// This list contains the two delegates above (for iterating)
 	public List<YMLDelegate> ymlDelegates = new ArrayList<>();
 
@@ -101,7 +107,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 			yd.Load();
 		}
 
-		// Checl the delegaes for their entries.
+		// Check the delegaes for their entries.
 		// If they lack some entries,
 		// add the missing ones and save the file.
 		for (YMLDelegate yd : ymlDelegates) {

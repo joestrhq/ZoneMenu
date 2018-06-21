@@ -39,6 +39,7 @@ public class PlayerInteract implements Listener {
 			// Initiliaze message string
 			String find1 = "";
 			String find2 = "";
+			String find2names = "";
 			
 			// Check event action
 			if ((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
@@ -64,10 +65,16 @@ public class PlayerInteract implements Listener {
 				
 				// Add regions to the string
 				for (ProtectedRegion region : regiononloc) {
-					if (find2 != "") {
+					if (find2 != "" && find2names != "") {
 						find2 = find2 + ", ";
+						find2names = find2names + ", ";
 					}
 					find2 = find2 + region.getId();
+					find2names = find2names +
+					this.plugin.colorCode('&', (String) this.plugin.nameDelegate.getMap().get("name_format"))
+						.replace("{owner}", (String)region.getOwners().getPlayers().toArray()[0])
+						.replace("{id_counter}", region.getId()
+							.replace((String)this.plugin.idDelegate.getMap().get("zone_id"), ""));
 				}
 				
 				// Check if no regions were found
@@ -81,6 +88,8 @@ public class PlayerInteract implements Listener {
 					find1 = (String) this.plugin.configDelegate.getMap().get("event_find");
 				}
 				
+				find1.replace("{ids}", find2);
+				find1.replace("{names}", find2names);
 				// Send player a actionbar message
 				this.plugin.sendActionBarToPlayer(player, this.plugin.colorCode('&', find1 + find2));
 			}

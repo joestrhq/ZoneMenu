@@ -56,6 +56,17 @@ public class SubCommandZoneInfo {
 			player.sendMessage(
 					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_info_id"))
 							+ protectedregion.getId());
+			
+			if(!domainowners.getPlayers().isEmpty()) {
+				player.sendMessage(
+						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_info_name")) +
+						this.plugin.colorCode('&', (String) this.plugin.nameDelegate.getMap().get("name_format"))
+								.replace("{owner}", (String)domainowners.getPlayers().toArray()[0])
+								.replace("{id_counter}", protectedregion.getId()
+										.replace((String)this.plugin.idDelegate.getMap().get("zone_id"), ""))
+				);
+			}
+			
 			player.sendMessage(
 					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_info_priority"))
 							+ protectedregion.getPriority());
