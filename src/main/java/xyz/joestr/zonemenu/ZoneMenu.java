@@ -98,6 +98,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 		// Add the delegates to the list
 		ymlDelegates.add(configDelegate);
 		ymlDelegates.add(idDelegate);
+		ymlDelegates.add(nameDelegate);
 
 		// Check the delegates for existence,
 		// if not create them.
