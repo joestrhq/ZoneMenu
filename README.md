@@ -13,8 +13,8 @@ Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for
 */zone sign* - Sign the start- and ending point of your new zone.  
 */zone create* - Create a zone from your selection.  
 */zone cancel* - Cancel your zone creation.  
-*/zone addmember \<player\>* - Add a member to your zone.  
-*/zone removemember \<player\>* - Remove a member from your zone.  
+*/zone addmember \<Player\>* - Add a member to your zone.  
+*/zone removemember \<Player\>* - Remove a member from your zone.  
 */zone flag \<Flag\> \<Flagvalue\>* - Change flags of your zone.  
 */zone info* - Get information about your zone.  
 */zone delete* - Delete your zone.  
@@ -94,7 +94,7 @@ id: <Map>
   zone_id_counter: <Int>
 ```
 
-**Deprecated**  
+**Removed**  
 **Version 0.0.3**  
 */zone unbind* - Unbind your stick. (Removed in version 0.0.3)  
 *unbind: \<String\>* (Removed in version 0.0.3)  
