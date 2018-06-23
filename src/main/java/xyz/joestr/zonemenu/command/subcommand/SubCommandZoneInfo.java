@@ -53,20 +53,28 @@ public class SubCommandZoneInfo {
 
 			// Send infos to player
 			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
+
 			player.sendMessage(
-					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_info_id"))
-							+ protectedregion.getId());
-			
-			if(!domainowners.getPlayers().isEmpty()) {
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_info_name")) +
-						this.plugin.colorCode('&', (String) this.plugin.nameDelegate.getMap().get("name_format"))
-								.replace("{owner}", (String)domainowners.getPlayers().toArray()[0])
-								.replace("{id_counter}", protectedregion.getId()
-										.replace((String)this.plugin.idDelegate.getMap().get("zone_id"), ""))
-				);
-			}
-			
+					this.plugin.colorCode(
+							'&',
+							((String)this.plugin.configDelegate.getMap().get("zone_info_name_id"))
+								.replace("{id}", protectedregion.getId())
+								.replace(
+										"{name}",
+										((String)this.plugin.nameDelegate.getMap().get("name_format"))
+												.replace(
+														"{owner}",
+														((String)domainowners.toPlayersString(this.plugin.worldGuardPlugin.getProfileCache()))
+																.replace("*", "").split(",")[0]
+												)
+												.replace(
+														"{id_counter}",
+														protectedregion.getId().replace((String) this.plugin.idDelegate.getMap().get("zone_id"), "")
+												)
+								)
+					)
+			);
+
 			player.sendMessage(
 					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_info_priority"))
 							+ protectedregion.getPriority());

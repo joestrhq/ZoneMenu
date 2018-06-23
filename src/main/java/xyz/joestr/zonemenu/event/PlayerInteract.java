@@ -72,7 +72,7 @@ public class PlayerInteract implements Listener {
 					find2 = find2 + region.getId();
 					find2names = find2names +
 					this.plugin.colorCode('&', (String) this.plugin.nameDelegate.getMap().get("name_format"))
-						.replace("{owner}", (String)region.getOwners().getPlayers().toArray()[0])
+						.replace("{owner}", (String)region.getOwners().toPlayersString(this.plugin.worldGuardPlugin.getProfileCache()).replace("*", "").split(",")[0])
 						.replace("{id_counter}", region.getId()
 							.replace((String)this.plugin.idDelegate.getMap().get("zone_id"), ""));
 				}
@@ -88,8 +88,8 @@ public class PlayerInteract implements Listener {
 					find1 = (String) this.plugin.configDelegate.getMap().get("event_find");
 				}
 				
-				find1.replace("{ids}", find2);
-				find1.replace("{names}", find2names);
+				find1 = find1.replace("{ids}", find2);
+				find1 = find1.replace("{names}", find2names);
 				// Send player a actionbar message
 				this.plugin.sendActionBarToPlayer(player, this.plugin.colorCode('&', find1));
 			}

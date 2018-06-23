@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>xyz.joestr</groupId>
   <artifactId>zonemenu_dev</artifactId>
-  <version>build_7_pre_2</version>
+  <version>build_7_pre_3</version>
   <name>ZoneMenu_Dev</name>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>

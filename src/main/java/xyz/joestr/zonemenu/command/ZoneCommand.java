@@ -354,7 +354,7 @@ public class ZoneCommand implements CommandExecutor {
 				// TODO: Implementig /zone flag <Flag> <Flag value ...> / done: seems complicated
 				// TODO: reset flags (/zone flag <Flag> null?)
 				// /zone flag <Flag> <Flag value...>
-				if ((args[0].equalsIgnoreCase("flag")) && (args.length > 2) && (args.length < 4)) {
+				if ((args[0].equalsIgnoreCase("flag")) && (args.length > 2)) {
 					
 					this.subCommandZoneFlag.process(player, args);
 					

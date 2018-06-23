@@ -13,8 +13,8 @@ Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for
 */zone sign* - Sign the start- and ending point of your new zone.  
 */zone create* - Create a zone from your selection.  
 */zone cancel* - Cancel your zone creation.  
-*/zone addmember \<player\>* - Add a member to your zone.  
-*/zone removemember \<player\>* - Remove a member from your zone.  
+*/zone addmember \<Player\>* - Add a member to your zone.  
+*/zone removemember \<Player\>* - Remove a member from your zone.  
 */zone flag \<Flag\> \<Flagvalue\>* - Change flags of your zone.  
 */zone info* - Get information about your zone.  
 */zone delete* - Delete your zone.  
@@ -22,7 +22,7 @@ Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for
 **Permissions (since build_5)**  
 */zone* - zonemenu.\*
 
-**Config entries (since build_5)**  
+**Config entries (since build_7_pre_3)**  
 **config.yml**  
 ```
 config: <Map>
@@ -52,38 +52,38 @@ config: <Map>
   zone_create_not_signed: <String>
   zone_create_area_min: <Int>
   zone_create_area_max: <Int>
-  zone_create_area_under: <String>
-  zone_create_area_over: <String>
+  zone_create_area_under: <String (can contain {0} -> zone_create_area_min)>
+  zone_create_area_over: <String (can contain {0} -> zone_create_area_max)>
   zone_create_overlaps_unowned: <String>
   zone_create_priority: <Int>
   zone_create: <String>
   zone_cancel_not_running: <String>
   zone_cancel: <String>
   no_zone: <String>
-  zone_addmember_not_existing: <String>
-  zone_addmember_already_member: <String>
-  zone_addmember: <String>
-  zone_removemember_unknownplayer: <String>
-  zone_removemember: <String>
-  zone_flag_not_found: <String>
-  zone_flag_changed: <String>
-  zone_info_id: <String>
+  zone_addmember_not_existing: <String (can contain {0} -> Given playername)>
+  zone_addmember_already_member: <String (can contain {0} -> Given playername)>
+  zone_addmember: <String (can contain {0} -> Given playername)>
+  zone_removemember_unknownplayer: <String (can contain {0} -> Given playername)>
+  zone_removemember: <String (can contain {0} -> Given playername)>
+  zone_flag_not_found: <String (can contain {0} -> Flag name)>
+  zone_flag_changed: <String (can contain {0} -> Flag name, {1} -> Flag value)>
+  zone_info_name_id: <String (can contain {name} -> Name format, {id} -> Worldguard region id)>
   zone_info_priority: <String>
   zone_info_owners: <String>
   zone_info_members: <String>
-  zone_info_flag: <String>
-  zone_info_start: <String>
-  zone_info_end: <String>
-  zone_info_area: <String>
+  zone_info_flag: <String (can contain {0} -> Flag name, {1} -> Flag value)>
+  zone_info_start: <String (can contain {0} -> X-Coordinate, {1} -> Z-Coordinate)>
+  zone_info_end: <String (can contain {0} -> X-Coordinate, {1} -> Z-Coordinate)>
+  zone_info_area: <String (can contain {0} -> Area)>
   zone_delete: <String>
-  usage_message: <String>
-  permission_message: <String>
-  event_find_multi: <String>
+  usage_message: <String (can contain {0} -> Coresponding command)>
+  permission_message: <String (can contain {0} -> Coresponding Permission)>
+  event_find_multi: <String (can contain {names} -> Name formats, {id} -> Worldguard region ids)>
   event_find_no: <String>
-  event_find: <String>
+  event_find: <String (can contain {names} -> Name formats, {ids} -> Worldguard region ids)>
   event_sign_first: <String>
   event_sign_second: <String>
-  event_sign_area: <String>
+  event_sign_area: <String (can contain {0} -> Area)>
   zone_wait_message: <String>
   console_message: <String>
 ```
@@ -93,8 +93,13 @@ id: <Map>
   zone_id: <String>
   zone_id_counter: <Int>
 ```
+**name.yml**  
+```
+name: <Map>
+  name_format: <String (can contain {owner} -> First region owner, {id_counter} -> zone_id_counter value on creation)'
+```
 
-**Deprecated**  
+**Removed**  
 **Version 0.0.3**  
 */zone unbind* - Unbind your stick. (Removed in version 0.0.3)  
 *unbind: \<String\>* (Removed in version 0.0.3)  
@@ -117,12 +122,14 @@ id: <Map>
 *zone_id_search: \<String\>* (Replaced by *zone_wait_message: \<String\>* in version 0.0.4)  
 *zone_id: \<String\>* (Exported to *id.yml* in version 0.0.4)  
 *zone_id_counter: \<Int\>* (Exported to *id.yml* in version 0.0.4)
+**Version build\_7\_pre\_3**  
+*zone_info_id: \<String\>* - WorldGuard region id showed in /zone info (Replaced by *zone_info_name_id: \<String (can contain {name} -> Name format, {id} -\> Worldguard region id)\>* in build\_7\_pre\_3)  
 
 **Note**  
 Since version 0.0.3 missing config entries will be automatically placed while older versions (0.0.1, 0.0.2) don't do that.
 
 **Version history**  
-0.0.1; 0.0.2; 0.0.3; 0.0.4; build\_5; build\_6; build\_7\_pre\_1; *build\_7\_pre\_2 latest*
+0.0.1; 0.0.2; 0.0.3; 0.0.4; build\_5; build\_6; build\_7\_pre\_1; build\_7\_pre\_2; *build\_7\_pre\_3 latest*
 
 **Builds**  
 Builds are available [here](https://jenkins.joestr.xyz/job/ZoneMenu_Dev/).
