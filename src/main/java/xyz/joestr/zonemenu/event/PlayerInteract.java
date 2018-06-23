@@ -91,7 +91,7 @@ public class PlayerInteract implements Listener {
 				find1.replace("{ids}", find2);
 				find1.replace("{names}", find2names);
 				// Send player a actionbar message
-				this.plugin.sendActionBarToPlayer(player, this.plugin.colorCode('&', find1 + find2));
+				this.plugin.sendActionBarToPlayer(player, this.plugin.colorCode('&', find1));
 			}
 		}
 
