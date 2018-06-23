@@ -121,7 +121,7 @@ name: <Map>
 *console_msg: \<String\>* (Replaced by *console_message: \<String\>* in version 0.0.4)  
 *zone_id_search: \<String\>* (Replaced by *zone_wait_message: \<String\>* in version 0.0.4)  
 *zone_id: \<String\>* (Exported to *id.yml* in version 0.0.4)  
-*zone_id_counter: \<Int\>* (Exported to *id.yml* in version 0.0.4)
+*zone_id_counter: \<Int\>* (Exported to *id.yml* in version 0.0.4)  
 **Version build\_7\_pre\_3**  
 *zone_info_id: \<String\>* - WorldGuard region id showed in /zone info (Replaced by *zone_info_name_id: \<String (can contain {name} -> Name format, {id} -\> Worldguard region id)\>* in build\_7\_pre\_3)  
 
