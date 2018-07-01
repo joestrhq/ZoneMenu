@@ -16,7 +16,7 @@ Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for
 */zone addmember \<Zone\>\<Player\>* - Add a member to a zone.  
 */zone removemember \<Zone\> \<Player\>* - Remove a member from a zone.  
 */zone flag \<Zone\> \<Flag\> \<Flagvalue\>* - Change flags of a zone.  
-*/zone info \<Zone\> * - Get information about a zone.  
+*/zone info \<Zone\>* - Get information about a zone.  
 */zone delete \<Zone\>* - Delete a zone.  
 */zone list* - List all yout zones.
 
