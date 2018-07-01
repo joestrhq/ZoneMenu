@@ -1,9 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>xyz.joestr</groupId>
-  <artifactId>zonemenu</artifactId>
-  <version>build_6</version>
+
+  <artifactId>zonemenu_dev</artifactId>
+  <version>build_8</version>
   <name>ZoneMenu</name>
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
   <repositories>
     <repository>
       <id>spigot-repo</id>
@@ -13,7 +18,7 @@
         <id>sk89q-repo</id>
         <url>http://repo.joestr.xyz/zonemenu/</url>
     </repository>
-</repositories>
+  </repositories>
   <dependencies>
     <!--Spigot API-->
     <dependency>
@@ -46,6 +51,12 @@
   <url>https://repo.joestr.xyz/zonemenu</url>
   <build>
     <resources>
+      <resource>
+        <directory>
+          src/main/java
+        </directory>
+        <filtering>true</filtering>
+      </resource>
       <resource>
         <directory>
           src/main/resources

@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -18,27 +18,28 @@ import org.bukkit.plugin.Plugin;
  * YMLDelegate class which can handle functions for YML-Files.
  * 
  * @author Joel
- * @since version_1
- * @version version_5
+ * @since build_1
+ * @version build_7_pre_2
  */
 public class YMLDelegate {
 
 	Plugin plugin = null;
-	Map<String, Object> hashMap = new HashMap<String, Object>();
+	Map<String, Object> hashMap = new LinkedHashMap<>();
 	String configurationSection = "";
 	String fileName = "";
 
 	/**
-	 * Create a YMLDelegate instace.
+	 * Create a new YMLDelegate instace
 	 * 
 	 * @author joestr
-	 * @since version_1
+	 * @since build_1
+	 * @version build_7_pre_2
 	 * @param plugin
-	 *            Instace of a plugin.
+	 *            {@linkplain Plugin} Instace of a plugin
 	 * @param configurationSection
-	 *            Name of the configuration section.
+	 *            {@linkplain String} Name of the configuration section
 	 * @param fileName
-	 *            Name of the file.
+	 *            {@linkplain String} Name of the file
 	 */
 	public YMLDelegate(Plugin plugin, String configurationSection, String fileName) {
 
@@ -51,10 +52,12 @@ public class YMLDelegate {
 	 * Get the name of the file.
 	 * 
 	 * @author joestr
-	 * @since version_1
-	 * @return Name of the file.
+	 * @since build_1
+	 * @version build_7_pre_2
+	 * @return {@linkplain String} Name of the file.
 	 */
 	public String getFileName() {
+
 		return this.fileName;
 	}
 
@@ -62,47 +65,55 @@ public class YMLDelegate {
 	 * Get the configuration section as a map.
 	 * 
 	 * @author joestr
-	 * @since version_1
-	 * @return Map
+	 * @since build_1
+	 * @version build_7_pre_2
+	 * @return {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map with
+	 *         entries
 	 */
 	public Map<String, Object> getMap() {
+
 		return this.hashMap;
 	}
 
 	/**
-	 * Set the configuration section with a map
+	 * Set the configuration section with a map.
 	 * 
 	 * @author joestr
-	 * @since version_1
+	 * @since build_1
+	 * @version build_7_pre_2
 	 * @param map
-	 *            Map
+	 *            {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map
+	 *            with entries
 	 */
 	public void setMap(Map<String, Object> map) {
+
 		this.hashMap = map;
 	}
 
 	/**
 	 * Get the configuration section as a map.
 	 * 
-	 * @deprecated
-	 * @see YMLDelegate#getMap()
 	 * @author joestr
-	 * @since version_1
-	 * @return Map
+	 * @since build_1
+	 * @version build_7_pre_2
+	 * @return {@linkplain Map}<{@linkplain String}, {@linkplain Onject}> Map with
+	 *         entries
+	 * @deprecated Use {@linkplain #getMap()} instead.
 	 */
 	public Map<String, Object> Map() {
 		return this.getMap();
 	}
 
 	/**
-	 * Set the configuration section with a map
+	 * Set the configuration section with a map.
 	 * 
-	 * @deprecated
-	 * @see YMLDelegate#setMap(Map)
 	 * @author joestr
-	 * @since version_1
+	 * @since build_1
+	 * @version build_7_pre_2
 	 * @param map
-	 *            Map
+	 *            {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map
+	 *            with entries
+	 * @deprecated Use {@linkplain #setMap(Map)} instead.
 	 */
 	public void Map(Map<String, Object> map) {
 		this.setMap(map);
@@ -112,7 +123,8 @@ public class YMLDelegate {
 	 * Load the file, get the configuration section and put it into a map.
 	 * 
 	 * @author joestr
-	 * @since version_1
+	 * @since build_1
+	 * @version build_7_pre_2
 	 */
 	public void Load() {
 
@@ -131,7 +143,8 @@ public class YMLDelegate {
 	 * Save the map to the file.
 	 * 
 	 * @author joestr
-	 * @since version_1
+	 * @since build_1
+	 * @version build_7_pre_2
 	 */
 	public void Save() {
 
@@ -154,7 +167,8 @@ public class YMLDelegate {
 	 * Reset the file with the ressource file.
 	 * 
 	 * @author joestr
-	 * @since version_1
+	 * @since build_1
+	 * @version build_7_pre_2
 	 */
 	public void Reset() {
 
@@ -190,11 +204,13 @@ public class YMLDelegate {
 	 * Check for existing file.
 	 * 
 	 * @author joestr
-	 * @since version_1
+	 * @since build_1
+	 * @version build_7_pre_2
+	 * @return {@linkplain Boolean} If the file exists or not.
 	 */
 	public boolean Exist() {
 
-		boolean returnVariable = false;
+		boolean result = false;
 
 		File file = null;
 
@@ -204,7 +220,7 @@ public class YMLDelegate {
 
 			if (file.exists()) {
 
-				returnVariable = true;
+				result = true;
 			}
 		} catch (NullPointerException exception) {
 
@@ -217,18 +233,20 @@ public class YMLDelegate {
 			exception.printStackTrace();
 		}
 
-		return returnVariable;
+		return result;
 	}
 
 	/**
 	 * Check if loaded file contains the same entries as the ressource file.
 	 * 
 	 * @author joestr
-	 * @since version_1
+	 * @since build_1
+	 * @version build_7_pre_2
+	 * @return {@linkplain Boolean} If the was successful or not.
 	 */
 	public boolean Check() {
 
-		boolean returnVariable = true;
+		boolean result = true;
 
 		Reader reader = null;
 
@@ -248,20 +266,21 @@ public class YMLDelegate {
 
 			if (!this.hashMap.containsKey(s)) {
 
-				returnVariable = false;
+				result = false;
 				break;
 			}
 		}
 
-		return returnVariable;
+		return result;
 	}
 
 	/**
 	 * Check if loaded file contains the same entries as the ressource file and if
 	 * not add the missing entries to the map.
 	 * 
-	 * @author joestr
-	 * @since version_1
+	 * @since build_1
+	 * @version build_7_pre_2
+	 * @return {@linkplain Boolean} If an entry was added.
 	 */
 	public boolean EntryCheck() {
 
@@ -272,7 +291,6 @@ public class YMLDelegate {
 		try {
 
 			reader = new InputStreamReader(this.plugin.getResource(fileName), "UTF-8");
-
 		} catch (UnsupportedEncodingException exception) {
 
 			exception.printStackTrace();
