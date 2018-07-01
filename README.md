@@ -1,11 +1,11 @@
-# ZoneMenu Dev  
-This is the branch for development!
+# ZoneMenu
 
 **Important**  
 This plugin requires [WorldEdit](https://github.com/sk89q/WorldEdit) and [WorldGuard](https://github.com/sk89q/WorldGuard)!
 
 **ZoneMenu**  
 Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)
+
 
 **Commands (since build_8)**  
 */zone* - Display interactive menu.  
@@ -145,5 +145,6 @@ Since version 0.0.3 missing config entries will be automatically placed while ol
 **Version history**  
 0.0.1; 0.0.2; 0.0.3; 0.0.4; build\_5; build\_6; build\_7\_pre\_1; build\_7\_pre\_2; build\_7\_pre\_3; *build\_8 latest*
 
+
 **Builds**  
-Builds are available [here](https://jenkins.joestr.xyz/job/ZoneMenu_Dev/).
+Builds are available [here](https://jenkins.joestr.xyz/job/ZoneMenu/).
