@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>xyz.joestr</groupId>
 
-  <artifactId>zonemenu_dev</artifactId>
+  <artifactId>zonemenu</artifactId>
   <version>build_8</version>
   <name>ZoneMenu</name>
   <properties>
