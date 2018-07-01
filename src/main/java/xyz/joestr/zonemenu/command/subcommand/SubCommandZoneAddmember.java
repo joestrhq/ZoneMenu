@@ -34,16 +34,31 @@ public class SubCommandZoneAddmember {
 			// Initialise new region
 			ProtectedRegion protectedregion = null;
 
-			if (!t.isEmpty()) {
-				protectedregion = t.get(0);
+			if (t.isEmpty()) {
+
+				player.sendMessage(
+						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
+				player.sendMessage(
+						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
+
+				return;
+			}
+
+			for (ProtectedRegion pr : t) {
+
+				if (pr.getId().equalsIgnoreCase(args[1])) {
+
+					protectedregion = pr;
+				}
 			}
 
 			// Check if region in invalid
 			if (protectedregion == null) {
 
-				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("no_zone")));
-
+				player.sendMessage(
+						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
+				player.sendMessage(
+						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
 				return;
 			}
 
@@ -52,12 +67,12 @@ public class SubCommandZoneAddmember {
 
 			// Check if mebers list contains the specified player
 			if (domainmembers.contains(
-					plugin.worldGuardPlugin.wrapOfflinePlayer(plugin.getServer().getOfflinePlayer(args[1])))) {
+					plugin.worldGuardPlugin.wrapOfflinePlayer(plugin.getServer().getOfflinePlayer(args[2])))) {
 
 				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 				player.sendMessage(plugin
 						.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_addmember_already_member"))
-						.replace("{0}", args[1]));
+						.replace("{0}", args[2]));
 
 				return;
 			}
@@ -73,7 +88,7 @@ public class SubCommandZoneAddmember {
 			// The following executor would be re-used in your plugin.
 			ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
 
-			String[] input = new String[] { args[1] };
+			String[] input = new String[] { args[2] };
 			ProfileService profiles = plugin.worldGuardPlugin.getProfileService();
 			DomainInputResolver resolver = new DomainInputResolver(profiles, input);
 			resolver.setLocatorPolicy(UserLocatorPolicy.UUID_AND_NAME);
@@ -85,11 +100,11 @@ public class SubCommandZoneAddmember {
 				public void onSuccess(DefaultDomain result) {
 
 					protectedregionforguava.getMembers().addPlayer(
-							plugin.worldGuardPlugin.wrapOfflinePlayer(plugin.getServer().getOfflinePlayer(args[1])));
+							plugin.worldGuardPlugin.wrapOfflinePlayer(plugin.getServer().getOfflinePlayer(args[2])));
 					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 					player.sendMessage(
 							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_addmember"))
-									.replace("{0}", args[1]));
+									.replace("{0}", args[2]));
 				}
 
 				public void onFailure(Throwable throwable) {
@@ -97,7 +112,7 @@ public class SubCommandZoneAddmember {
 					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 					player.sendMessage(plugin
 							.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_addmember_not_existing"))
-							.replace("{0}", args[1]));
+							.replace("{0}", args[2]));
 				}
 			});
 			// end ---

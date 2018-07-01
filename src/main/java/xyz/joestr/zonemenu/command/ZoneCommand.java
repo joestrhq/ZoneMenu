@@ -17,18 +17,19 @@ import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneDelete;
 import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneFind;
 import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneFlag;
 import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneInfo;
+import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneList;
 import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneRemovemember;
-import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneSign;
+import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneSubcreate;
 
-@SuppressWarnings("deprecation")
 public class ZoneCommand implements CommandExecutor {
 
 	private ZoneMenu plugin = null;
-	
+
 	private SubCommandZoneFind subCommandZoneFind = null;
-	private SubCommandZoneSign subCommandZoneSign = null;
 	private SubCommandZoneCreate subCommandZoneCreate = null;
+	private SubCommandZoneSubcreate subCommandZoneSubcreate = null;
 	private SubCommandZoneCancel subCommandZoneCancel = null;
+	private SubCommandZoneList subCommandZoneList = null;
 	private SubCommandZoneAddmember subCommandZoneAddmember = null;
 	private SubCommandZoneRemovemember subCommandZoneRemovemember = null;
 	private SubCommandZoneFlag subCommandZoneFlag = null;
@@ -37,19 +38,20 @@ public class ZoneCommand implements CommandExecutor {
 
 	public ZoneCommand(ZoneMenu zonemenu) {
 		this.plugin = zonemenu;
-		
+
 		this.subCommandZoneFind = new SubCommandZoneFind(this.plugin);
-		this.subCommandZoneSign = new SubCommandZoneSign(this.plugin);
 		this.subCommandZoneCreate = new SubCommandZoneCreate(this.plugin);
+		this.subCommandZoneSubcreate = new SubCommandZoneSubcreate(this.plugin);
 		this.subCommandZoneCancel = new SubCommandZoneCancel(this.plugin);
+		this.subCommandZoneList = new SubCommandZoneList(this.plugin);
 		this.subCommandZoneAddmember = new SubCommandZoneAddmember(this.plugin);
 		this.subCommandZoneRemovemember = new SubCommandZoneRemovemember(this.plugin);
 		this.subCommandZoneFlag = new SubCommandZoneFlag(this.plugin);
 		this.subCommandZoneInfo = new SubCommandZoneInfo(this.plugin);
 		this.subCommandZoneDelete = new SubCommandZoneDelete(this.plugin);
-		
+
 	}
-	
+
 	public boolean onCommand(CommandSender sender, Command command, String label, final String[] args) {
 
 		// Check if sender is a player
@@ -65,241 +67,83 @@ public class ZoneCommand implements CommandExecutor {
 				// /zone
 				if (args.length < 1) {
 
-					player.spigot().sendMessage(
-							new ComponentBuilder(
-									this.plugin.colorCode(
-											"&",
-											(String) this.plugin.configDelegate.Map().get("head") +
-											(String) this.plugin.configDelegate.Map().get("head_extra")
-									)
-							)
-							.append(
-									"\n" +
-									this.plugin.colorCode(
-											"&",
-											(String) this.plugin.configDelegate.Map().get("find")
-									)
-							)
-							.event(
-									new HoverEvent(
-											HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder(
-													this.plugin.colorCode(
-															"&",
-															(String) this.plugin.configDelegate.Map().get("find_hover")
-													)
-											)
-											.create()
-									)
-							)
-							.event(
-									new ClickEvent(
-											ClickEvent.Action.RUN_COMMAND,
-											"/zone find"
-									)
-							)
-							.append(
-									"\n" +
-									this.plugin.colorCode(
-											"&",
-											(String) this.plugin.configDelegate.Map().get("sign")
-									)
-							)
-							.event(
-									new HoverEvent(
-											HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder(
-													this.plugin.colorCode(
-															"&",
-															(String) this.plugin.configDelegate.Map().get("sign_hover")
-													)
-											)
-											.create()
-									)
-							)
-							.event(
-									new ClickEvent(
-											ClickEvent.Action.RUN_COMMAND,
-											"/zone sign"
-									)
-							)
-							.append(
-									"\n" +
-									this.plugin.colorCode(
-											"&",
-											(String) this.plugin.configDelegate.Map().get("create")
-									)
-							)
-							.event(
-									new HoverEvent(
-											HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder(
-													this.plugin.colorCode(
-															"&",
-															(String) this.plugin.configDelegate.Map().get("create_hover")
-													)
-											)
-											.create()
-									)
-							)
-							.event(
-									new ClickEvent(
-											ClickEvent.Action.RUN_COMMAND,
-											"/zone create"
-									)
-							)
-							.append(
-									"\n" +
-									this.plugin.colorCode(
-											"&",
-											(String) this.plugin.configDelegate.Map().get("cancel")
-									)
-							)
-							.event(
-									new HoverEvent(
-											HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder(
-													this.plugin.colorCode(
-															"&",
-															(String) this.plugin.configDelegate.Map().get("cancel_hover")
-													)
-											)
-											.create()
-									)
-							)
-							.event(
-									new ClickEvent(
-											ClickEvent.Action.RUN_COMMAND,
-											"/zone cancel"
-									)
-							)
-							.append(
-									"\n" +
-									this.plugin.colorCode(
-											"&",
-											(String) this.plugin.configDelegate.Map().get("addmember")
-									)
-							)
-							.event(
-									new HoverEvent(
-											HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder(
-													this.plugin.colorCode(
-															"&",
-															(String) this.plugin.configDelegate.Map().get("addmember_hover")
-													)
-											)
-											.create()
-									)
-							)
-							.event(
-									new ClickEvent(
-											ClickEvent.Action.SUGGEST_COMMAND,
-											"/zone addmember "
-									)
-							)
-							.append(
-									"\n" +
-									this.plugin.colorCode(
-											"&",
-											(String) this.plugin.configDelegate.Map().get("removemember")
-									)
-							)
-							.event(
-									new HoverEvent(
-											HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder(
-													this.plugin.colorCode(
-															"&",
-															(String) this.plugin.configDelegate.Map().get("removemember_hover")
-													)
-											)
-											.create()
-									)
-							)
-							.event(
-									new ClickEvent(
-											ClickEvent.Action.SUGGEST_COMMAND,
-											"/zone removemember "
-									)
-							)
-							.append(
-									"\n" +
-									this.plugin.colorCode(
-											"&",
-											(String) this.plugin.configDelegate.Map().get("info")
-									)
-							)
-							.event(
-									new HoverEvent(
-											HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder(
-													this.plugin.colorCode(
-															"&",
-															(String) this.plugin.configDelegate.Map().get("info_hover")
-													)
-											)
-											.create()
-									)
-							)
-							.event(
-									new ClickEvent(
-											ClickEvent.Action.RUN_COMMAND,
-											"/zone info"
-									)
-							)
-							.append(
-									"\n" +
-									this.plugin.colorCode(
-											"&",
-											(String) this.plugin.configDelegate.Map().get("flag")
-									)
-							)
-							.event(
-									new HoverEvent(
-											HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder(
-													this.plugin.colorCode(
-															"&",
-															(String) this.plugin.configDelegate.Map().get("flag_hover")
-													)
-											)
-											.create()
-									)
-							)
-							.event(
-									new ClickEvent(
-											ClickEvent.Action.SUGGEST_COMMAND,
-											"/zone flag"
-									)
-							)
-							.append(
-									"\n" +
-									this.plugin.colorCode(
-											"&",
-											(String) this.plugin.configDelegate.Map().get("delete")
-									)
-							)
-							.event(
-									new HoverEvent(
-											HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder(
-													this.plugin.colorCode(
-															"&",
-															(String) this.plugin.configDelegate.Map().get("delete_hover")
-													)
-											)
-											.create()
-									)
-							)
-							.event(
-									new ClickEvent(
-											ClickEvent.Action.SUGGEST_COMMAND,
-											"/zone delete"
-									)
-							)
-							.create()
-					);
+					player.spigot()
+							.sendMessage(new ComponentBuilder(this.plugin.colorCode('&',
+									(String) this.plugin.configDelegate.getMap().get("head")
+											+ (String) this.plugin.configDelegate.getMap().get("head_extra")))
+													.append("\n" + this.plugin.colorCode('&',
+															(String) this.plugin.configDelegate.getMap().get("find")))
+													.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+															new ComponentBuilder(this.plugin.colorCode('&',
+																	(String) this.plugin.configDelegate.getMap()
+																			.get("find_hover"))).create()))
+													.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/zone find"))
+													.append("\n" + this.plugin.colorCode('&',
+															(String) this.plugin.configDelegate.getMap().get("create")))
+													.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+															new ComponentBuilder(this.plugin.colorCode('&',
+																	(String) this.plugin.configDelegate.getMap()
+																			.get("create_hover"))).create()))
+													.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+															"/zone create"))
+													.append("\n" + this.plugin.colorCode('&',
+															(String) this.plugin.configDelegate.getMap().get("subcreate")))
+													.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+															new ComponentBuilder(this.plugin.colorCode('&',
+																	(String) this.plugin.configDelegate.getMap()
+																			.get("subcreate_hover"))).create()))
+													.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
+															"/zone subcreate "))
+													.append("\n" + this.plugin.colorCode('&',
+															(String) this.plugin.configDelegate.getMap().get("cancel")))
+													.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+															new ComponentBuilder(this.plugin.colorCode('&',
+																	(String) this.plugin.configDelegate.getMap()
+																			.get("cancel_hover"))).create()))
+													.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+															"/zone cancel"))
+													.append("\n" + this.plugin.colorCode('&',
+															(String) this.plugin.configDelegate.getMap().get("addmember")))
+													.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+															new ComponentBuilder(this.plugin.colorCode('&',
+																	(String) this.plugin.configDelegate.getMap()
+																			.get("addmember_hover"))).create()))
+													.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
+															"/zone addmember "))
+													.append("\n" + this.plugin.colorCode('&',
+															(String) this.plugin.configDelegate.getMap()
+																	.get("removemember")))
+													.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+															new ComponentBuilder(this.plugin.colorCode('&',
+																	(String) this.plugin.configDelegate.getMap()
+																			.get("removemember_hover"))).create()))
+													.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
+															"/zone removemember "))
+													.append("\n" + this.plugin.colorCode('&',
+															(String) this.plugin.configDelegate.getMap().get("info")))
+													.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+															new ComponentBuilder(this.plugin.colorCode('&',
+																	(String) this.plugin.configDelegate.getMap()
+																			.get("info_hover"))).create()))
+													.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
+															"/zone info "))
+													.append("\n" + this.plugin.colorCode('&',
+															(String) this.plugin.configDelegate.getMap().get("flag")))
+													.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+															new ComponentBuilder(this.plugin.colorCode('&',
+																	(String) this.plugin.configDelegate.getMap()
+																			.get("flag_hover"))).create()))
+													.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
+															"/zone flag "))
+													.append("\n" + this.plugin.colorCode('&',
+															(String) this.plugin.configDelegate.getMap().get("delete")))
+													.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+															new ComponentBuilder(this.plugin.colorCode('&',
+																	(String) this.plugin.configDelegate.getMap()
+																			.get("delete_hover"))).create()))
+													.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
+															"/zone delete "))
+													.create());
 					return true;
 				}
 
@@ -311,19 +155,19 @@ public class ZoneCommand implements CommandExecutor {
 					return true;
 				}
 
-				// /zoen sign
-				if ((args[0].equalsIgnoreCase("sign")) && (args.length < 2)) {
-					
-					this.subCommandZoneSign.process(player);
-					
-					return true;
-				}
-
 				// /zone create
 				if ((args[0].equalsIgnoreCase("create")) && (args.length < 2)) {
 
 					this.subCommandZoneCreate.process(player);
-					
+
+					return true;
+				}
+
+				// /zone create
+				if ((args[0].equalsIgnoreCase("subcreate")) && (args.length > 1) && (args.length < 3)) {
+
+					this.subCommandZoneSubcreate.process(player, args);
+
 					return true;
 				}
 
@@ -335,8 +179,16 @@ public class ZoneCommand implements CommandExecutor {
 					return true;
 				}
 
+				// /zone find
+				if ((args[0].equalsIgnoreCase("list")) && (args.length < 2)) {
+
+					this.subCommandZoneList.process(player);
+
+					return true;
+				}
+
 				// /zone addmember <player>
-				if ((args[0].equalsIgnoreCase("addmember")) && (args.length > 1) && (args.length < 3)) {
+				if ((args[0].equalsIgnoreCase("addmember")) && (args.length > 2) && (args.length < 4)) {
 
 					this.subCommandZoneAddmember.process(player, args);
 
@@ -344,59 +196,63 @@ public class ZoneCommand implements CommandExecutor {
 				}
 
 				// /zone removemember <player>
-				if ((args[0].equalsIgnoreCase("removemember")) && (args.length > 1) && (args.length < 3)) {
-					
+				if ((args[0].equalsIgnoreCase("removemember")) && (args.length > 2) && (args.length < 4)) {
+
 					this.subCommandZoneRemovemember.process(player, args);
-					
+
 					return true;
 				}
 
-				// TODO: Implementig /zone flag <Flag> <Flag value ...> / done: seems complicated
-				// TODO: reset flags (/zone flag <Flag> null?)
+				// TODO: Implementig /zone flag <Flag> <Flag value ...> / DONE: seems
+				// complicated
+				// TODO: reset flags (/zone flag <Flag> null?) / DONE
 				// /zone flag <Flag> <Flag value...>
 				if ((args[0].equalsIgnoreCase("flag")) && (args.length > 2)) {
-					
+
 					this.subCommandZoneFlag.process(player, args);
-					
+
 					return true;
 				}
 
 				// /zone info
-				if ((args[0].equalsIgnoreCase("info")) && (args.length < 2)) {
+				if ((args[0].equalsIgnoreCase("info")) && (args.length > 1) && (args.length < 3)) {
 
-					this.subCommandZoneInfo.process(player);
-					
+					this.subCommandZoneInfo.process(player, args);
+
 					return true;
 				}
 
 				// /zone delete
-				if ((args[0].equalsIgnoreCase("delete")) && (args.length < 2)) {
+				if ((args[0].equalsIgnoreCase("delete")) && (args.length > 1) && (args.length < 3)) {
 
-					this.subCommandZoneDelete.process(player);
-					
+					this.subCommandZoneDelete.process(player, args);
+
 					return true;
 				}
 
 				// Wrong usage of the /zone command
-				player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
-				player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("usage_message"))
-						.replace("{0}", "/zone"));
+				player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
+				player.sendMessage(
+						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
+								.replace("{0}", "/zone"));
 
 				return true;
 			}
 
 			// Permission zonemenu.* is missing
-			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
-			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("permission_message"))
-					.replace("{0}", "zonemenu.*"));
+			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
+			player.sendMessage(
+					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("permission_message"))
+							.replace("{0}", "zonemenu.*"));
 
 			return true;
 		}
 
 		// Console
 		this.plugin.getServer().getConsoleSender()
-				.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("head")));
-		sender.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.Map().get("console_message")));
+				.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
+		sender.sendMessage(
+				this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("console_message")));
 		return true;
 	}
 }

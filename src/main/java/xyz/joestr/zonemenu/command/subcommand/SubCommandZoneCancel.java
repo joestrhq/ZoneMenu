@@ -5,16 +5,16 @@ import org.bukkit.entity.Player;
 import xyz.joestr.zonemenu.ZoneMenu;
 
 public class SubCommandZoneCancel {
-	
+
 	ZoneMenu plugin = null;
-	
+
 	public SubCommandZoneCancel(ZoneMenu plugin) {
 		this.plugin = plugin;
 	}
-	
+
 	public void process(Player player) {
 		// Check if player is in map
-		if (!this.plugin.tool.containsKey(player)) {
+		if (!this.plugin.toolType.containsKey(player)) {
 
 			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
 			player.sendMessage(this.plugin.colorCode('&',
@@ -24,24 +24,28 @@ public class SubCommandZoneCancel {
 		}
 
 		// Clean up user
-		this.plugin.tool.remove(player);
+		this.plugin.toolType.remove(player);
 		this.plugin.findLocations.remove(player);
-		this.plugin.worlds.remove(player);
-		this.plugin.selectedFirstLocations.remove(player);
-		this.plugin.selectedSecondLocations.remove(player);
-		
-		if(this.plugin.worldEditPlugin.getSession(player).getSelectionWorld() != null) {
-			this.plugin.worldEditPlugin.getSession(player).getRegionSelector(this.plugin.worldEditPlugin.getSession(player).getSelectionWorld()).clear();
+		this.plugin.createWorlds.remove(player);
+		this.plugin.createFirstLocations.remove(player);
+		this.plugin.createSecondLocations.remove(player);
+		this.plugin.subcreateWorlds.remove(player);
+		this.plugin.subcreateFirstLocations.remove(player);
+		this.plugin.subcreateSecondLocations.remove(player);
+
+		if (this.plugin.worldEditPlugin.getSelection(player) != null) {
+			this.plugin.worldEditPlugin.getSelection(player).getRegionSelector().clear();
 		}
 
 		// Reset beacons
-		this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner1);
-		this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner2);
-		this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner3);
-		this.plugin.resetBeaconCorner(player, this.plugin.beaconCorner4);
+		this.plugin.resetBeaconCorner(player, this.plugin.createCorner1);
+		this.plugin.resetBeaconCorner(player, this.plugin.createCorner2);
+		this.plugin.resetBeaconCorner(player, this.plugin.createCorner3);
+		this.plugin.resetBeaconCorner(player, this.plugin.createCorner4);
+		this.plugin.resetSubcreateCorner(player, this.plugin.subcreateCorner1);
+		this.plugin.resetSubcreateCorner(player, this.plugin.subcreateCorner2);
 
 		player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-		player.sendMessage(
-				this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_cancel")));
+		player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_cancel")));
 	}
 }

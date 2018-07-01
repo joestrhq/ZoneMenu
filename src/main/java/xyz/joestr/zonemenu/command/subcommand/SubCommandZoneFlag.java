@@ -38,287 +38,285 @@ public class SubCommandZoneFlag {
 	public void process(Player player, String[] args) {
 
 		plugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
-			
+
 			// Initialise new region
 			ProtectedRegion protectedregion = null;
 
-			if (!t.isEmpty()) {
-				protectedregion = t.get(0);
+			if (t.isEmpty()) {
+
+				player.sendMessage(
+						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
+				player.sendMessage(
+						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
+
+				return;
 			}
-			
+
+			for (ProtectedRegion pr : t) {
+
+				if (pr.getId().equalsIgnoreCase(args[1])) {
+
+					protectedregion = pr;
+				}
+			}
+
 			if (protectedregion == null) {
 
 				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("no_zone")));
 				return;
 			}
-			
+
 			String all = "";
-			
-			for (int i = 2; i < args.length; i++) {
-				
-				if(i == args.length - 1) {
-					
+
+			for (int i = 3; i < args.length; i++) {
+
+				if (i == args.length - 1) {
+
 					all = all.concat(args[i]);
 				} else {
-					
+
 					all = all.concat(args[i].concat(" "));
 				}
 			}
-			
-			Flag<?> flagMatched = DefaultFlag.fuzzyMatchFlag(plugin.worldGuardPlugin.getFlagRegistry(), args[1]);
-			
-			if(!DefaultFlag.getDefaultFlags().contains(flagMatched)) {
+
+			Flag<?> flagMatched = DefaultFlag.fuzzyMatchFlag(plugin.worldGuardPlugin.getFlagRegistry(), args[2]);
+
+			if (!DefaultFlag.getDefaultFlags().contains(flagMatched)) {
 				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 				player.sendMessage(
 						plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_not_found"))
-								.replace("{0}", args[1]));
+								.replace("{0}", args[2]));
 			}
-			
+
 			if (flagMatched instanceof StateFlag) {
 				StateFlag sf = (StateFlag) flagMatched;
 				try {
-					if(all.equalsIgnoreCase("null")) {
+					if (all.equalsIgnoreCase("null")) {
 						protectedregion.setFlag(sf, null);
 					} else {
-						protectedregion.setFlag(sf, sf.parseInput(FlagContext.create().setSender(player)
-								.setInput(all).setObject("region", protectedregion).build()));
+						protectedregion.setFlag(sf, sf.parseInput(FlagContext.create().setSender(player).setInput(all)
+								.setObject("region", protectedregion).build()));
 					}
+					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 					player.sendMessage(
-							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-						player.sendMessage(plugin
-							.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
-							.replace("{0}", flagMatched.getName()).replace("{1}", all));
+							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
+									.replace("{0}", flagMatched.getName()).replace("{1}", all));
 				} catch (InvalidFlagFormat e) {
-					player.sendMessage(
-							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-					player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <allow|deny|none>");
+					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
+					player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " " + args[2] + " <allow|deny|none>");
 					return;
 					// e.printStackTrace();
 				}
 				return;
 			}
-			
+
 			if (flagMatched instanceof SetFlag<?>) {
 				if (DefaultFlag.DENY_SPAWN.getName().equalsIgnoreCase(((SetFlag<?>) flagMatched).getName())) {
 					SetFlag<EntityType> sfet = (SetFlag<EntityType>) flagMatched;
 					try {
-						if(all.equalsIgnoreCase("null")) {
+						if (all.equalsIgnoreCase("null")) {
 							protectedregion.setFlag(sfet, null);
 						} else {
 							protectedregion.setFlag(sfet, sfet.parseInput(FlagContext.create().setSender(player)
 									.setInput(all).setObject("region", protectedregion).build()));
 						}
-					} catch (InvalidFlagFormat e) {
+						player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 						player.sendMessage(
-								ChatColor.RED + "/zone flag " + args[1] + " <EntityType[,EntityType ...]>");
+								plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
+										.replace("{0}", flagMatched.getName()).replace("{1}", all));
+					} catch (InvalidFlagFormat e) {
+						player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " " + args[2]
+								+ " <EntityType[,EntityType ...]>");
 						// e.printStackTrace();
 					}
 					return;
 				}
-				
+
 				Type type = ((ParameterizedType) flagMatched.getClass().getGenericSuperclass())
 						.getActualTypeArguments()[0];
 				SetFlag<Type> sfet = (SetFlag<Type>) flagMatched;
-				
+
 				try {
-					if(all.equalsIgnoreCase("null")) {
+					if (all.equalsIgnoreCase("null")) {
 						protectedregion.setFlag(sfet, null);
 					} else {
 						protectedregion.setFlag(sfet, sfet.parseInput(FlagContext.create().setSender(player)
 								.setInput(all).setObject("region", protectedregion).build()));
 					}
+					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 					player.sendMessage(
-							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-					player.sendMessage(plugin
-							.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
-							.replace("{0}", flagMatched.getName()).replace("{1}", all));
+							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
+									.replace("{0}", flagMatched.getName()).replace("{1}", all));
 				} catch (InvalidFlagFormat e) {
-					player.sendMessage(
-							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-					player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <" + type.getTypeName()
-							+ "[," + type.getTypeName() + " ...]>");
+					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
+					player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " " + args[2] + " <"
+							+ type.getTypeName() + "[," + type.getTypeName() + " ...]>");
 					// e.printStackTrace();
 				}
-				
+
 				return;
 			}
-			
+
 			if (flagMatched instanceof StringFlag) {
 				StringFlag sf = (StringFlag) flagMatched;
-				
+
 				try {
-					if(all.equalsIgnoreCase("null")) {
+					if (all.equalsIgnoreCase("null")) {
 						protectedregion.setFlag(sf, null);
 					} else {
-						protectedregion.setFlag(sf, sf.parseInput(FlagContext.create().setSender(player)
-								.setInput(all).setObject("region", protectedregion).build()));
+						protectedregion.setFlag(sf, sf.parseInput(FlagContext.create().setSender(player).setInput(all)
+								.setObject("region", protectedregion).build()));
 					}
+					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 					player.sendMessage(
-							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-					player.sendMessage(plugin
-							.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
-							.replace("{0}", flagMatched.getName()).replace("{1}", all));
+							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
+									.replace("{0}", flagMatched.getName()).replace("{1}", all));
 				} catch (InvalidFlagFormat e) {
-					player.sendMessage(
-							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-					player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <String ...>");
+					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
+					player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " " + args[2] + " <String ...>");
 					// e.printStackTrace();
 				}
-				
+
 				return;
 			}
-			
+
 			if (flagMatched instanceof BooleanFlag) {
 				BooleanFlag bf = (BooleanFlag) flagMatched;
-				
+
 				try {
-					if(all.equalsIgnoreCase("null")) {
+					if (all.equalsIgnoreCase("null")) {
 						protectedregion.setFlag(bf, null);
 					} else {
-						protectedregion.setFlag(bf, bf.parseInput(FlagContext.create().setSender(player)
-								.setInput(all).setObject("region", protectedregion).build()));
+						protectedregion.setFlag(bf, bf.parseInput(FlagContext.create().setSender(player).setInput(all)
+								.setObject("region", protectedregion).build()));
 					}
+					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 					player.sendMessage(
-							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-					player.sendMessage(plugin
-							.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
-							.replace("{0}", flagMatched.getName()).replace("{1}", all));
+							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
+									.replace("{0}", flagMatched.getName()).replace("{1}", all));
 				} catch (InvalidFlagFormat e) {
-					player.sendMessage(
-							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-					player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <true|false>");
+					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
+					player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " " + args[2] + " <true|false>");
 					// e.printStackTrace();
 				}
-				
+
 				return;
 			}
-			
+
 			if (flagMatched instanceof IntegerFlag) {
 				IntegerFlag inf = (IntegerFlag) flagMatched;
-				
+
 				try {
-					if(all.equalsIgnoreCase("null")) {
+					if (all.equalsIgnoreCase("null")) {
 						protectedregion.setFlag(inf, null);
 					} else {
-						protectedregion.setFlag(inf, inf.parseInput(FlagContext.create().setSender(player)
-								.setInput(all).setObject("region", protectedregion).build()));
+						protectedregion.setFlag(inf, inf.parseInput(FlagContext.create().setSender(player).setInput(all)
+								.setObject("region", protectedregion).build()));
 					}
+					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 					player.sendMessage(
-							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-					player.sendMessage(plugin
-							.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
-							.replace("{0}", flagMatched.getName()).replace("{1}", all));
+							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
+									.replace("{0}", flagMatched.getName()).replace("{1}", all));
 				} catch (InvalidFlagFormat e) {
-					player.sendMessage(
-							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-					player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <Integer>");
+					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
+					player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " " + args[2] + " <Integer>");
 					// e.printStackTrace();
 				}
-				
+
 				return;
 			}
-			
+
 			if (flagMatched instanceof DoubleFlag) {
 				DoubleFlag df = (DoubleFlag) flagMatched;
-				
+
 				try {
-					if(all.equalsIgnoreCase("null")) {
+					if (all.equalsIgnoreCase("null")) {
 						protectedregion.setFlag(df, null);
 					} else {
-						protectedregion.setFlag(df, df.parseInput(FlagContext.create().setSender(player)
-								.setInput(all).setObject("region", protectedregion).build()));
+						protectedregion.setFlag(df, df.parseInput(FlagContext.create().setSender(player).setInput(all)
+								.setObject("region", protectedregion).build()));
 					}
+					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 					player.sendMessage(
-							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-					player.sendMessage(plugin
-							.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
-							.replace("{0}", flagMatched.getName()).replace("{1}", all));
+							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
+									.replace("{0}", flagMatched.getName()).replace("{1}", all));
 				} catch (InvalidFlagFormat e) {
-					player.sendMessage(
-							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-					player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <Double>");
+					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
+					player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " " + args[2] + " <Double>");
 					// e.printStackTrace();
 				}
-				
+
 				return;
 			}
-			
+
 			if (flagMatched instanceof LocationFlag) {
 				LocationFlag lf = (LocationFlag) flagMatched;
-				
+
 				try {
-					if(all.equalsIgnoreCase("null")) {
+					if (all.equalsIgnoreCase("null")) {
 						protectedregion.setFlag(lf, null);
 					} else {
-						protectedregion.setFlag(lf, lf.parseInput(FlagContext.create().setSender(player)
-								.setInput(all).setObject("region", protectedregion).build()));
+						protectedregion.setFlag(lf, lf.parseInput(FlagContext.create().setSender(player).setInput(all)
+								.setObject("region", protectedregion).build()));
 					}
+					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 					player.sendMessage(
-							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-					player.sendMessage(plugin
-							.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
-							.replace("{0}", flagMatched.getName()).replace("{1}", all));
+							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
+									.replace("{0}", flagMatched.getName()).replace("{1}", all));
 				} catch (InvalidFlagFormat e) {
-					player.sendMessage(
-							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-					player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <here|X,Y,Z>");
+					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
+					player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " " + args[2] + " <here|X,Y,Z>");
 					// e.printStackTrace();
 				}
-				
+
 				return;
 			}
-			
+
 			if (flagMatched instanceof EnumFlag<?>) {
 				if (DefaultFlag.GAME_MODE.getName().equalsIgnoreCase(((EnumFlag<?>) flagMatched).getName())) {
 					EnumFlag<GameMode> efgm = (EnumFlag<GameMode>) flagMatched;
-					
+
 					try {
-						if(all.equalsIgnoreCase("null")) {
+						if (all.equalsIgnoreCase("null")) {
 							protectedregion.setFlag(efgm, null);
 						} else {
 							protectedregion.setFlag(efgm, efgm.parseInput(FlagContext.create().setSender(player)
 									.setInput(all).setObject("region", protectedregion).build()));
 						}
+						player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 						player.sendMessage(
-								plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-						player.sendMessage(plugin
-								.colorCode('&',
-										(String) plugin.configDelegate.getMap().get("zone_flag_changed"))
-								.replace("{0}", flagMatched.getName()).replace("{1}", all));
+								plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
+										.replace("{0}", flagMatched.getName()).replace("{1}", all));
 					} catch (InvalidFlagFormat e) {
-						player.sendMessage(
-								plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-						player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <Gamemode>");
+						player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
+						player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " " + args[2] + " <Gamemode>");
 						// e.printStackTrace();
 					}
-					
+
 					return;
 				}
-				
+
 				if (DefaultFlag.WEATHER_LOCK.getName().equalsIgnoreCase(((EnumFlag<?>) flagMatched).getName())) {
 					EnumFlag<WeatherType> efwt = (EnumFlag<WeatherType>) flagMatched;
-					
+
 					try {
-						if(all.equalsIgnoreCase("null")) {
+						if (all.equalsIgnoreCase("null")) {
 							protectedregion.setFlag(efwt, null);
 						} else {
 							protectedregion.setFlag(efwt, efwt.parseInput(FlagContext.create().setSender(player)
 									.setInput(all).setObject("region", protectedregion).build()));
 						}
+						player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 						player.sendMessage(
-								plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-						player.sendMessage(plugin
-								.colorCode('&',
-										(String) plugin.configDelegate.getMap().get("zone_flag_changed"))
-								.replace("{0}", flagMatched.getName()).replace("{1}", all));
+								plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_flag_changed"))
+										.replace("{0}", flagMatched.getName()).replace("{1}", all));
 					} catch (InvalidFlagFormat e) {
-						player.sendMessage(
-								plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-						player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " <Weathertype>");
+						player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
+						player.sendMessage(ChatColor.RED + "/zone flag " + args[1] + " " + args[2] + " <Weathertype>");
 						// e.printStackTrace();
 					}
-					
+
 					return;
 				}
 			}

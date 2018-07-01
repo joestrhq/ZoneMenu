@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>xyz.joestr</groupId>
   <artifactId>zonemenu_dev</artifactId>
-  <version>build_7_pre_3</version>
+  <version>build_8</version>
   <name>ZoneMenu_Dev</name>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
@@ -50,6 +50,12 @@
   <url>https://repo.joestr.xyz/zonemenu</url>
   <build>
     <resources>
+      <resource>
+        <directory>
+          src/main/java
+        </directory>
+        <filtering>true</filtering>
+      </resource>
       <resource>
         <directory>
           src/main/resources
