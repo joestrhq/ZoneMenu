@@ -64,30 +64,33 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	// Map which contains players and a locations
 	public Map<Player, Location> findLocations = new HashMap<>();
 
-	// Map which contains players and worlds
-	public Map<Player, World> createWorlds = new HashMap<>();
-
 	// Map which cotnains players and their currently bound tools
 	public Map<Player, ZoneMenuToolType> toolType = new HashMap<>();
 
+	// Map which cotnains players and their currently selected signtype
 	public Map<Player, ZoneMenuSignType> signType = new HashMap<>();
 
 	// Map which contains players and their first selected locations
 	public Map<Player, Location> createFirstLocations = new HashMap<>();
-
-	// Map which contains players and their second selected lcoations
 	public Map<Player, Location> createSecondLocations = new HashMap<>();
 
-	// Map which contains players and the locations where a beacon is shown to them
+	// Map which contains players and worlds
+	public Map<Player, World> createWorlds = new HashMap<>();
+	
+	// Maps which contains players and the locations where a beacon is shown to them
 	public Map<Player, Location> createCorner1 = new HashMap<>();
 	public Map<Player, Location> createCorner2 = new HashMap<>();
 	public Map<Player, Location> createCorner3 = new HashMap<>();
 	public Map<Player, Location> createCorner4 = new HashMap<>();
-
-	public Map<Player, World> subcreateWorlds = new HashMap<>();
+	
+	// Maps which contain players and the selected locations
 	public Map<Player, Location> subcreateFirstLocations = new HashMap<>();
 	public Map<Player, Location> subcreateSecondLocations = new HashMap<>();
+	
+	// Map which contains players and worlds
+	public Map<Player, World> subcreateWorlds = new HashMap<>();
 
+	// Maps which contains players and the locations where a seelantern (or glowstone) is shown to them
 	public Map<Player, Location> subcreateCorner1 = new HashMap<>();
 	public Map<Player, Location> subcreateCorner2 = new HashMap<>();
 
@@ -200,22 +203,6 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	}
 
 	/**
-	 * Replaces all occourances of paramter {@code s} with '&'.
-	 * 
-	 * @since build_1
-	 * @version ${project.version}
-	 * @param s
-	 *            {@linkplain String}
-	 * @return {@linkplain String} Modified string
-	 * @deprecated The future of the '§' as a color code character is not safe.
-	 *             <br />
-	 *             Use {@link #colorCode(char, String)} instead.
-	 */
-	public String colorCode(String s, String t) {
-		return t.replace(s, "§");
-	}
-
-	/**
 	 * Calls {@linkplain ChatColor#translateAlternateColorCodes(char, String)} with
 	 * the parameters {@code alternativeCode} and {@code stringToInspect}.
 	 * 
@@ -229,22 +216,6 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	 */
 	public String colorCode(char alternativeCode, String stringToInspect) {
 		return ChatColor.translateAlternateColorCodes(alternativeCode, stringToInspect);
-	}
-
-	/**
-	 * Replaces all occurrences of '§' with paramter {@code s}.
-	 * 
-	 * @since build_1
-	 * @version ${project.version}
-	 * @param s
-	 *            {@linkplain String}
-	 * @return {@linkplain String} Modified string
-	 * @deprecated The future of the '§' as a color code character is not safe.
-	 *             <br />
-	 *             Use {@link #alternativeColorCode(char, String)} instead.
-	 */
-	public String alternativeColorCode(String s, String t) {
-		return t.replace("§", s);
 	}
 
 	/**
