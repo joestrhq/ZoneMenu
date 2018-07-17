@@ -138,8 +138,8 @@ id:
 *zone_id: \<String\>* (Exported to *id.yml* in version 0.0.4)  
 *zone_id_counter: \<Int\>* (Exported to *id.yml* in version 0.0.4)  
 **Version build\_7\_pre\_3**  
-*zone_info_id: \<String\>* - WorldGuard region id showed in /zone info (Replaced by *zone_info_name_id: \<String (can contain {name} -> Name format, {id} -\> Worldguard region id)\>* in build\_7\_pre\_3) 
-**Version build\_9**
+*zone_info_id: \<String\>* - WorldGuard region id showed in /zone info (Replaced by *zone_info_name_id: \<String (can contain {name} -> Name format, {id} -\> Worldguard region id)\>* in build\_7\_pre\_3)  
+**Version build\_9**  
 *console_message: \<String\>* (Replaced by *not_a_player_message: \<String\>* in version build\_9) 
 
 **Note**  
@@ -150,4 +150,4 @@ Since version 0.0.3 missing config entries will be automatically placed while ol
 
 
 **Builds**  
-Builds are available [here](https://jenkins.joestr.xyz/job/ZoneMenu_Dev/).
+Builds are available [here](https://jenkins.joestr.xyz/job/ZoneMenu/).
