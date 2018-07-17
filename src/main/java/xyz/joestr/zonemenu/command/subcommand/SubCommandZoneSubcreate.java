@@ -17,8 +17,9 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion.CircularInheritan
 import com.sk89q.worldguard.util.profile.resolver.ProfileService;
 
 import xyz.joestr.zonemenu.ZoneMenu;
-import xyz.joestr.zonemenu.enumeration.ZoneMenuSignType;
-import xyz.joestr.zonemenu.enumeration.ZoneMenuToolType;
+import xyz.joestr.zonemenu.util.ZoneMenuPlayer;
+import xyz.joestr.zonemenu.util.ZoneMenuSignType;
+import xyz.joestr.zonemenu.util.ZoneMenuToolType;
 
 public class SubCommandZoneSubcreate {
 
@@ -29,6 +30,18 @@ public class SubCommandZoneSubcreate {
 	}
 
 	public void process(Player player, String[] args) {
+
+		// .length != 2 -> Wrong usage
+		if (args.length != 2) {
+
+			// Wrong usage of the /zone subcreate command
+			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
+			player.sendMessage(
+					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
+							.replace("{0}", "/zone subcreate <Zone>"));
+
+			return;
+		}
 
 		this.plugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
@@ -44,21 +57,44 @@ public class SubCommandZoneSubcreate {
 					player.getInventory().addItem(new ItemStack[] { new ItemStack(Material.STICK, 1) });
 				}
 
+				// If the player is in the map ...
+				if(this.plugin.zoneMenuPlayers.containsKey(player)) {
+					
+					// ... set the ToolType and SignType.
+					this.plugin.zoneMenuPlayers.get(player).setToolType(ZoneMenuToolType.SIGN);
+					this.plugin.zoneMenuPlayers.get(player).setSignType(ZoneMenuSignType.SUBZONE);
+				} else {
+					
+					// If not, create, set SignType and ToolType and finally put them into the map.
+					ZoneMenuPlayer zoneMenuPlayer = new ZoneMenuPlayer(player);
+					
+					zoneMenuPlayer.setToolType(ZoneMenuToolType.SIGN);
+					zoneMenuPlayer.setSignType(ZoneMenuSignType.SUBZONE);
+					
+					this.plugin.zoneMenuPlayers.put(player, zoneMenuPlayer);
+				}
+				
 				// Send player a message
 				player.sendMessage(
 						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
 				player.sendMessage(this.plugin.colorCode('&',
 						(String) this.plugin.configDelegate.getMap().get("zone_subcreate_sign")));
 
-				// Put player into a map where his name and the current action are stored
-				this.plugin.toolType.put(player, ZoneMenuToolType.SIGN);
-				this.plugin.signType.put(player, ZoneMenuSignType.SUBZONE);
-
 				return;
 			}
 
-			if (this.plugin.toolType.get(player) != ZoneMenuToolType.SIGN
-					|| this.plugin.signType.get(player) != ZoneMenuSignType.SUBZONE) {
+			// If the player is not in the map ...
+			if(!this.plugin.zoneMenuPlayers.containsKey(player)) {
+				
+				// ... do not proceed.
+				return;
+			}
+			
+			// If ToolType or SingType is wrong ...
+			if (this.plugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN
+					|| this.plugin.zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.SUBZONE) {
+				
+				// ... do not proceed.
 				return;
 			}
 
@@ -99,8 +135,9 @@ public class SubCommandZoneSubcreate {
 
 				player.sendMessage(
 						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
+				player.sendMessage(this.plugin.colorCode('&',
+						((String) this.plugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
+								args[1])));
 
 				return;
 			}
@@ -202,23 +239,13 @@ public class SubCommandZoneSubcreate {
 			// Finally, add the region to worlds region manager
 			this.plugin.worldGuardPlugin.getRegionManager(player.getWorld()).addRegion(protectedCuboidRegion);
 
+			this.plugin.clearUpZoneMenuPlayer(player);
+			
 			// Send player a message
 			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
 			player.sendMessage(
-					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_subcreate")));
-
-			// Clean up user
-			this.plugin.toolType.remove(player);
-			this.plugin.findLocations.remove(player);
-			this.plugin.subcreateWorlds.remove(player);
-			this.plugin.subcreateFirstLocations.remove(player);
-			this.plugin.subcreateSecondLocations.remove(player);
-			this.plugin.worldEditPlugin.getSession(player)
-					.getRegionSelector(this.plugin.worldEditPlugin.getSession(player).getSelectionWorld()).clear();
-
-			// Reset Corners
-			this.plugin.resetBeaconCorner(player, this.plugin.subcreateCorner1);
-			this.plugin.resetBeaconCorner(player, this.plugin.subcreateCorner2);
+					this.plugin.colorCode('&', ((String) this.plugin.configDelegate.getMap().get("zone_subcreate"))
+							.replace("{0}", protectedCuboidRegion.getId())));
 		});
 	}
 }

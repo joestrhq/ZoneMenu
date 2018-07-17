@@ -27,9 +27,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import xyz.joestr.zonemenu.util.YMLDelegate;
+import xyz.joestr.zonemenu.util.ZoneMenuPlayer;
 import xyz.joestr.zonemenu.command.ZoneCommand;
-import xyz.joestr.zonemenu.enumeration.ZoneMenuSignType;
-import xyz.joestr.zonemenu.enumeration.ZoneMenuToolType;
 import xyz.joestr.zonemenu.event.PlayerChangedWorld;
 import xyz.joestr.zonemenu.event.PlayerQuit;
 import xyz.joestr.zonemenu.event.playerinteract.CreatePlayerInteract;
@@ -61,38 +60,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	// WorldGuard
 	public WorldGuardPlugin worldGuardPlugin;
 
-	// Map which contains players and a locations
-	public Map<Player, Location> findLocations = new HashMap<>();
-
-	// Map which cotnains players and their currently bound tools
-	public Map<Player, ZoneMenuToolType> toolType = new HashMap<>();
-
-	// Map which cotnains players and their currently selected signtype
-	public Map<Player, ZoneMenuSignType> signType = new HashMap<>();
-
-	// Map which contains players and their first selected locations
-	public Map<Player, Location> createFirstLocations = new HashMap<>();
-	public Map<Player, Location> createSecondLocations = new HashMap<>();
-
-	// Map which contains players and worlds
-	public Map<Player, World> createWorlds = new HashMap<>();
-	
-	// Maps which contains players and the locations where a beacon is shown to them
-	public Map<Player, Location> createCorner1 = new HashMap<>();
-	public Map<Player, Location> createCorner2 = new HashMap<>();
-	public Map<Player, Location> createCorner3 = new HashMap<>();
-	public Map<Player, Location> createCorner4 = new HashMap<>();
-	
-	// Maps which contain players and the selected locations
-	public Map<Player, Location> subcreateFirstLocations = new HashMap<>();
-	public Map<Player, Location> subcreateSecondLocations = new HashMap<>();
-	
-	// Map which contains players and worlds
-	public Map<Player, World> subcreateWorlds = new HashMap<>();
-
-	// Maps which contains players and the locations where a seelantern (or glowstone) is shown to them
-	public Map<Player, Location> subcreateCorner1 = new HashMap<>();
-	public Map<Player, Location> subcreateCorner2 = new HashMap<>();
+	// Map which contains players an their ZoneMenuPlayers
+	public Map<Player, ZoneMenuPlayer> zoneMenuPlayers = new HashMap<>();
 
 	/**
 	 * Plugin starts.
@@ -255,23 +224,23 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	 * @author joestr
 	 * @since build_7_pre_2
 	 * @version ${project.version}
-	 * @param playerLocationMap
-	 *            {@linkplain Map}<{@linkplain Player}, {@linkplain Location}> A map
-	 *            which contains players an locations
+	 * @param location
+	 *            {@linkplain Location} A location
 	 * @param player
 	 *            {@linkplain Player} A player
+	 * 
 	 */
 	@SuppressWarnings({ "deprecation" })
-	public void resetBeaconCorner(Player player, Map<Player, Location> playerLocationMap) {
+	public void resetBeaconCorner(Location location, Player player) {
 
-		if (!playerLocationMap.containsKey(player)) {
+		if (location == null) {
 			return;
 		}
 
-		int x = playerLocationMap.get(player).getBlockX();
+		int x = location.getBlockX();
 		int y = 0;
-		int z = playerLocationMap.get(player).getBlockZ();
-		World world = playerLocationMap.get(player).getWorld();
+		int z = location.getBlockZ();
+		World world = location.getWorld();
 
 		player.sendBlockChange(world.getBlockAt(x, 1, z).getLocation(), world.getBlockAt(x, 1, z).getType(),
 				world.getBlockAt(x, 1, z).getData());
@@ -301,9 +270,6 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	 *            {@linkplain Location} Where the beacon should be located
 	 * @param player
 	 *            {@linkplain Player} Player to send the blockhange
-	 * @param playerLocationMap
-	 *            {@linkplain Map}<{@linkplain Player}, {@linkplain Location}> A map
-	 *            which contains players an locations
 	 * @param glassColor
 	 *            {@linkplain byte} Which color the glass should have
 	 */
@@ -311,10 +277,11 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	// From: https://bukkit.org/threads/lib-beacon-creator.179399/ (modified)
 	// --- start
 	@SuppressWarnings("deprecation")
-	public void createBeaconCorner(Location location, Player player, Map<Player, Location> playerLocationMap,
-			byte glassColor) {
+	public void createBeaconCorner(Location location, Player player, byte glassColor) {
 
-		playerLocationMap.put(player, location);
+		if (location == null || player == null) {
+			return;
+		}
 
 		int x = location.getBlockX();
 		int y = 0;
@@ -350,27 +317,25 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 	}
 	// --- end
 
-	// Show player a beacon (blockchange)
-	// From: https://bukkit.org/threads/lib-beacon-creator.179399/ (modified)
-	// --- start
-	public void createSubcreateCroner(Location location, Player player, Map<Player, Location> playerLocationMap,
+	public void createSubcreateCroner(Location location, Player player,
 			Material material, byte data) {
-
-		playerLocationMap.put(player, location);
-
-		this.laterSet(playerLocationMap.get(player), player, material, data);
+		
+		if (location == null || player == null || material == null) {
+			return;
+		}
+		
+		this.laterSet(location, player, material, data);
 	}
-	// --- end
 
 	@SuppressWarnings("deprecation")
-	public void resetSubcreateCorner(Player player, Map<Player, Location> playerLocationMap) {
+	public void resetSubcreateCorner(Location location, Player player) {
 
-		if (!playerLocationMap.containsKey(player)) {
+		if (location == null || player == null) {
 			return;
 		}
 
-		player.sendBlockChange(playerLocationMap.get(player), playerLocationMap.get(player).getBlock().getType(),
-				playerLocationMap.get(player).getBlock().getData());
+		player.sendBlockChange(location, location.getBlock().getType(),
+				location.getBlock().getData());
 	}
 
 	/**
@@ -521,5 +486,28 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
 			return lp;
 		}).whenComplete(biconsumer);
+	}
+
+	public void clearUpZoneMenuPlayer(Player player) {
+
+		if (!this.zoneMenuPlayers.containsKey(player)) {
+			return;
+		}
+
+		ZoneMenuPlayer zoneMenuPlayer = this.zoneMenuPlayers.get(player);
+
+		if (this.worldEditPlugin.getSelection(player) != null) {
+			this.worldEditPlugin.getSelection(player).getRegionSelector().clear();
+		}
+
+		this.resetBeaconCorner(zoneMenuPlayer.getCreateCorner1(), player);
+		this.resetBeaconCorner(zoneMenuPlayer.getCreateCorner2(), player);
+		this.resetBeaconCorner(zoneMenuPlayer.getCreateCorner3(), player);
+		this.resetBeaconCorner(zoneMenuPlayer.getCreateCorner4(), player);
+
+		this.resetSubcreateCorner(zoneMenuPlayer.getSubcreateCorner1(), player);
+		this.resetSubcreateCorner(zoneMenuPlayer.getSubcreateCorner2(), player);
+		
+		this.zoneMenuPlayers.remove(player);
 	}
 }

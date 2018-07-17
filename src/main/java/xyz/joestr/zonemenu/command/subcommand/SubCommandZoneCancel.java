@@ -12,9 +12,31 @@ public class SubCommandZoneCancel {
 		this.plugin = plugin;
 	}
 
-	public void process(Player player) {
-		// Check if player is in map
-		if (!this.plugin.toolType.containsKey(player)) {
+	public void process(Player player, String[] args) {
+		
+		if(args.length != 1) {
+			
+			// Wrong usage of the /zone command
+			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
+			player.sendMessage(
+					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
+							.replace("{0}", "/zone cancel"));
+
+			return;
+		}
+		
+		// Check if player is not in map -> No zone creation running
+		if (!this.plugin.zoneMenuPlayers.containsKey(player)) {
+
+			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
+			player.sendMessage(this.plugin.colorCode('&',
+					(String) this.plugin.configDelegate.getMap().get("zone_cancel_not_running")));
+
+			return;
+		}
+		
+		// Check if the ToolType is not set -> No zone creation running
+		if (this.plugin.zoneMenuPlayers.get(player).getToolType() == null) {
 
 			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
 			player.sendMessage(this.plugin.colorCode('&',
@@ -23,28 +45,10 @@ public class SubCommandZoneCancel {
 			return;
 		}
 
-		// Clean up user
-		this.plugin.toolType.remove(player);
-		this.plugin.findLocations.remove(player);
-		this.plugin.createWorlds.remove(player);
-		this.plugin.createFirstLocations.remove(player);
-		this.plugin.createSecondLocations.remove(player);
-		this.plugin.subcreateWorlds.remove(player);
-		this.plugin.subcreateFirstLocations.remove(player);
-		this.plugin.subcreateSecondLocations.remove(player);
+		// Clear up player.
+		this.plugin.clearUpZoneMenuPlayer(player);
 
-		if (this.plugin.worldEditPlugin.getSelection(player) != null) {
-			this.plugin.worldEditPlugin.getSelection(player).getRegionSelector().clear();
-		}
-
-		// Reset beacons
-		this.plugin.resetBeaconCorner(player, this.plugin.createCorner1);
-		this.plugin.resetBeaconCorner(player, this.plugin.createCorner2);
-		this.plugin.resetBeaconCorner(player, this.plugin.createCorner3);
-		this.plugin.resetBeaconCorner(player, this.plugin.createCorner4);
-		this.plugin.resetSubcreateCorner(player, this.plugin.subcreateCorner1);
-		this.plugin.resetSubcreateCorner(player, this.plugin.subcreateCorner2);
-
+		// Send player a message
 		player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
 		player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_cancel")));
 	}

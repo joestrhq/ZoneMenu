@@ -21,6 +21,17 @@ public class SubCommandZoneRemovemember {
 	@SuppressWarnings("deprecation")
 	public void process(Player player, String[] args) {
 
+		if(args.length != 1) {
+			
+			// Wrong usage of the /zone command
+			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
+			player.sendMessage(
+					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
+							.replace("{0}", "/zone removemember <Zone> <Player>"));
+
+			return;
+		}
+		
 		plugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
 			// Initialise new region
@@ -48,7 +59,9 @@ public class SubCommandZoneRemovemember {
 			if (protectedregion == null) {
 
 				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("no_zone")));
+				player.sendMessage(this.plugin.colorCode('&',
+						((String) this.plugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
+								args[1])));
 
 				return;
 			}
@@ -63,7 +76,8 @@ public class SubCommandZoneRemovemember {
 				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 				player.sendMessage(plugin
 						.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_removemember_unknownplayer"))
-						.replace("{0}", args[2]));
+						.replace("{0}", args[2])
+						.replace("{1}", args[1]));
 
 				return;
 			}
@@ -77,7 +91,8 @@ public class SubCommandZoneRemovemember {
 
 			player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
 			player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_removemember"))
-					.replace("{0}", args[2]));
+					.replace("{0}", args[2])
+					.replace("{1}", args[1]));
 		});
 	}
 }

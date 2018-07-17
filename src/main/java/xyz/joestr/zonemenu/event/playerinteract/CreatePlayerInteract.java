@@ -12,8 +12,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import xyz.joestr.zonemenu.ZoneMenu;
-import xyz.joestr.zonemenu.enumeration.ZoneMenuSignType;
-import xyz.joestr.zonemenu.enumeration.ZoneMenuToolType;
+import xyz.joestr.zonemenu.util.ZoneMenuPlayer;
+import xyz.joestr.zonemenu.util.ZoneMenuSignType;
+import xyz.joestr.zonemenu.util.ZoneMenuToolType;
 
 /**
  * Class which handles player interaction with blocks
@@ -35,12 +36,23 @@ public class CreatePlayerInteract implements Listener {
 	@EventHandler
 	public void onInteract(PlayerInteractEvent event) {
 
-		// Grab player form the event
+		// Grab player from the event
 		Player player = event.getPlayer();
 
+		// If the player is not in the map ...
+		if (!this.plugin.zoneMenuPlayers.containsKey(player)) {
+			
+			// ... do not proceed.
+			return;
+		}
+
+		// Grab the ZoneMenuPlayer
+		ZoneMenuPlayer zoneMenuPlayer = this.plugin.zoneMenuPlayers.get(player);
+
+		// Using a stick? ToolType and SignType correct?
 		if ((player.getInventory().getItemInMainHand().getType() != Material.STICK)
-				|| (this.plugin.toolType.get(player) != ZoneMenuToolType.SIGN)
-				|| (this.plugin.signType.get(player) != ZoneMenuSignType.ZONE)) {
+				|| (this.plugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN)
+				|| (this.plugin.zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.ZONE)) {
 
 			return;
 		}
@@ -50,47 +62,54 @@ public class CreatePlayerInteract implements Listener {
 
 		// Check if event action is left-click
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-			// Check if firstlocation-map contains players name
-			if (this.plugin.createFirstLocations.containsKey(player)) {
-				// Check if locations are the same
-				if (((Location) plugin.createFirstLocations.get(player))
-						.equals(event.getClickedBlock().getLocation())) {
-					event.setCancelled(true);
-					return;
-				}
+			// Check if locations are the same
+			if (event.getClickedBlock().getLocation().equals(zoneMenuPlayer.getCreateCorner1())) {
+				event.setCancelled(true);
+				return;
 			}
 
 			// Put players world and location into maps
-			this.plugin.createWorlds.put(player, player.getWorld());
-			this.plugin.createFirstLocations.put(player, event.getClickedBlock().getLocation());
 
 			// Cancel the event
 			event.setCancelled(true);
 
-			// Grab some values to work with
-			World playerworld = (World) this.plugin.createWorlds.get(player);
-			Location playerpos1 = (Location) this.plugin.createFirstLocations.get(player);
-			Location playerpos2 = (Location) this.plugin.createSecondLocations.get(player);
-			playerpos1.setY(0);
+			// Set the world
+			zoneMenuPlayer.setCreateWorld(event.getClickedBlock().getLocation().getWorld());
 
 			// Reset old beacon
-			this.plugin.resetBeaconCorner(player, this.plugin.createCorner1);
+			this.plugin.resetBeaconCorner(zoneMenuPlayer.getCreateCorner1(), player);
+
+			// set the 1st corner
+			zoneMenuPlayer.setCreateCorner1(event.getClickedBlock().getLocation());
+
 			// Create new beacon
-			this.plugin.createBeaconCorner(playerpos1, player, this.plugin.createCorner1, (byte) 10);
+			this.plugin.createBeaconCorner(zoneMenuPlayer.getCreateCorner1(), player, (byte) 10);
 
 			// If all needed variables are set
-			if ((playerworld != null) && (playerpos1 != null) && (playerpos2 != null)) {
+			if ((zoneMenuPlayer.getCreateWorld() != null) && (zoneMenuPlayer.getCreateCorner1() != null)
+					&& (zoneMenuPlayer.getCreateCorner2() != null)) {
 				// Reset beacons and create new ones
-				this.plugin.resetBeaconCorner(player, this.plugin.createCorner2);
-				this.plugin.createBeaconCorner(playerpos2, player, this.plugin.createCorner2, (byte) 2);
-				Location loc = playerpos1.clone();
-				loc.setX(playerpos2.getX());
-				this.plugin.resetBeaconCorner(player, this.plugin.createCorner3);
-				this.plugin.createBeaconCorner(loc, player, this.plugin.createCorner3, (byte) 0);
-				loc = playerpos1.clone();
-				loc.setZ(playerpos2.getZ());
-				this.plugin.resetBeaconCorner(player, this.plugin.createCorner4);
-				this.plugin.createBeaconCorner(loc, player, this.plugin.createCorner4, (byte) 0);
+				this.plugin.resetBeaconCorner(zoneMenuPlayer.getCreateCorner2(), player);
+				this.plugin.createBeaconCorner(zoneMenuPlayer.getCreateCorner2(), player, (byte) 2);
+
+				this.plugin.resetBeaconCorner(zoneMenuPlayer.getCreateCorner3(), player);
+				Location loc = zoneMenuPlayer.getCreateCorner1().clone();
+				loc.setX(zoneMenuPlayer.getCreateCorner2().getX());
+				zoneMenuPlayer.setCreateCorner3(loc);
+				this.plugin.createBeaconCorner(loc, player, (byte) 0);
+
+				this.plugin.resetBeaconCorner(zoneMenuPlayer.getCreateCorner4(), player);
+				loc = zoneMenuPlayer.getCreateCorner1().clone();
+				loc.setZ(zoneMenuPlayer.getCreateCorner2().getZ());
+				zoneMenuPlayer.setCreateCorner4(loc);
+				this.plugin.createBeaconCorner(loc, player, (byte) 0);
+
+				// Grab some values to work with
+				World playerworld = zoneMenuPlayer.getCreateWorld();
+				Location playerpos1 = zoneMenuPlayer.getCreateCorner1().clone();
+				playerpos1.setY(0);
+				Location playerpos2 = zoneMenuPlayer.getCreateCorner2().clone();
+				playerpos2.setY(255);
 
 				// Make a worldedit selection
 				CuboidSelection cs = new CuboidSelection(playerworld, playerpos1, playerpos2);
@@ -111,52 +130,70 @@ public class CreatePlayerInteract implements Listener {
 		}
 
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-
-			// Exact same behaviour as above, except
-			// fistlocations <-> secondlocations
-
-			if (plugin.createSecondLocations.containsKey(player)) {
-				if (((Location) plugin.createSecondLocations.get(player))
-						.equals(event.getClickedBlock().getLocation())) {
-					event.setCancelled(true);
-					return;
-				}
+			// Check if locations are the same
+			if (event.getClickedBlock().getLocation().equals(zoneMenuPlayer.getCreateCorner2())) {
+				event.setCancelled(true);
+				return;
 			}
 
-			this.plugin.createWorlds.put(player, player.getWorld());
-			this.plugin.createSecondLocations.put(player, event.getClickedBlock().getLocation());
+			// Put players world and location into maps
+
+			// Cancel the event
 			event.setCancelled(true);
-			World playerworld = (World) this.plugin.createWorlds.get(player);
-			Location playerpos1 = (Location) this.plugin.createFirstLocations.get(player);
-			Location playerpos2 = (Location) this.plugin.createSecondLocations.get(player);
-			playerpos2.setY(255);
-			// playerpos2.setY(player.getWorld().getMaxHeight());
 
-			this.plugin.resetBeaconCorner(player, this.plugin.createCorner2);
-			this.plugin.createBeaconCorner(playerpos2, player, this.plugin.createCorner2, (byte) 2);
+			// Set the world
+			zoneMenuPlayer.setCreateWorld(event.getClickedBlock().getLocation().getWorld());
 
-			if ((playerworld != null) && (playerpos1 != null) && (playerpos2 != null)) {
-				this.plugin.resetBeaconCorner(player, this.plugin.createCorner1);
-				this.plugin.createBeaconCorner(playerpos1, player, this.plugin.createCorner1, (byte) 10);
-				Location loc = playerpos1.clone();
-				loc.setX(playerpos2.getX());
-				this.plugin.resetBeaconCorner(player, this.plugin.createCorner3);
-				this.plugin.createBeaconCorner(loc, player, this.plugin.createCorner3, (byte) 0);
-				loc = playerpos1.clone();
-				loc.setZ(playerpos2.getZ());
-				this.plugin.resetBeaconCorner(player, this.plugin.createCorner4);
-				this.plugin.createBeaconCorner(loc, player, this.plugin.createCorner4, (byte) 0);
+			// Reset old beacon
+			this.plugin.resetBeaconCorner(zoneMenuPlayer.getCreateCorner2(), player);
+
+			// Set the 2nd corner
+			zoneMenuPlayer.setCreateCorner2(event.getClickedBlock().getLocation());
+
+			// Create new beacon
+			this.plugin.createBeaconCorner(zoneMenuPlayer.getCreateCorner2(), player, (byte) 2);
+
+			// If all needed variables are set
+			if ((zoneMenuPlayer.getCreateWorld() != null) && (zoneMenuPlayer.getCreateCorner1() != null)
+					&& (zoneMenuPlayer.getCreateCorner2() != null)) {
+				// Reset beacons and create new ones
+				this.plugin.resetBeaconCorner(zoneMenuPlayer.getCreateCorner1(), player);
+				this.plugin.createBeaconCorner(zoneMenuPlayer.getCreateCorner1(), player, (byte) 10);
+
+				this.plugin.resetBeaconCorner(zoneMenuPlayer.getCreateCorner3(), player);
+				Location loc = zoneMenuPlayer.getCreateCorner1().clone();
+				loc.setX(zoneMenuPlayer.getCreateCorner2().getX());
+				zoneMenuPlayer.setCreateCorner3(loc);
+				this.plugin.createBeaconCorner(loc, player, (byte) 0);
+
+				this.plugin.resetBeaconCorner(zoneMenuPlayer.getCreateCorner4(), player);
+				loc = zoneMenuPlayer.getCreateCorner1().clone();
+				loc.setZ(zoneMenuPlayer.getCreateCorner2().getZ());
+				zoneMenuPlayer.setCreateCorner4(loc);
+				this.plugin.createBeaconCorner(loc, player, (byte) 0);
+
+				// Grab some values to work with
+				World playerworld = zoneMenuPlayer.getCreateWorld();
+				Location playerpos1 = zoneMenuPlayer.getCreateCorner1().clone();
+				playerpos1.setY(0);
+				Location playerpos2 = zoneMenuPlayer.getCreateCorner2().clone();
+				playerpos2.setY(255);
+
+				// Make a worldedit selection
 				CuboidSelection cs = new CuboidSelection(playerworld, playerpos1, playerpos2);
 				this.plugin.getWorldEditPlugin().setSelection(player, cs);
+
+				// Set actionbar message
 				sign1 = (String) plugin.configDelegate.getMap().get("event_sign_second")
 						+ (String) ((String) plugin.configDelegate.getMap().get("event_sign_area")).replace("{0}",
 								Integer.toString(this.plugin.getWorldEditPlugin().getSelection(player).getLength()
 										* this.plugin.getWorldEditPlugin().getSelection(player).getWidth()));
 			} else {
-
+				// Set actionbar message
 				sign1 = (String) plugin.configDelegate.getMap().get("event_sign_second");
 			}
 
+			// Send actiobar message to the player
 			plugin.sendActionBarToPlayer(player, this.plugin.colorCode('&', sign1));
 		}
 	}
