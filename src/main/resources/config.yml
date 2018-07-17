@@ -36,7 +36,7 @@ config:
   zone_create_priority: 1
   zone_create: "&bZone &a{0} &bcreated."
   zone_subcreate_sign: "&bUse the stick to sign the first point by &aleft- &band the second point by &aright-click&b."
-  zone_subcreate_not_in_zone: "&cYour subzone is not completely in zone &b{0}&a."
+  zone_subcreate_not_in_zone: "&cYour subzone is not completely in zone &b{0}ca."
   zone_subcreate_circular: "&cThere was an circular inheritance exception."
   zone_subcreate: "&bSubzone &a{0} &bcreated."
   zone_cancel_not_running: "&cZone creation not running."
