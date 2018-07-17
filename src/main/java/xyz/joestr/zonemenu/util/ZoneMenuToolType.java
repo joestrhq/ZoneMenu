@@ -1,4 +1,4 @@
-package xyz.joestr.zonemenu.enumeration;
+package xyz.joestr.zonemenu.util;
 
 /**
  * ZoneMenuTool enumeration

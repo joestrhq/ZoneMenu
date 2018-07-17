@@ -17,8 +17,19 @@ public class SubCommandZoneList {
 		this.plugin = plugin;
 	}
 
-	public void process(Player player) {
+	public void process(Player player, String[] args) {
 
+		if(args.length != 1) {
+			
+			// Wrong usage of the /zone command
+			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
+			player.sendMessage(
+					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
+							.replace("{0}", "/zone list"));
+
+			return;
+		}
+		
 		plugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
 			if (t.isEmpty()) {

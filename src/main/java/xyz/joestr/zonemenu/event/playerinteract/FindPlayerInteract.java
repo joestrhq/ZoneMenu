@@ -4,7 +4,6 @@ import com.sk89q.worldguard.bukkit.WGBukkit;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,7 +12,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import xyz.joestr.zonemenu.ZoneMenu;
-import xyz.joestr.zonemenu.enumeration.ZoneMenuToolType;
+import xyz.joestr.zonemenu.util.ZoneMenuPlayer;
+import xyz.joestr.zonemenu.util.ZoneMenuToolType;
 
 /**
  * Class which handles player interaction with blocks
@@ -38,9 +38,19 @@ public class FindPlayerInteract implements Listener {
 		// Grab player form the event
 		Player player = event.getPlayer();
 
-		// Check if item in main Hand is a stick
+		// If the player is not in the map ...
+		if(!this.plugin.zoneMenuPlayers.containsKey(player)) {
+			
+			// .. do not proceed.
+			return;
+		}
+		
+		// Grab the ZoneMenuPlayer
+		ZoneMenuPlayer zoneMenuPlayer = this.plugin.zoneMenuPlayers.get(player);
+		
+		// Using a stick? ToolType correct?
 		if ((player.getInventory().getItemInMainHand().getType() != Material.STICK)
-				|| (this.plugin.toolType.get(player) != ZoneMenuToolType.FIND)) {
+				|| (this.plugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.FIND)) {
 
 			return;
 		}
@@ -51,17 +61,14 @@ public class FindPlayerInteract implements Listener {
 
 		// Check event action
 		if ((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
-			// Check if locations contains the player
-			if (plugin.findLocations.containsKey(player)) {
-				// Check if this location is equal to the stored one
-				if (((Location) plugin.findLocations.get(player)).equals(event.getClickedBlock().getLocation())) {
-					event.setCancelled(true);
-					return;
-				}
+			// Check if this location is equal to the stored one
+			if (event.getClickedBlock().getLocation().equals(zoneMenuPlayer.getFindLocation())) {
+				event.setCancelled(true);
+				return;
 			}
 
 			// Put player an location into a map
-			this.plugin.findLocations.put(player, event.getClickedBlock().getLocation());
+			zoneMenuPlayer.setFindLocation(event.getClickedBlock().getLocation());
 
 			// Cancel the event
 			event.setCancelled(true);
@@ -90,6 +97,7 @@ public class FindPlayerInteract implements Listener {
 			}
 
 			find1 = find1.replace("{ids}", find2);
+			
 			// Send player a actionbar message
 			this.plugin.sendActionBarToPlayer(player, this.plugin.colorCode('&', find1));
 		}

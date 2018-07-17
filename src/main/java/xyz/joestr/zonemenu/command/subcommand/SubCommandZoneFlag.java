@@ -37,6 +37,17 @@ public class SubCommandZoneFlag {
 	@SuppressWarnings("unchecked")
 	public void process(Player player, String[] args) {
 
+		if(args.length != 4) {
+			
+			// Wrong usage of the /zone command
+			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
+			player.sendMessage(
+					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
+							.replace("{0}", "/zone flag <Zone> <Flag> <Flagvalue>"));
+
+			return;
+		}
+		
 		plugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
 			// Initialise new region
@@ -63,7 +74,10 @@ public class SubCommandZoneFlag {
 			if (protectedregion == null) {
 
 				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("no_zone")));
+				player.sendMessage(this.plugin.colorCode('&',
+						((String) this.plugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
+								args[1])));
+				
 				return;
 			}
 

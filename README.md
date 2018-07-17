@@ -13,17 +13,17 @@ Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for
 */zone create* - Create a zone from your selection.  
 */zone subcreate \<Zone\>* - Create a subzone.
 */zone cancel* - Cancel a zone creation.  
+*/zone list* - List all your zones.
 */zone addmember \<Zone\>\<Player\>* - Add a member to a zone.  
 */zone removemember \<Zone\> \<Player\>* - Remove a member from a zone.  
 */zone flag \<Zone\> \<Flag\> \<Flagvalue\>* - Change flags of a zone.  
 */zone info \<Zone\>* - Get information about a zone.  
 */zone delete \<Zone\>* - Delete a zone.  
-*/zone list* - List all yout zones.
 
 **Permissions (since build_5)**  
 */zone* - zonemenu.\*
 
-**Config entries (since build_8)**  
+**Config entries (since build_9)**  
 **config.yml**  
 ```
 config:
@@ -60,24 +60,23 @@ config:
   zone_create_have_over_equal: "&cYou are already having &b{count}&c (out of &b{zone_create_have_max}&c) zone(s) in this world."
   zone_create_area_max_claimable: 10000
   zone_create_area_max_claimable_over: "&cYou are already having an area of &b{area}&c block(s) spread over &b{count}&c zone(s)."
-  zone_create_overlaps_unowned: "&cYour zone overlaps with one or more unowned zones."
+  zone_create_overlaps_unowned: "&cYour selection overlaps with one or more unowned zones."
   zone_create_priority: 1
-  zone_create: "&bZone created."
+  zone_create: "&bZone &a{0} &bcreated."
   zone_subcreate_sign: "&bUse the stick to sign the first point by &aleft- &band the second point by &aright-click&b."
-  zone_subcreate_not_in_zone: "&cYour subzone is not completely in the zone &b{0}&a."
-  zone_subcreate_circular: "&cThere was an circulat inheritance exception."
-  zone_subcreate: "&bSubzone created."
+  zone_subcreate_not_in_zone: "&cYour subzone is not completely in zone &b{0}&a."
+  zone_subcreate_circular: "&cThere was an circular inheritance exception."
+  zone_subcreate: "&bSubzone &a{0} &bcreated."
   zone_cancel_not_running: "&cZone creation not running."
   zone_cancel: "&bZone creation cancelled."
-  no_zone: "&cYou do not have a zone in this world."
   zone_list: "&bList of all your zones: &a{list}"
-  zone_addmember_not_existing: "&cThe player &b{0} &cdoes not exist."
-  zone_addmember_already_member: "&cThe player &b{0} &cis already a member of your zone."
-  zone_addmember: "&bThe player &a{0} &bis now a member of your zone."
-  zone_removemember_unknownplayer: "&cThe player &b{0} &cis not a member of your zone."
-  zone_removemember: "&bThe player &a{0} &bis no longer a member of your zone."
+  zone_addmember_not_existing: "&b{0} &cdoes not exist."
+  zone_addmember_already_member: "&b{0} &cis already a member at zone &b{1}."
+  zone_addmember: "&a{0} &bis now a member of zone &a{1}."
+  zone_removemember_unknownplayer: "&b{0} &cis not a member at zone &b{1}."
+  zone_removemember: "&a{0} &bis no longer a member at zone &b{1}."
   zone_flag_not_found: "&cFlag &b{0} &cdoes not exist."
-  zone_flag_changed: "&bFlag &a{0} &bchanged to &a{1}&b."
+  zone_flag_changed: "&bFlag &a{0} &b at zone &a{1} changed to &a{2}&b."
   zone_info_id: "&bName: &a{id}"
   zone_info_priority: "&bPriority: &a"
   zone_info_parent: "&bParent: &a"
@@ -87,9 +86,7 @@ config:
   zone_info_start: "&5Starting &bpoint: &aX: {0} &b/ &aZ: {1}"
   zone_info_end: "&dEnding &bpoint: &aX: {0} &b/ &aZ: {1}"
   zone_info_area: "&bArea: &a{0}"
-  zone_delete: "&bZone deleted."
-  usage_message: "&cPlease use &b{0}&c."
-  permission_message: "&cYou need &b{0}&c."
+  zone_delete: "&bZone &a{0} &bdeleted."
   event_find_multi: "&bZones found: &a{ids}"
   event_find_no: "&cNo zones found."
   event_find: "&bZone found: &a{ids}"
@@ -97,7 +94,11 @@ config:
   event_sign_second: "&dSecond &bposition marked."
   event_sign_area: " &bArea: &a{0}"
   zone_wait_message: "&aZoneMenu &c- &bPlease wait ..."
-  console_message: "&cNot a player?"
+  no_zone: "&cYou do not have any zone in this world."
+  not_exisiting_zone: "&cZone &b{0} &cdoes not exist."
+  usage_message: "&cUsage: &b{0}"
+  permission_message: "&cLacking permission: &b{0}"
+  not_a_player_message: "&cNot a player?"
 ```
 **id.yml**  
 ```
@@ -138,6 +139,8 @@ id:
 *zone_id_counter: \<Int\>* (Exported to *id.yml* in version 0.0.4)  
 **Version build\_7\_pre\_3**  
 *zone_info_id: \<String\>* - WorldGuard region id showed in /zone info (Replaced by *zone_info_name_id: \<String (can contain {name} -> Name format, {id} -\> Worldguard region id)\>* in build\_7\_pre\_3) 
+**Version build\_9**
+*console_message: \<String\>* (Replaced by *not_a_player_message: \<String\>* in version build\_9) 
 
 **Note**  
 Since version 0.0.3 missing config entries will be automatically placed while older versions (0.0.1, 0.0.2) don't do that.
@@ -147,4 +150,4 @@ Since version 0.0.3 missing config entries will be automatically placed while ol
 
 
 **Builds**  
-Builds are available [here](https://jenkins.joestr.xyz/job/ZoneMenu/).
+Builds are available [here](https://jenkins.joestr.xyz/job/ZoneMenu_Dev/).
