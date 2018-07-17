@@ -1,11 +1,12 @@
 # ZoneMenu
 
+This is the development branch.
+
 **Important**  
 This plugin requires [WorldEdit](https://github.com/sk89q/WorldEdit) and [WorldGuard](https://github.com/sk89q/WorldGuard)!
 
 **ZoneMenu**  
 Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)
-
 
 **Commands (since build_8)**  
 */zone* - Display interactive menu.  
@@ -138,7 +139,7 @@ id:
 *zone_id: \<String\>* (Exported to *id.yml* in version 0.0.4)  
 *zone_id_counter: \<Int\>* (Exported to *id.yml* in version 0.0.4)  
 **Version build\_7\_pre\_3**  
-*zone_info_id: \<String\>* - WorldGuard region id showed in /zone info (Replaced by *zone_info_name_id: \<String (can contain {name} -> Name format, {id} -\> Worldguard region id)\>* in build\_7\_pre\_3) 
+*zone_info_id: \<String\>* - WorldGuard region id showed in /zone info (Replaced by *zone_info_name_id: \<String (can contain {name} -> Name format, {id} -\> Worldguard region id)\>* in build\_7\_pre\_3)  
 **Version build\_9**
 *console_message: \<String\>* (Replaced by *not_a_player_message: \<String\>* in version build\_9) 
 
