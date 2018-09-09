@@ -10,49 +10,51 @@ import xyz.joestr.zonemenu.util.ZoneMenuToolType;
 
 public class SubCommandZoneFind {
 
-	ZoneMenu plugin = null;
+    ZoneMenu zoneMenuPlugin = null;
 
-	public SubCommandZoneFind(ZoneMenu plugin) {
-		this.plugin = plugin;
-	}
+    public SubCommandZoneFind(ZoneMenu plugin) {
+        this.zoneMenuPlugin = plugin;
+    }
 
-	public void process(Player player, String[] args) {
-		
-		// .length does not equals 1 -> Wrong usage
-		if(args.length != 1) {
-			
-			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-			player.sendMessage(
-					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
-							.replace("{0}", "/zone find"));
+    public void process(Player player, String[] args) {
 
-			return;
-		}
-		
-		// Check if players inventory contains a stick
-		if (!player.getInventory().contains(Material.STICK)) {
+        // .length does not equals 1 -> Wrong usage
+        if (args.length != 1) {
 
-			// Add a stick to players inventory
-			player.getInventory().addItem(new ItemStack[] { new ItemStack(Material.STICK, 1) });
-		}
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message")).replace("{0}",
+                            "/zone find")));
 
-		// If the player is in the map ...
-		if(this.plugin.zoneMenuPlayers.containsKey(player)) {
-			
-			// ... set the proper ToolType.
-			this.plugin.zoneMenuPlayers.get(player).setToolType(ZoneMenuToolType.FIND);
-		} else {
-			
-			// If not create it here, set the ToolType and put it into the map.
-			ZoneMenuPlayer zoneMenuPlayer = new ZoneMenuPlayer(player);
-			
-			zoneMenuPlayer.setToolType(ZoneMenuToolType.FIND);
-			
-			this.plugin.zoneMenuPlayers.put(player, zoneMenuPlayer);
-		}
+            return;
+        }
 
-		// Send the player a message
-		player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-		player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_find")));
-	}
+        // Check if players inventory contains a stick
+        if (!player.getInventory().contains(Material.STICK)) {
+
+            // Add a stick to players inventory
+            player.getInventory().addItem(new ItemStack[] {
+
+                    new ItemStack(Material.STICK, 1) });
+        }
+
+        // If the player is in the map ...
+        if (this.zoneMenuPlugin.zoneMenuPlayers.containsKey(player)) {
+
+            // ... set the ToolType.
+
+            this.zoneMenuPlugin.zoneMenuPlayers.get(player).setToolType(ZoneMenuToolType.FIND);
+        } else {
+
+            // If not create it here, set the ToolType and put it into the map.
+            ZoneMenuPlayer zoneMenuPlayer = new ZoneMenuPlayer(player);
+
+            zoneMenuPlayer.setToolType(ZoneMenuToolType.FIND);
+
+            this.zoneMenuPlugin.zoneMenuPlayers.put(player, zoneMenuPlayer);
+        }
+
+        // Send the player a message
+        player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_find")));
+    }
 }

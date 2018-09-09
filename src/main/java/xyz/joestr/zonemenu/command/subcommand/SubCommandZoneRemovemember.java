@@ -12,87 +12,79 @@ import xyz.joestr.zonemenu.ZoneMenu;
 
 public class SubCommandZoneRemovemember {
 
-	ZoneMenu plugin = null;
+    ZoneMenu plugin = null;
 
-	public SubCommandZoneRemovemember(ZoneMenu plugin) {
-		this.plugin = plugin;
-	}
+    public SubCommandZoneRemovemember(ZoneMenu plugin) {
+        this.plugin = plugin;
+    }
 
-	@SuppressWarnings("deprecation")
-	public void process(Player player, String[] args) {
+    @SuppressWarnings("deprecation")
+    public void process(Player player, String[] args) {
 
-		if(args.length != 1) {
-			
-			// Wrong usage of the /zone command
-			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-			player.sendMessage(
-					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
-							.replace("{0}", "/zone removemember <Zone> <Player>"));
+        if (args.length != 1) {
 
-			return;
-		}
-		
-		plugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
+            // Wrong usage of the /zone command
+            player.sendMessage(
+                    this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
+                            .replace("{0}", "/zone removemember <Zone> <Player>"));
 
-			// Initialise new region
-			ProtectedRegion protectedregion = null;
+            return;
+        }
 
-			if (t.isEmpty()) {
+        plugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
+            // Initialise new region
+            ProtectedRegion protectedregion = null;
 
-				return;
-			}
+            if (t.isEmpty()) {
 
-			for (ProtectedRegion pr : t) {
+                player.sendMessage(
+                        this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
 
-				if (pr.getId().equalsIgnoreCase(args[1])) {
+                return;
+            }
 
-					protectedregion = pr;
-				}
-			}
+            for (ProtectedRegion pr : t) {
 
-			// Check if region in invalid
-			if (protectedregion == null) {
+                if (pr.getId().equalsIgnoreCase(args[1])) {
 
-				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(this.plugin.colorCode('&',
-						((String) this.plugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
-								args[1])));
+                    protectedregion = pr;
+                }
+            }
 
-				return;
-			}
+            // Check if region in invalid
+            if (protectedregion == null) {
 
-			// Grab the members
-			DefaultDomain domainmembers = protectedregion.getMembers();
+                player.sendMessage(this.plugin.colorCode('&',
+                        ((String) this.plugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
+                                args[1])));
 
-			// Check if members does not contain the specified player
-			if (!domainmembers.contains(
-					plugin.worldGuardPlugin.wrapOfflinePlayer(Bukkit.getServer().getOfflinePlayer(args[2])))) {
+                return;
+            }
 
-				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(plugin
-						.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_removemember_unknownplayer"))
-						.replace("{0}", args[2])
-						.replace("{1}", args[1]));
+            // Grab the members
+            DefaultDomain domainmembers = protectedregion.getMembers();
 
-				return;
-			}
+            // Check if members does not contain the specified player
+            if (!domainmembers.contains(
+                    plugin.worldGuardPlugin.wrapOfflinePlayer(Bukkit.getServer().getOfflinePlayer(args[2])))) {
 
-			// Remove specified player from the members
-			domainmembers.removePlayer(
-					plugin.worldGuardPlugin.wrapOfflinePlayer(Bukkit.getServer().getOfflinePlayer(args[2])));
+                player.sendMessage(plugin
+                        .colorCode('&', (String) plugin.configDelegate.getMap().get("zone_removemember_unknownplayer"))
+                        .replace("{0}", args[2]).replace("{1}", args[1]));
 
-			// Set the new members
-			protectedregion.setMembers(domainmembers);
+                return;
+            }
 
-			player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-			player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_removemember"))
-					.replace("{0}", args[2])
-					.replace("{1}", args[1]));
-		});
-	}
+            // Remove specified player from the members
+            domainmembers.removePlayer(
+                    plugin.worldGuardPlugin.wrapOfflinePlayer(Bukkit.getServer().getOfflinePlayer(args[2])));
+
+            // Set the new members
+            protectedregion.setMembers(domainmembers);
+
+            player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_removemember"))
+                    .replace("{0}", args[2]).replace("{1}", args[1]));
+        });
+    }
 }

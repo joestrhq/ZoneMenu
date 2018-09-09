@@ -18,117 +18,176 @@ import com.sk89q.worldguard.util.profile.resolver.ProfileService;
 
 import xyz.joestr.zonemenu.ZoneMenu;
 
+/**
+ * Class which handles subcommand "addmember" of command "zone".
+ * 
+ * @author joestr
+ * @since ${project.version}
+ * @version ${project.version}
+ */
 public class SubCommandZoneAddmember {
 
-	ZoneMenu plugin = null;
+    ZoneMenu zoneMenuPlugin = null;
 
-	public SubCommandZoneAddmember(ZoneMenu plugin) {
-		this.plugin = plugin;
-	}
+    /**
+     * Constrcutor for the
+     * {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneAddmember
+     * SubCommandZoneAddmember} class.
+     * 
+     * @param zoneMenuPlugin
+     *            A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
+     * @author joestr
+     * @since ${project.version}
+     * @version ${project.version}
+     */
+    public SubCommandZoneAddmember(ZoneMenu zoneMenuPlugin) {
 
-	@SuppressWarnings("deprecation")
-	public void process(Player player, String[] args) {
+        this.zoneMenuPlugin = zoneMenuPlugin;
+    }
 
-		if (args.length != 3) {
+    /**
+     * Processes.
+     * 
+     * @param player
+     *            A {@link org.bukkit.entity.Player Player}.
+     * @param arguments
+     *            An array of {@link java.lang.String String}s.
+     * @author joestr
+     * @since ${project.version}
+     * @version ${project.version}
+     */
+    @SuppressWarnings("deprecation")
+    public void process(Player player, String[] arguments) {
 
-			// Wrong usage of the /zone command
-			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-			player.sendMessage(
-					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
-							.replace("{0}", "/zone addmember <Zone> <Player>"));
+        if (!player.hasPermission("zonemenu.addmember")) {
 
-			return;
-		}
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                            + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("permission_message"))
+                                    .replace("{0}", "zonemenu.addmember")));
 
-		plugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
+            return;
+        }
 
-			// Initialise new region
-			ProtectedRegion protectedregion = null;
+        // If arguments' length does not equals 3 ...
+        if (arguments.length != 3) {
 
-			if (t.isEmpty()) {
+            // ... wrong usage of "/zone addmember <Zone> <Player>".
 
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
+            // Send the player a message.
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                            + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message")).replace("{0}",
+                                    "/zone addmember <Zone> <Player>")));
 
-				return;
-			}
+            return;
+        }
 
-			for (ProtectedRegion pr : t) {
+        this.zoneMenuPlugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
-				if (pr.getId().equalsIgnoreCase(args[1])) {
+            // If the list is empty ...
+            if (t.isEmpty()) {
 
-					protectedregion = pr;
-				}
-			}
+                // ... send the player a message.
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                                + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone"))));
 
-			// Check if region in invalid
-			if (protectedregion == null) {
+                return;
+            }
 
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(this.plugin.colorCode('&',
-						((String) this.plugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
-								args[1])));
-				return;
-			}
+            // Initialise new region with null
+            ProtectedRegion protectedRegion = null;
 
-			// Grab the members
-			DefaultDomain domainmembers = protectedregion.getMembers();
+            // Loop through all regions ...
+            for (ProtectedRegion protectedRegion_ : t) {
 
-			// Check if mebers list contains the specified player
-			if (domainmembers.contains(
-					plugin.worldGuardPlugin.wrapOfflinePlayer(plugin.getServer().getOfflinePlayer(args[2])))) {
+                // ... and if the region ID equals the second argument (<Zone>) ...
+                if (protectedRegion_.getId().equalsIgnoreCase(arguments[1])) {
 
-				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(plugin
-						.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_addmember_already_member"))
-						.replace("{0}", args[2]));
+                    // ... set the found region.
+                    protectedRegion = protectedRegion_;
+                }
+            }
 
-				return;
-			}
+            // If region equals null ...
+            if (protectedRegion == null) {
 
-			// Initiliaze a variable for later
-			final ProtectedRegion protectedregionforguava = protectedregion;
+                // ... no region with this ID was not found.
 
-			// From:
-			// https://worldguard.enginehub.org/en/latest/developer/regions/protected-region/#domains
-			// (modified)
-			// start ---
-			// Google's Guava library provides useful concurrency classes.
-			// The following executor would be re-used in your plugin.
-			ListeningExecutorService executor = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
+                // Send the player a message.
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                                + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("not_exisiting_zone"))
+                                        .replace("{0}", arguments[1])));
 
-			String[] input = new String[] { args[2] };
-			ProfileService profiles = plugin.worldGuardPlugin.getProfileService();
-			DomainInputResolver resolver = new DomainInputResolver(profiles, input);
-			resolver.setLocatorPolicy(UserLocatorPolicy.UUID_AND_NAME);
-			ListenableFuture<DefaultDomain> future = executor.submit(resolver);
+                return;
+            }
 
-			// Add a callback using Guava
-			Futures.addCallback(future, new FutureCallback<DefaultDomain>() {
+            // get the members of the region
+            DefaultDomain domainMembers = protectedRegion.getMembers();
 
-				public void onSuccess(DefaultDomain result) {
+            // If members list contains the third argument (<Player>) ...
+            if (domainMembers.contains(this.zoneMenuPlugin.worldGuardPlugin
+                    .wrapOfflinePlayer(this.zoneMenuPlugin.getServer().getOfflinePlayer(arguments[2])))) {
 
-					protectedregionforguava.getMembers().addPlayer(
-							plugin.worldGuardPlugin.wrapOfflinePlayer(plugin.getServer().getOfflinePlayer(args[2])));
-					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-					player.sendMessage(
-							plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_addmember"))
-									.replace("{0}", args[2])
-									.replace("{1}", args[1]));
-				}
+                // ... the given player is laready a member.
 
-				public void onFailure(Throwable throwable) {
+                // Send the player a message.
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                                + ((String) zoneMenuPlugin.configDelegate.getMap().get("zone_addmember_already_member"))
+                                        .replace("{0}", arguments[2])));
 
-					player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-					player.sendMessage(plugin
-							.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_addmember_not_existing"))
-							.replace("{0}", args[2]));
-				}
-			});
-			// end ---
-		});
-	}
+                return;
+            }
+
+            // Initiliaze a variable for guava
+            final ProtectedRegion protectedRegionForGuava = protectedRegion;
+
+            // From:
+            // https://worldguard.enginehub.org/en/latest/developer/regions/protected-region/#domains
+            // (modified)
+            // --- start ---
+            // Google's Guava library provides useful concurrency classes.
+            // The following executor would be re-used in your plugin.
+            ListeningExecutorService listeningExecutorService = MoreExecutors
+                    .listeningDecorator(Executors.newCachedThreadPool());
+
+            String[] input = new String[] { arguments[2] };
+            ProfileService profileService = this.zoneMenuPlugin.worldGuardPlugin.getProfileService();
+            DomainInputResolver domainInputResolver = new DomainInputResolver(profileService, input);
+            domainInputResolver.setLocatorPolicy(UserLocatorPolicy.UUID_AND_NAME);
+            ListenableFuture<DefaultDomain> listenableFuture = listeningExecutorService.submit(domainInputResolver);
+
+            // Add a callback using Guava
+            Futures.addCallback(listenableFuture, new FutureCallback<DefaultDomain>() {
+
+                // If it was successfull.
+                public void onSuccess(DefaultDomain result) {
+
+                    // Add the player as member to a region.
+                    protectedRegionForGuava.getMembers().addPlayer(zoneMenuPlugin.worldGuardPlugin
+                            .wrapOfflinePlayer(zoneMenuPlugin.getServer().getOfflinePlayer(arguments[2])));
+
+                    // Send the player a message.
+                    player.sendMessage(zoneMenuPlugin.colorCode('&',
+                            ((String) zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                                    + ((String) zoneMenuPlugin.configDelegate.getMap().get("zone_addmember"))
+                                            .replace("{0}", arguments[2]).replace("{1}", arguments[1])));
+                }
+
+                // If it was not successfull.
+                public void onFailure(Throwable throwable) {
+
+                    // Send the player a message.
+                    player.sendMessage(zoneMenuPlugin.colorCode('&', ((String) zoneMenuPlugin.configDelegate.getMap()
+                            .get("prefix"))
+                            + ((String) zoneMenuPlugin.configDelegate.getMap().get("zone_addmember_not_existing"))
+                                    .replace("{0}", arguments[2])));
+                }
+            });
+            // --- end ---
+        });
+    }
 }

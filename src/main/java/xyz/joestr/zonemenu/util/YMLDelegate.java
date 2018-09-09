@@ -23,299 +23,299 @@ import org.bukkit.plugin.Plugin;
  */
 public class YMLDelegate {
 
-	Plugin plugin = null;
-	Map<String, Object> hashMap = new LinkedHashMap<>();
-	String configurationSection = "";
-	String fileName = "";
+    Plugin plugin = null;
+    Map<String, Object> hashMap = new LinkedHashMap<>();
+    String configurationSection = "";
+    String fileName = "";
 
-	/**
-	 * Create a new YMLDelegate instace
-	 * 
-	 * @author joestr
-	 * @since build_1
-	 * @version build_7_pre_2
-	 * @param plugin
-	 *            {@linkplain Plugin} Instace of a plugin
-	 * @param configurationSection
-	 *            {@linkplain String} Name of the configuration section
-	 * @param fileName
-	 *            {@linkplain String} Name of the file
-	 */
-	public YMLDelegate(Plugin plugin, String configurationSection, String fileName) {
+    /**
+     * Create a new YMLDelegate instace
+     * 
+     * @author joestr
+     * @since build_1
+     * @version build_7_pre_2
+     * @param plugin
+     *            {@linkplain Plugin} Instace of a plugin
+     * @param configurationSection
+     *            {@linkplain String} Name of the configuration section
+     * @param fileName
+     *            {@linkplain String} Name of the file
+     */
+    public YMLDelegate(Plugin plugin, String configurationSection, String fileName) {
 
-		this.plugin = plugin;
-		this.configurationSection = configurationSection;
-		this.fileName = fileName;
-	}
+        this.plugin = plugin;
+        this.configurationSection = configurationSection;
+        this.fileName = fileName;
+    }
 
-	/**
-	 * Get the name of the file.
-	 * 
-	 * @author joestr
-	 * @since build_1
-	 * @version build_7_pre_2
-	 * @return {@linkplain String} Name of the file.
-	 */
-	public String getFileName() {
+    /**
+     * Get the name of the file.
+     * 
+     * @author joestr
+     * @since build_1
+     * @version build_7_pre_2
+     * @return {@linkplain String} Name of the file.
+     */
+    public String getFileName() {
 
-		return this.fileName;
-	}
+        return this.fileName;
+    }
 
-	/**
-	 * Get the configuration section as a map.
-	 * 
-	 * @author joestr
-	 * @since build_1
-	 * @version build_7_pre_2
-	 * @return {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map with
-	 *         entries
-	 */
-	public Map<String, Object> getMap() {
+    /**
+     * Get the configuration section as a map.
+     * 
+     * @author joestr
+     * @since build_1
+     * @version build_7_pre_2
+     * @return {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map with
+     *         entries
+     */
+    public Map<String, Object> getMap() {
 
-		return this.hashMap;
-	}
+        return this.hashMap;
+    }
 
-	/**
-	 * Set the configuration section with a map.
-	 * 
-	 * @author joestr
-	 * @since build_1
-	 * @version build_7_pre_2
-	 * @param map
-	 *            {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map
-	 *            with entries
-	 */
-	public void setMap(Map<String, Object> map) {
+    /**
+     * Set the configuration section with a map.
+     * 
+     * @author joestr
+     * @since build_1
+     * @version build_7_pre_2
+     * @param map
+     *            {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map
+     *            with entries
+     */
+    public void setMap(Map<String, Object> map) {
 
-		this.hashMap = map;
-	}
+        this.hashMap = map;
+    }
 
-	/**
-	 * Get the configuration section as a map.
-	 * 
-	 * @author joestr
-	 * @since build_1
-	 * @version build_7_pre_2
-	 * @return {@linkplain Map}<{@linkplain String}, {@linkplain Onject}> Map with
-	 *         entries
-	 * @deprecated Use {@linkplain #getMap()} instead.
-	 */
-	public Map<String, Object> Map() {
-		return this.getMap();
-	}
+    /**
+     * Get the configuration section as a map.
+     * 
+     * @author joestr
+     * @since build_1
+     * @version build_7_pre_2
+     * @return {@linkplain Map}<{@linkplain String}, {@linkplain Onject}> Map with
+     *         entries
+     * @deprecated Use {@linkplain #getMap()} instead.
+     */
+    public Map<String, Object> Map() {
+        return this.getMap();
+    }
 
-	/**
-	 * Set the configuration section with a map.
-	 * 
-	 * @author joestr
-	 * @since build_1
-	 * @version build_7_pre_2
-	 * @param map
-	 *            {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map
-	 *            with entries
-	 * @deprecated Use {@linkplain #setMap(Map)} instead.
-	 */
-	public void Map(Map<String, Object> map) {
-		this.setMap(map);
-	}
+    /**
+     * Set the configuration section with a map.
+     * 
+     * @author joestr
+     * @since build_1
+     * @version build_7_pre_2
+     * @param map
+     *            {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map
+     *            with entries
+     * @deprecated Use {@linkplain #setMap(Map)} instead.
+     */
+    public void Map(Map<String, Object> map) {
+        this.setMap(map);
+    }
 
-	/**
-	 * Load the file, get the configuration section and put it into a map.
-	 * 
-	 * @author joestr
-	 * @since build_1
-	 * @version build_7_pre_2
-	 */
-	public void Load() {
+    /**
+     * Load the file, get the configuration section and put it into a map.
+     * 
+     * @author joestr
+     * @since build_1
+     * @version build_7_pre_2
+     */
+    public void Load() {
 
-		try {
+        try {
 
-			FileConfiguration fileConfiguration = YamlConfiguration
-					.loadConfiguration(new File(this.plugin.getDataFolder(), fileName));
-			hashMap.putAll(fileConfiguration.getConfigurationSection(configurationSection).getValues(true));
-		} catch (Exception exception) {
+            FileConfiguration fileConfiguration = YamlConfiguration
+                    .loadConfiguration(new File(this.plugin.getDataFolder(), fileName));
+            hashMap.putAll(fileConfiguration.getConfigurationSection(configurationSection).getValues(true));
+        } catch (Exception exception) {
 
-			exception.printStackTrace();
-		}
-	}
+            exception.printStackTrace();
+        }
+    }
 
-	/**
-	 * Save the map to the file.
-	 * 
-	 * @author joestr
-	 * @since build_1
-	 * @version build_7_pre_2
-	 */
-	public void Save() {
+    /**
+     * Save the map to the file.
+     * 
+     * @author joestr
+     * @since build_1
+     * @version build_7_pre_2
+     */
+    public void Save() {
 
-		try {
+        try {
 
-			FileConfiguration fileConfiguration = YamlConfiguration
-					.loadConfiguration(new File(this.plugin.getDataFolder(), fileName));
-			fileConfiguration.createSection(configurationSection, hashMap);
-			fileConfiguration.save(new File(this.plugin.getDataFolder(), fileName));
-		} catch (NullPointerException exception) {
+            FileConfiguration fileConfiguration = YamlConfiguration
+                    .loadConfiguration(new File(this.plugin.getDataFolder(), fileName));
+            fileConfiguration.createSection(configurationSection, hashMap);
+            fileConfiguration.save(new File(this.plugin.getDataFolder(), fileName));
+        } catch (NullPointerException exception) {
 
-			exception.printStackTrace();
-		} catch (Exception exception) {
+            exception.printStackTrace();
+        } catch (Exception exception) {
 
-			exception.printStackTrace();
-		}
-	}
+            exception.printStackTrace();
+        }
+    }
 
-	/**
-	 * Reset the file with the ressource file.
-	 * 
-	 * @author joestr
-	 * @since build_1
-	 * @version build_7_pre_2
-	 */
-	public void Reset() {
+    /**
+     * Reset the file with the ressource file.
+     * 
+     * @author joestr
+     * @since build_1
+     * @version build_7_pre_2
+     */
+    public void Reset() {
 
-		try {
+        try {
 
-			this.plugin.saveResource(fileName, true);
-		} catch (Exception exception) {
+            this.plugin.saveResource(fileName, true);
+        } catch (Exception exception) {
 
-			exception.printStackTrace();
-		}
+            exception.printStackTrace();
+        }
 
-		Load();
-	}
+        Load();
+    }
 
-	/**
-	 * Create a new file.
-	 * 
-	 * @author joestr
-	 * @since version_1
-	 */
-	public void Create() {
+    /**
+     * Create a new file.
+     * 
+     * @author joestr
+     * @since version_1
+     */
+    public void Create() {
 
-		try {
+        try {
 
-			this.plugin.saveResource(fileName, false);
-		} catch (Exception e) {
+            this.plugin.saveResource(fileName, false);
+        } catch (Exception e) {
 
-			e.printStackTrace();
-		}
-	}
+            e.printStackTrace();
+        }
+    }
 
-	/**
-	 * Check for existing file.
-	 * 
-	 * @author joestr
-	 * @since build_1
-	 * @version build_7_pre_2
-	 * @return {@linkplain Boolean} If the file exists or not.
-	 */
-	public boolean Exist() {
+    /**
+     * Check for existing file.
+     * 
+     * @author joestr
+     * @since build_1
+     * @version build_7_pre_2
+     * @return {@linkplain Boolean} If the file exists or not.
+     */
+    public boolean Exist() {
 
-		boolean result = false;
+        boolean result = false;
 
-		File file = null;
+        File file = null;
 
-		try {
+        try {
 
-			file = new File(this.plugin.getDataFolder(), fileName);
+            file = new File(this.plugin.getDataFolder(), fileName);
 
-			if (file.exists()) {
+            if (file.exists()) {
 
-				result = true;
-			}
-		} catch (NullPointerException exception) {
+                result = true;
+            }
+        } catch (NullPointerException exception) {
 
-			exception.printStackTrace();
-		} catch (SecurityException exception) {
+            exception.printStackTrace();
+        } catch (SecurityException exception) {
 
-			exception.printStackTrace();
-		} catch (Exception exception) {
+            exception.printStackTrace();
+        } catch (Exception exception) {
 
-			exception.printStackTrace();
-		}
+            exception.printStackTrace();
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Check if loaded file contains the same entries as the ressource file.
-	 * 
-	 * @author joestr
-	 * @since build_1
-	 * @version build_7_pre_2
-	 * @return {@linkplain Boolean} If the was successful or not.
-	 */
-	public boolean Check() {
+    /**
+     * Check if loaded file contains the same entries as the ressource file.
+     * 
+     * @author joestr
+     * @since build_1
+     * @version build_7_pre_2
+     * @return {@linkplain Boolean} If the was successful or not.
+     */
+    public boolean Check() {
 
-		boolean result = true;
+        boolean result = true;
 
-		Reader reader = null;
+        Reader reader = null;
 
-		try {
+        try {
 
-			reader = new InputStreamReader(this.plugin.getResource(fileName), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
+            reader = new InputStreamReader(this.plugin.getResource(fileName), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
 
-			e.printStackTrace();
-		} catch (Exception exception) {
+            e.printStackTrace();
+        } catch (Exception exception) {
 
-			exception.printStackTrace();
-		}
+            exception.printStackTrace();
+        }
 
-		for (String s : YamlConfiguration.loadConfiguration(reader).getConfigurationSection(configurationSection)
-				.getKeys(true)) {
+        for (String s : YamlConfiguration.loadConfiguration(reader).getConfigurationSection(configurationSection)
+                .getKeys(true)) {
 
-			if (!this.hashMap.containsKey(s)) {
+            if (!this.hashMap.containsKey(s)) {
 
-				result = false;
-				break;
-			}
-		}
+                result = false;
+                break;
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	/**
-	 * Check if loaded file contains the same entries as the ressource file and if
-	 * not add the missing entries to the map.
-	 * 
-	 * @since build_1
-	 * @version build_7_pre_2
-	 * @return {@linkplain Boolean} If an entry was added.
-	 */
-	public boolean EntryCheck() {
+    /**
+     * Check if loaded file contains the same entries as the ressource file and if
+     * not add the missing entries to the map.
+     * 
+     * @since build_1
+     * @version build_7_pre_2
+     * @return {@linkplain Boolean} If an entry was added.
+     */
+    public boolean EntryCheck() {
 
-		boolean addedEntry = false;
+        boolean addedEntry = false;
 
-		Reader reader = null;
+        Reader reader = null;
 
-		try {
+        try {
 
-			reader = new InputStreamReader(this.plugin.getResource(fileName), "UTF-8");
-		} catch (UnsupportedEncodingException exception) {
+            reader = new InputStreamReader(this.plugin.getResource(fileName), "UTF-8");
+        } catch (UnsupportedEncodingException exception) {
 
-			exception.printStackTrace();
-		} catch (Exception exception) {
+            exception.printStackTrace();
+        } catch (Exception exception) {
 
-			exception.printStackTrace();
-		}
+            exception.printStackTrace();
+        }
 
-		ConfigurationSection configurationsection = YamlConfiguration.loadConfiguration(reader)
-				.getConfigurationSection(configurationSection);
+        ConfigurationSection configurationsection = YamlConfiguration.loadConfiguration(reader)
+                .getConfigurationSection(configurationSection);
 
-		for (String s : configurationsection.getKeys(true)) {
+        for (String s : configurationsection.getKeys(true)) {
 
-			if (!this.hashMap.containsKey(s)) {
+            if (!this.hashMap.containsKey(s)) {
 
-				Bukkit.getLogger().log(Level.WARNING,
-						"File: " + this.getFileName() + "; Missing entry: " + s + "; (using from default config)");
-				this.hashMap.put(s, configurationsection.get(s));
+                Bukkit.getLogger().log(Level.WARNING,
+                        "File: " + this.getFileName() + "; Missing entry: " + s + "; (using from default config)");
+                this.hashMap.put(s, configurationsection.get(s));
 
-				if (!addedEntry) {
-					addedEntry = true;
-				}
-			}
-		}
+                if (!addedEntry) {
+                    addedEntry = true;
+                }
+            }
+        }
 
-		return addedEntry;
-	}
+        return addedEntry;
+    }
 }

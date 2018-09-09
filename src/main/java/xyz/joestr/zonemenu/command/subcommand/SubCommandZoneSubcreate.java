@@ -21,231 +21,257 @@ import xyz.joestr.zonemenu.util.ZoneMenuPlayer;
 import xyz.joestr.zonemenu.util.ZoneMenuSignType;
 import xyz.joestr.zonemenu.util.ZoneMenuToolType;
 
+/**
+ * Class which handles subcommand "subcreate" of command "zone".
+ * 
+ * @author joestr
+ * @since ${project.version}
+ * @version ${project.version}
+ */
 public class SubCommandZoneSubcreate {
 
-	ZoneMenu plugin = null;
+    ZoneMenu zoneMenuPlugin = null;
 
-	public SubCommandZoneSubcreate(ZoneMenu plugin) {
-		this.plugin = plugin;
-	}
+    /**
+     * Constrcutor for the
+     * {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneSubcreate
+     * SubCommandZoneSubcreate} class.
+     * 
+     * @param zoneMenuPlugin
+     *            A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
+     * @author joestr
+     * @since ${project.version}
+     * @version ${project.version}
+     */
+    public SubCommandZoneSubcreate(ZoneMenu plugin) {
 
-	public void process(Player player, String[] args) {
+        this.zoneMenuPlugin = plugin;
+    }
 
-		// .length != 2 -> Wrong usage
-		if (args.length != 2) {
+    /**
+     * Processes.
+     * 
+     * @param player
+     *            A {@link org.bukkit.entity.Player Player}.
+     * @param arguments
+     *            An array of {@link java.lang.String String}s.
+     * @author joestr
+     * @since ${project.version}
+     * @version ${project.version}
+     */
+    public void process(Player player, String[] args) {
 
-			// Wrong usage of the /zone subcreate command
-			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-			player.sendMessage(
-					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
-							.replace("{0}", "/zone subcreate <Zone>"));
+        // If arguments' length does not equals 2 ...
+        if (args.length != 2) {
 
-			return;
-		}
+            // ... wrong usage of "/zone subcreate <Zone>".
 
-		this.plugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
+            // Send the player a message.
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message")).replace("{0}",
+                            "/zone subcreate <Zone>")));
 
-			// Grab players worldedit selection
-			Selection selectedRegion = this.plugin.worldEditPlugin.getSelection(player);
+            return;
+        }
 
-			// Check if selection is valid
-			if (selectedRegion == null) {
+        this.zoneMenuPlugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
-				// Check if players inventory contains a stick
-				if (!player.getInventory().contains(Material.STICK)) {
-					// Add a stick to players inventory
-					player.getInventory().addItem(new ItemStack[] { new ItemStack(Material.STICK, 1) });
-				}
+            // Grab players worldedit selection
+            Selection selectedRegion = this.zoneMenuPlugin.worldEditPlugin.getSelection(player);
 
-				// If the player is in the map ...
-				if(this.plugin.zoneMenuPlayers.containsKey(player)) {
-					
-					// ... set the ToolType and SignType.
-					this.plugin.zoneMenuPlayers.get(player).setToolType(ZoneMenuToolType.SIGN);
-					this.plugin.zoneMenuPlayers.get(player).setSignType(ZoneMenuSignType.SUBZONE);
-				} else {
-					
-					// If not, create, set SignType and ToolType and finally put them into the map.
-					ZoneMenuPlayer zoneMenuPlayer = new ZoneMenuPlayer(player);
-					
-					zoneMenuPlayer.setToolType(ZoneMenuToolType.SIGN);
-					zoneMenuPlayer.setSignType(ZoneMenuSignType.SUBZONE);
-					
-					this.plugin.zoneMenuPlayers.put(player, zoneMenuPlayer);
-				}
-				
-				// Send player a message
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(this.plugin.colorCode('&',
-						(String) this.plugin.configDelegate.getMap().get("zone_subcreate_sign")));
+            // Check if selection is valid
+            if (selectedRegion == null) {
 
-				return;
-			}
+                // Check if players inventory contains a stick
+                if (!player.getInventory().contains(Material.STICK)) {
 
-			// If the player is not in the map ...
-			if(!this.plugin.zoneMenuPlayers.containsKey(player)) {
-				
-				// ... do not proceed.
-				return;
-			}
-			
-			// If ToolType or SingType is wrong ...
-			if (this.plugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN
-					|| this.plugin.zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.SUBZONE) {
-				
-				// ... do not proceed.
-				return;
-			}
+                    // Add a stick to players inventory
+                    player.getInventory().addItem(new ItemStack[] { new ItemStack(Material.STICK, 1) });
+                }
 
-			ProtectedRegion protectedRegion = null;
+                // If the player is in the map ...
+                if (this.zoneMenuPlugin.zoneMenuPlayers.containsKey(player)) {
 
-			if (t.isEmpty()) {
+                    // ... set the ToolType and SignType.
+                    this.zoneMenuPlugin.zoneMenuPlayers.get(player).setToolType(ZoneMenuToolType.SIGN);
+                    this.zoneMenuPlugin.zoneMenuPlayers.get(player).setSignType(ZoneMenuSignType.SUBZONE);
+                } else {
 
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
+                    // If not, create, set SignType and ToolType and finally put them into the map.
+                    ZoneMenuPlayer zoneMenuPlayer = new ZoneMenuPlayer(player);
 
-				return;
-			}
+                    zoneMenuPlayer.setToolType(ZoneMenuToolType.SIGN);
+                    zoneMenuPlayer.setSignType(ZoneMenuSignType.SUBZONE);
 
-			for (ProtectedRegion pr : t) {
+                    this.zoneMenuPlugin.zoneMenuPlayers.put(player, zoneMenuPlayer);
+                }
 
-				if (pr.getId().equalsIgnoreCase(args[1])) {
+                // Send player a message
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                        (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_subcreate_sign")));
 
-					protectedRegion = pr;
-				}
-			}
+                return;
+            }
 
-			int subZoneCounter = 1;
+            // If the player is not in the map ...
+            if (!this.zoneMenuPlugin.zoneMenuPlayers.containsKey(player)) {
 
-			for (ProtectedRegion pr : t) {
+                // ... do not proceed.
+                return;
+            }
 
-				if (pr.getParent() != null) {
+            // If ToolType or SingType is wrong ...
+            if (this.zoneMenuPlugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN
+                    || this.zoneMenuPlugin.zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.SUBZONE) {
 
-					if (pr.getParent().equals(protectedRegion)) {
+                // ... do not proceed.
+                return;
+            }
 
-						subZoneCounter++;
-					}
-				}
-			}
+            ProtectedRegion protectedRegion = null;
 
-			if (protectedRegion == null) {
+            if (t.isEmpty()) {
 
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(this.plugin.colorCode('&',
-						((String) this.plugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
-								args[1])));
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                        (String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone")));
 
-				return;
-			}
+                return;
+            }
 
-			int minBlockX = selectedRegion.getMinimumPoint().getBlockX();
-			int minBlockY = selectedRegion.getMinimumPoint().getBlockY();
-			int minBlockZ = selectedRegion.getMinimumPoint().getBlockZ();
-			int maxBlockX = selectedRegion.getMaximumPoint().getBlockX();
-			int maxBlockY = selectedRegion.getMaximumPoint().getBlockY();
-			int maxBlockZ = selectedRegion.getMaximumPoint().getBlockZ();
+            for (ProtectedRegion pr : t) {
 
-			if (!protectedRegion.contains(minBlockX, minBlockY, minBlockZ)) {
+                if (pr.getId().equalsIgnoreCase(args[1])) {
 
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(this.plugin.colorCode('&',
-						((String) this.plugin.configDelegate.getMap().get("zone_subcreate_not_in_zone")).replace("{0}",
-								protectedRegion.getId())));
+                    protectedRegion = pr;
+                }
+            }
 
-				return;
-			}
+            int subZoneCounter = 1;
 
-			if (!protectedRegion.contains(maxBlockX, maxBlockY, maxBlockZ)) {
+            for (ProtectedRegion pr : t) {
 
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(this.plugin.colorCode('&',
-						(String) this.plugin.configDelegate.getMap().get("zone_subcreate_not_in_zone")));
+                if (pr.getParent() != null) {
 
-				return;
-			}
+                    if (pr.getParent().equals(protectedRegion)) {
 
-			// Grab some values to work with
-			Location min = selectedRegion.getMinimumPoint();
-			Location max = selectedRegion.getMaximumPoint();
-			double firstX = min.getX();
-			double firstY = min.getY();
-			double firstZ = min.getZ();
-			double secondX = max.getX();
-			double secondY = max.getY();
-			double secondZ = max.getZ();
+                        subZoneCounter++;
+                    }
+                }
+            }
 
-			// Create a new WorldGuard region
-			ProtectedCuboidRegion protectedCuboidRegion = new ProtectedCuboidRegion(
-					((String) this.plugin.idDelegate.getMap().get("subzone_id"))
-							.replace("{parent}", protectedRegion.getId()).replace("{count}", "" + subZoneCounter++),
-					new BlockVector(firstX, firstY, firstZ), new BlockVector(secondX, secondY, secondZ));
+            if (protectedRegion == null) {
 
-			try {
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
+                                args[1])));
 
-				protectedCuboidRegion.setParent(protectedRegion);
-			} catch (CircularInheritanceException e) {
+                return;
+            }
 
-				e.printStackTrace();
+            int minBlockX = selectedRegion.getMinimumPoint().getBlockX();
+            int minBlockY = selectedRegion.getMinimumPoint().getBlockY();
+            int minBlockZ = selectedRegion.getMinimumPoint().getBlockZ();
+            int maxBlockX = selectedRegion.getMaximumPoint().getBlockX();
+            int maxBlockY = selectedRegion.getMaximumPoint().getBlockY();
+            int maxBlockZ = selectedRegion.getMaximumPoint().getBlockZ();
 
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(this.plugin.colorCode('&',
-						(String) this.plugin.configDelegate.getMap().get("zone_subcreate_circular")));
+            if (!protectedRegion.contains(minBlockX, minBlockY, minBlockZ)) {
 
-				return;
-			}
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_subcreate_not_in_zone"))
+                                .replace("{0}", protectedRegion.getId())));
 
-			// Check if Worldguards profileservice contains players name
-			ProfileService ps = this.plugin.worldGuardPlugin.getProfileService();
-			try {
-				ps.findByName(player.getName());
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+                return;
+            }
 
-			// Create a new domain
-			DefaultDomain domain = new DefaultDomain();
-			// Wrap player and add it to the domain
-			domain.addPlayer(this.plugin.worldGuardPlugin.wrapPlayer(player));
-			// Apply the domain to owners
-			protectedCuboidRegion.setOwners(domain);
-			// Set the priority to the specified value in the config file
-			protectedCuboidRegion.setPriority(protectedRegion.getPriority() + 1);
+            if (!protectedRegion.contains(maxBlockX, maxBlockY, maxBlockZ)) {
 
-			// Some flags
-			/*
-			 * ProtectRegion.setFlag(DefaultFlag.CREEPER_EXPLOSION, StateFlag.State.DENY);
-			 * ProtectRegion.setFlag(DefaultFlag.ENDERDRAGON_BLOCK_DAMAGE,
-			 * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.TNT,
-			 * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.FIRE_SPREAD,
-			 * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.OTHER_EXPLOSION,
-			 * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.ENDER_BUILD,
-			 * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.GHAST_FIREBALL,
-			 * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.LAVA_FIRE,
-			 * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.PVP,
-			 * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.MOB_DAMAGE,
-			 * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.MOB_SPAWNING,
-			 * StateFlag.State.DENY);
-			 */
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                        (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_subcreate_not_in_zone")));
 
-			// Finally, add the region to worlds region manager
-			this.plugin.worldGuardPlugin.getRegionManager(player.getWorld()).addRegion(protectedCuboidRegion);
+                return;
+            }
 
-			this.plugin.clearUpZoneMenuPlayer(player);
-			
-			// Send player a message
-			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-			player.sendMessage(
-					this.plugin.colorCode('&', ((String) this.plugin.configDelegate.getMap().get("zone_subcreate"))
-							.replace("{0}", protectedCuboidRegion.getId())));
-		});
-	}
+            // Grab some values to work with
+            Location min = selectedRegion.getMinimumPoint();
+            Location max = selectedRegion.getMaximumPoint();
+            double firstX = min.getX();
+            double firstY = min.getY();
+            double firstZ = min.getZ();
+            double secondX = max.getX();
+            double secondY = max.getY();
+            double secondZ = max.getZ();
+
+            // Create a new WorldGuard region
+            ProtectedCuboidRegion protectedCuboidRegion = new ProtectedCuboidRegion(
+                    ((String) this.zoneMenuPlugin.idDelegate.getMap().get("subzone_id"))
+                            .replace("{parent}", protectedRegion.getId()).replace("{count}", "" + subZoneCounter++),
+                    new BlockVector(firstX, firstY, firstZ), new BlockVector(secondX, secondY, secondZ));
+
+            try {
+
+                protectedCuboidRegion.setParent(protectedRegion);
+            } catch (CircularInheritanceException e) {
+
+                e.printStackTrace();
+
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                        (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_subcreate_circular")));
+
+                return;
+            }
+
+            // Check if Worldguards profileservice contains players name
+            ProfileService ps = this.zoneMenuPlugin.worldGuardPlugin.getProfileService();
+
+            try {
+
+                ps.findByName(player.getName());
+            } catch (IOException e) {
+
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+
+                e.printStackTrace();
+            }
+
+            // Create a new domain
+            DefaultDomain domain = new DefaultDomain();
+
+            // Wrap player and add it to the domain
+            domain.addPlayer(this.zoneMenuPlugin.worldGuardPlugin.wrapPlayer(player));
+
+            // Apply the domain to owners
+            protectedCuboidRegion.setOwners(domain);
+
+            // Set the priority to the specified value in the config file
+            protectedCuboidRegion.setPriority(protectedRegion.getPriority() + 1);
+
+            // Some flags
+            /*
+             * ProtectRegion.setFlag(DefaultFlag.CREEPER_EXPLOSION, StateFlag.State.DENY);
+             * ProtectRegion.setFlag(DefaultFlag.ENDERDRAGON_BLOCK_DAMAGE,
+             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.TNT,
+             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.FIRE_SPREAD,
+             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.OTHER_EXPLOSION,
+             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.ENDER_BUILD,
+             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.GHAST_FIREBALL,
+             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.LAVA_FIRE,
+             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.PVP,
+             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.MOB_DAMAGE,
+             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.MOB_SPAWNING,
+             * StateFlag.State.DENY);
+             */
+
+            // Finally, add the region to worlds region manager
+            this.zoneMenuPlugin.worldGuardPlugin.getRegionManager(player.getWorld()).addRegion(protectedCuboidRegion);
+
+            this.zoneMenuPlugin.clearUpZoneMenuPlayer(player);
+
+            // Send player a message
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_subcreate")).replace("{0}",
+                            protectedCuboidRegion.getId())));
+        });
+    }
 }

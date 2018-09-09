@@ -4,52 +4,92 @@ import org.bukkit.entity.Player;
 
 import xyz.joestr.zonemenu.ZoneMenu;
 
+/**
+ * Class which handles subcommand "cancel" of command "zone".
+ * 
+ * @author joestr
+ * @since ${project.version}
+ * @version ${project.version}
+ */
 public class SubCommandZoneCancel {
 
-	ZoneMenu plugin = null;
+    ZoneMenu zoneMenuPlugin = null;
 
-	public SubCommandZoneCancel(ZoneMenu plugin) {
-		this.plugin = plugin;
-	}
+    /**
+     * Constrcutor for the
+     * {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneCancel
+     * SubCommandZoneCancel} class.
+     * 
+     * @param zoneMenuPlugin
+     *            A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
+     * @author joestr
+     * @since ${project.version}
+     * @version ${project.version}
+     */
+    public SubCommandZoneCancel(ZoneMenu zoneMenuPlugin) {
 
-	public void process(Player player, String[] args) {
-		
-		if(args.length != 1) {
-			
-			// Wrong usage of the /zone command
-			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-			player.sendMessage(
-					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
-							.replace("{0}", "/zone cancel"));
+        this.zoneMenuPlugin = zoneMenuPlugin;
+    }
 
-			return;
-		}
-		
-		// Check if player is not in map -> No zone creation running
-		if (!this.plugin.zoneMenuPlayers.containsKey(player)) {
+    /**
+     * Processes.
+     * 
+     * @param player
+     *            A {@link org.bukkit.entity.Player Player}.
+     * @param arguments
+     *            An array of {@link java.lang.String String}s.
+     * @author joestr
+     * @since ${project.version}
+     * @version ${project.version}
+     */
+    public void process(Player player, String[] arguments) {
 
-			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-			player.sendMessage(this.plugin.colorCode('&',
-					(String) this.plugin.configDelegate.getMap().get("zone_cancel_not_running")));
+        // If arguments' length does not equals 1 ...
+        if (arguments.length != 1) {
 
-			return;
-		}
-		
-		// Check if the ToolType is not set -> No zone creation running
-		if (this.plugin.zoneMenuPlayers.get(player).getToolType() == null) {
+            // ... wrong usage of "/zone cancel".
 
-			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-			player.sendMessage(this.plugin.colorCode('&',
-					(String) this.plugin.configDelegate.getMap().get("zone_cancel_not_running")));
+            // Send the player a message.
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                            + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message")).replace("{0}",
+                                    "/zone cancel")));
 
-			return;
-		}
+            return;
+        }
 
-		// Clear up player.
-		this.plugin.clearUpZoneMenuPlayer(player);
+        // If player is not in the map ...
+        if (!this.zoneMenuPlugin.zoneMenuPlayers.containsKey(player)) {
 
-		// Send player a message
-		player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-		player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_cancel")));
-	}
+            // ... zone creation is not running.
+
+            // Send the player a message.
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                            + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_cancel_not_running"))));
+
+            return;
+        }
+
+        // If the ToolType equals null ...
+        if (this.zoneMenuPlugin.zoneMenuPlayers.get(player).getToolType() == null) {
+
+            // ... zone creation is not running.
+
+            // Send the player a message.
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                            + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_cancel_not_running"))));
+
+            return;
+        }
+
+        // Clear up player.
+        this.zoneMenuPlugin.clearUpZoneMenuPlayer(player);
+
+        // Send the player a message
+        player.sendMessage(
+                this.zoneMenuPlugin.colorCode('&', ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                        + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_cancel"))));
+    }
 }

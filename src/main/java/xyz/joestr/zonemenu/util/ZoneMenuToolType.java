@@ -8,5 +8,5 @@ package xyz.joestr.zonemenu.util;
  * @version ${project.version}
  */
 public enum ZoneMenuToolType {
-	FIND, SIGN
+    FIND, SIGN
 }
