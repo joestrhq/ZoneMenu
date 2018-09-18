@@ -29,6 +29,7 @@ import xyz.joestr.zonemenu.event.playerinteract.CreatePlayerInteract;
 import xyz.joestr.zonemenu.event.playerinteract.FindPlayerInteract;
 import xyz.joestr.zonemenu.event.playerinteract.SubcreatePlayerInteract;
 import xyz.joestr.zonemenu.tabcomplete.ZoneTabComplete;
+import xyz.joestr.zonemenu.util.Updater;
 import xyz.joestr.zonemenu.util.YMLDelegate;
 import xyz.joestr.zonemenu.util.ZoneMenuCreateCorner;
 import xyz.joestr.zonemenu.util.ZoneMenuPlayer;
@@ -64,6 +65,9 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
     // Map which contains players an their ZoneMenuPlayers
     public Map<Player, ZoneMenuPlayer> zoneMenuPlayers = new HashMap<>();
+    
+    // Updater
+    public Updater updater = new Updater("{project.ciManagement.url}/lastSuccessfulBuild/artifact/target/maven-archiver/pom.properties", "{project.version}");
 
     /**
      * Plugin starts.
