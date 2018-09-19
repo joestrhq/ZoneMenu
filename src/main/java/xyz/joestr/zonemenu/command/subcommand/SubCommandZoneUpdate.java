@@ -1,15 +1,8 @@
 package xyz.joestr.zonemenu.command.subcommand;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
 
 import org.bukkit.entity.Player;
-
-import com.sk89q.worldguard.domains.DefaultDomain;
-import com.sk89q.worldguard.protection.flags.Flag;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import xyz.joestr.zonemenu.ZoneMenu;
 
@@ -65,32 +58,36 @@ public class SubCommandZoneUpdate {
 
             return;
         }
-
-        boolean isUpdateAvailable = false;
         
-        try {
-            
-            isUpdateAvailable = this.zoneMenuPlugin.updater.isUpdateAvailable();
-        } catch (IOException e) {
-            
-            e.printStackTrace();
-        }
-        
-        if(isUpdateAvailable) {
-            
-            // Send the player a message.
-            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("update_available")).replace("{0}",
-                            this.zoneMenuPlugin.updater.getUpdateURI())));
+        this.zoneMenuPlugin.updater.asyncIsUpdateAvailable(
+            (Boolean result, Throwable exception) -> {
+                
+                if(exception != null) {
+                    
+                    // Send the player a message.
+                    player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("update_error"))));
 
-            return;
-        } else {
-            
-            // Send the player a message.
-            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("no_update_available"))));
+                    return;
+                }
+                
+                if(result) {
+                    
+                    // Send the player a message.
+                    player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                            ((String) this.zoneMenuPlugin.configDelegate.getMap().get("update_available")).replace("{0}",
+                                    this.zoneMenuPlugin.updater.getUpdateURI())));
 
-            return;
-        }
+                    return;
+                } else {
+                    
+                    // Send the player a message.
+                    player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                            ((String) this.zoneMenuPlugin.configDelegate.getMap().get("no_update_available"))));
+
+                    return;
+                }
+            }
+        );
     }
 }
