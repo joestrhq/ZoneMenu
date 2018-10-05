@@ -1,7 +1,5 @@
 package xyz.joestr.zonemenu.command.subcommand;
 
-import java.io.IOException;
-
 import org.bukkit.entity.Player;
 
 import xyz.joestr.zonemenu.ZoneMenu;
