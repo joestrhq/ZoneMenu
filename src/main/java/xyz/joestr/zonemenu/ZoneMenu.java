@@ -67,7 +67,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     public Map<Player, ZoneMenuPlayer> zoneMenuPlayers = new HashMap<>();
     
     // Updater
-    public Updater updater = new Updater("{project.ciManagement.url}/lastSuccessfulBuild/artifact/target/maven-archiver/pom.properties", "{project.version}");
+    public Updater updater = new Updater("${project.ciManagement.url}/lastSuccessfulBuild/artifact/target/maven-archiver/pom.properties", "${project.version}");
 
     /**
      * Plugin starts.
