@@ -47,7 +47,7 @@ public class SubCommandZoneUpdate {
     public void process(Player player, String[] arguments) {
 
         // If arguments' length does not equals 3 ...
-        if (arguments.length != 2) {
+        if (arguments.length != 1) {
 
             // ... wrong usage of "/zone info <Zone>".
 

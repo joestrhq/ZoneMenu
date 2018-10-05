@@ -35,6 +35,7 @@ public class CommandZone implements CommandExecutor {
     private SubCommandZoneFlag subCommandZoneFlag = null;
     private SubCommandZoneInfo subCommandZoneInfo = null;
     private SubCommandZoneDelete subCommandZoneDelete = null;
+    private SubCommandZoneUpdate subCommandZoneUpdate = null;
 
     public CommandZone(ZoneMenu zonemenu) {
         this.plugin = zonemenu;
@@ -49,6 +50,7 @@ public class CommandZone implements CommandExecutor {
         this.subCommandZoneFlag = new SubCommandZoneFlag(this.plugin);
         this.subCommandZoneInfo = new SubCommandZoneInfo(this.plugin);
         this.subCommandZoneDelete = new SubCommandZoneDelete(this.plugin);
+        this.subCommandZoneUpdate = new SubCommandZoneUpdate(this.plugin);
     }
 
     public boolean onCommand(CommandSender commandSender, Command command, String label, final String[] args) {
@@ -287,6 +289,15 @@ public class CommandZone implements CommandExecutor {
             this.subCommandZoneDelete.process(player, args);
 
             return true;
+        }
+
+        // /zone update
+        if (args[0].equalsIgnoreCase("update")) {
+
+                // Continue the work
+                this.subCommandZoneUpdate.process(player, args);
+
+                return true;
         }
 
         // If we are here an invalid sub command was provided -> Wrong usage
