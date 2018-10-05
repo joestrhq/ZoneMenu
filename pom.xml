@@ -64,13 +64,7 @@
     <resources>
       <resource>
         <directory>
-          src/main/java
-        </directory>
-        <filtering>true</filtering>
-      </resource>
-      <resource>
-        <directory>
-          src/main/resources
+          src/main
         </directory>
         <filtering>true</filtering>
       </resource>
