@@ -20,6 +20,7 @@ import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneInfo;
 import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneList;
 import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneRemovemember;
 import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneSubcreate;
+import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneUpdate;
 
 public class CommandZone implements CommandExecutor {
 
