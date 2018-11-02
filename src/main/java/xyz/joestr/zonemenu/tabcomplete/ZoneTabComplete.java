@@ -72,6 +72,7 @@ public class ZoneTabComplete implements TabCompleter {
                 list.add("delete");
                 list.add("cancel");
                 list.add("list");
+                list.add("update");
 
                 if (args.length == 1) {
                     for (String key : list) {
