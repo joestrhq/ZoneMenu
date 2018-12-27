@@ -1,5 +1,7 @@
 package xyz.joestr.zonemenu;
 
+import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.WorldEdit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +17,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import com.sk89q.worldguard.bukkit.WGBukkit;
+import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -37,7 +39,7 @@ import xyz.joestr.zonemenu.util.ZoneMenuSubcreateCorner;
 
 /**
  * ZoneMenu class
- * 
+ *
  * @author Joel
  * @since build_1
  * @version ${project.version}
@@ -65,13 +67,13 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
     // Map which contains players an their ZoneMenuPlayers
     public Map<Player, ZoneMenuPlayer> zoneMenuPlayers = new HashMap<>();
-    
+
     // Updater
     public Updater updater = new Updater("${project.ciManagement.url}lastSuccessfulBuild/artifact/target/maven-archiver/pom.properties", "${project.version}");
 
     /**
      * Plugin starts.
-     * 
+     *
      * @author joestr
      * @since ${project.version}
      * @version ${project.version}
@@ -122,12 +124,12 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
         // Get WorldEdit
         this.worldEditPlugin = this.getWorldEditPlugin();
-        this.worldGuardPlugin = WGBukkit.getPlugin();
+        this.worldGuardPlugin = this.getWorldGuardPlugin();
     }
 
     /**
      * Plugin ends.
-     * 
+     *
      * @author joestr
      * @since ${project.version}
      * @version ${project.version}
@@ -139,7 +141,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
     /**
      * Gets the WorldEdit plugin.
-     * 
+     *
      * @since ${project.version}
      * @version ${project.version}
      * @return {@linkplain WorldEditPlugin} WorldEdit plugin
@@ -160,12 +162,12 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
     /**
      * Gets the WorldGuard plugin.
-     * 
+     *
      * @since build_1
      * @version ${project.version}
      * @return {@linkplain WorldGuardPlugin} WorldGuard plugin
-     * @deprecated Use {@linkplain com.sk89q.worldguard.bukkit.WGBukkit#getPlugin()}
-     *             instead.
+     * @deprecated Use
+     * {@linkplain com.sk89q.worldguard.bukkit.WGBukkit#getPlugin()} instead.
      */
     public WorldGuardPlugin getWorldGuardPlugin() {
 
@@ -183,15 +185,13 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     }
 
     /**
-     * Calls {@linkplain ChatColor#translateAlternateColorCodes(char, String)} with
-     * the parameters {@code alternativeCode} and {@code stringToInspect}.
-     * 
+     * Calls {@linkplain ChatColor#translateAlternateColorCodes(char, String)}
+     * with the parameters {@code alternativeCode} and {@code stringToInspect}.
+     *
      * @since build_7_pre_2
      * @version ${project.version}
-     * @param alternativeCode
-     *            {@linkplain char} Alternative color code
-     * @param stringToInspect
-     *            {@linkplain String} String to inspect
+     * @param alternativeCode {@linkplain char} Alternative color code
+     * @param stringToInspect {@linkplain String} String to inspect
      * @return {@linkplain String} Modified string
      */
     public String colorCode(char alternativeCode, String stringToInspect) {
@@ -200,15 +200,13 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     }
 
     /**
-     * Replaces all occurrences of {@linkplain ChatColor#COLOR_CHAR} with paramter
-     * {@code alternativeCode}.
-     * 
+     * Replaces all occurrences of {@linkplain ChatColor#COLOR_CHAR} with
+     * paramter {@code alternativeCode}.
+     *
      * @since build_7_pre_2
      * @version ${project.version}
-     * @param alternativeCode
-     *            {@linkplain char} Alternative color code
-     * @param stringToInspect
-     *            {@linkplain String} String to inspect
+     * @param alternativeCode {@linkplain char} Alternative color code
+     * @param stringToInspect {@linkplain String} String to inspect
      * @return {@linkplain String} Modified string
      */
     public String alternativeColorCode(char alternativeCode, String stringToInspect) {
@@ -218,14 +216,12 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
     /**
      * Sends a message to a players action bar.
-     * 
+     *
      * @author joestr
      * @since build_7_pre_2
      * @version ${project.version}
-     * @param player
-     *            {@linkplain Player} A player
-     * @param message
-     *            {@linkplain String} A message
+     * @param player {@linkplain Player} A player
+     * @param message {@linkplain String} A message
      */
     public void sendActionBarToPlayer(Player player, String message) {
 
@@ -234,15 +230,14 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
     /**
      * Calculates the difference beetween two given numbers.
-     * 
+     *
      * @author joestr
      * @since build_7_pre_2
      * @version ${project.version}
-     * @param num1
-     *            {@linkplain Integer} First number
-     * @param num2
-     *            {@linkplain Integer} Second number
-     * @return {@linkplain Integer} Difference beetwen {@code num1} and {@code num2}
+     * @param num1 {@linkplain Integer} First number
+     * @param num2 {@linkplain Integer} Second number
+     * @return {@linkplain Integer} Difference beetwen {@code num1} and
+     * {@code num2}
      */
     public int difference(int num1, int num2) {
 
@@ -250,14 +245,13 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     }
 
     /**
-     * Calls {@linkplain #getRegion(Player, boolean)} with second parameter to be
-     * {@code true}.
-     * 
+     * Calls {@linkplain #getRegion(Player, boolean)} with second parameter to
+     * be {@code true}.
+     *
      * @author joestr
      * @since build_7_pre_2
      * @version ${project.version}
-     * @param player
-     *            {@linkplain Player} A player
+     * @param player {@linkplain Player} A player
      * @return {@linkplain ProtectedRegion} Region of a player
      */
     public ProtectedRegion getRegion(Player player) {
@@ -266,16 +260,14 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     }
 
     /**
-     * Calls {@linkplain #getRegions(Player, boolean)} with parameters and returns
-     * the first element or {@code null}.
-     * 
+     * Calls {@linkplain #getRegions(Player, boolean)} with parameters and
+     * returns the first element or {@code null}.
+     *
      * @author joestr
      * @since build_7_pre_2
      * @version ${project.version}
-     * @param player
-     *            {@linkplain Player} A player
-     * @param player
-     *            {@linkplain boolean} Show a message
+     * @param player {@linkplain Player} A player
+     * @param player {@linkplain boolean} Show a message
      * @return {@linkplain ProtectedRegion} Region of a player
      */
     public ProtectedRegion getRegion(final Player player, boolean showMessage) {
@@ -292,29 +284,27 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     }
 
     /**
-     * Get a list of players regions an control whether you like to show a message
-     * or not.
-     * 
+     * Get a list of players regions an control whether you like to show a
+     * message or not.
+     *
      * @author joestr
      * @since build_7_pre_2
      * @version ${project.version}
-     * @param player
-     *            {@linkplain Player} A player
-     * @param player
-     *            {@linkplain boolean} Show a message
-     * @return {@linkplain List}<{@linkplain ProtectedRegion}> List of regions of a
-     *         player
+     * @param player {@linkplain Player} A player
+     * @param player {@linkplain boolean} Show a message
+     * @return {@linkplain List}<{@linkplain ProtectedRegion}> List of regions
+     * of a player
      */
     public List<ProtectedRegion> getRegions(final Player player, final Boolean showMessage) {
 
         if (showMessage) {
 
             this.sendActionBarToPlayer(player,
-                    this.colorCode('&', (String) this.configDelegate.getMap().get("zone_wait_message")));
+                this.colorCode('&', (String) this.configDelegate.getMap().get("zone_wait_message")));
         }
 
-        List<ProtectedRegion> protectedRegions = new ArrayList<ProtectedRegion>();
-        RegionManager regeionManager = worldGuardPlugin.getRegionManager(player.getWorld());
+        List<ProtectedRegion> protectedRegions = new ArrayList<>();
+        RegionManager regeionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get((com.sk89q.worldedit.world.World) player.getWorld());
 
         for (String string : regeionManager.getRegions().keySet()) {
 
@@ -330,29 +320,27 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     /**
      * Gets all regions belonging to a player in a {@link CompletableFuture} and
      * gives it to a provided {@link BiConsumer}
-     * 
-     * @param player
-     *            {@linkplain Player} Player to search
-     * @param showMessage
-     *            {@linkplain String} Show a message during the search
-     * @param biConsumer
-     *            {@linkplain BiConsumer}<{@linkplain List}<{@linkplain ProtectedRegion}>,
-     *            {@linkplain Throwable}> Gets executed after the search
+     *
+     * @param player {@linkplain Player} Player to search
+     * @param showMessage {@linkplain String} Show a message during the search
+     * @param biConsumer {@linkplain BiConsumer}<{@linkplain
+     * List}<{@linkplain ProtectedRegion}>, {@linkplain Throwable}> Gets
+     * executed after the search
      */
     public void futuristicRegionProcessing(final Player player, final boolean showMessage,
-            final BiConsumer<List<ProtectedRegion>, Throwable> biConsumer) {
+        final BiConsumer<List<ProtectedRegion>, Throwable> biConsumer) {
 
         if (showMessage) {
 
             this.sendActionBarToPlayer(player,
-                    this.colorCode('&', (String) this.configDelegate.getMap().get("wait_message")));
+                this.colorCode('&', (String) this.configDelegate.getMap().get("wait_message")));
         }
 
         CompletableFuture.supplyAsync(() -> {
 
-            RegionManager regionManager = worldGuardPlugin.getRegionManager(player.getWorld());
+            RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get((com.sk89q.worldedit.world.World) player.getWorld());
 
-            List<ProtectedRegion> protectedRegions = new ArrayList<ProtectedRegion>();
+            List<ProtectedRegion> protectedRegions = new ArrayList<>();
 
             for (String string : regionManager.getRegions().keySet()) {
 
@@ -366,7 +354,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
         }).whenCompleteAsync(biConsumer);
     }
 
-    public void clearUpZoneMenuPlayer(Player player) {
+    public void clearUpZoneMenuPlayer(Player player) throws IncompleteRegionException {
 
         if (!this.zoneMenuPlayers.containsKey(player)) {
 
@@ -375,10 +363,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
         ZoneMenuPlayer zoneMenuPlayer = this.zoneMenuPlayers.get(player);
 
-        if (this.worldEditPlugin.getSelection(player) != null) {
-
-            this.worldEditPlugin.getSelection(player).getRegionSelector().clear();
-        }
+        WorldEdit.getInstance().getSessionManager().findByName(player.getName()).getRegionSelector((com.sk89q.worldedit.world.World) player.getWorld()).clear();
 
         this.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner1(), player);
         this.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner2(), player);

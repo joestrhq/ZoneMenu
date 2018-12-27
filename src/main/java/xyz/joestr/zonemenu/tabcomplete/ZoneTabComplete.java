@@ -1,5 +1,6 @@
 package xyz.joestr.zonemenu.tabcomplete;
 
+import com.sk89q.worldguard.WorldGuard;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import org.bukkit.entity.Player;
 
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.flags.BooleanFlag;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.DoubleFlag;
 import com.sk89q.worldguard.protection.flags.EnumFlag;
 import com.sk89q.worldguard.protection.flags.Flag;
@@ -29,7 +30,7 @@ import xyz.joestr.zonemenu.ZoneMenu;
 
 /**
  * Handles tab completions of the /zone command
- * 
+ *
  * @author joestr
  * @since build_1
  * @version ${project.version}
@@ -45,7 +46,6 @@ public class ZoneTabComplete implements TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
 
         // TODO: Comments
-
         List<String> list = new ArrayList<String>();
         List<String> l = new ArrayList<String>();
 
@@ -267,8 +267,8 @@ public class ZoneTabComplete implements TabCompleter {
                     if (domain == null) {
                         return list;
                     }
-                    String[] str = domain.toPlayersString(this.plugin.worldGuardPlugin.getProfileCache())
-                            .replace("*", "").split(", ");
+                    String[] str = domain.toPlayersString(WorldGuard.getInstance().getProfileCache())
+                        .replace("*", "").split(", ");
                     for (String s : str) {
                         list.add(s);
                     }
@@ -288,7 +288,7 @@ public class ZoneTabComplete implements TabCompleter {
                 // /zone flag <> []
                 if (args[0].equalsIgnoreCase("flag")) {
 
-                    for (Flag<?> f : DefaultFlag.getDefaultFlags()) {
+                    for (Flag<?> f : WorldGuard.getInstance().getFlagRegistry().getAll()) {
                         list.add(f.getName());
                     }
 
@@ -310,14 +310,14 @@ public class ZoneTabComplete implements TabCompleter {
                 // /zone flag <> <> []
                 if (args[0].equalsIgnoreCase("flag")) {
 
-                    for (Flag<?> f : DefaultFlag.getDefaultFlags()) {
+                    for (Flag<?> f : WorldGuard.getInstance().getFlagRegistry().getAll()) {
                         if (f.getName().equalsIgnoreCase(args[2])) {
                             if (f instanceof StateFlag) {
                                 list.add("allow");
                                 list.add("deny");
                                 list.add("none");
                             } else if (f instanceof SetFlag<?>) {
-                                if (DefaultFlag.DENY_SPAWN.getName().equalsIgnoreCase(((SetFlag<?>) f).getName())) {
+                                if (Flags.DENY_SPAWN.getName().equalsIgnoreCase(((SetFlag<?>) f).getName())) {
                                     for (EntityType et : EntityType.values()) {
                                         list.add(et.name().toLowerCase());
                                     }
@@ -334,12 +334,12 @@ public class ZoneTabComplete implements TabCompleter {
                             } else if (f instanceof LocationFlag) {
                                 list.add("here");
                             } else if (f instanceof EnumFlag<?>) {
-                                if (DefaultFlag.GAME_MODE.getName().equalsIgnoreCase(((EnumFlag<?>) f).getName())) {
+                                if (Flags.GAME_MODE.getName().equalsIgnoreCase(((EnumFlag<?>) f).getName())) {
                                     for (GameMode gm : GameMode.values()) {
                                         list.add(gm.name().toLowerCase());
                                     }
-                                } else if (DefaultFlag.WEATHER_LOCK.getName()
-                                        .equalsIgnoreCase(((EnumFlag<?>) f).getName())) {
+                                } else if (Flags.WEATHER_LOCK.getName()
+                                    .equalsIgnoreCase(((EnumFlag<?>) f).getName())) {
                                     for (WeatherType wt : WeatherType.values()) {
                                         list.add(wt.name().toLowerCase());
                                     }

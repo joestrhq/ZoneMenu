@@ -1,6 +1,10 @@
 package xyz.joestr.zonemenu.event.playerinteract;
 
-import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
+import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.math.BlockVector3;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,7 +22,7 @@ import xyz.joestr.zonemenu.util.ZoneMenuToolType;
 
 /**
  * Class which handles player interaction with blocks
- * 
+ *
  * @author joestr
  * @since ${project.version}
  * @version ${project.version}
@@ -49,8 +53,8 @@ public class SubcreatePlayerInteract implements Listener {
         ZoneMenuPlayer zoneMenuPlayer = this.plugin.zoneMenuPlayers.get(player);
 
         if ((player.getInventory().getItemInMainHand().getType() != Material.STICK)
-                || (this.plugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN)
-                || (this.plugin.zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.SUBZONE)) {
+            || (this.plugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN)
+            || (this.plugin.zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.SUBZONE)) {
 
             return;
         }
@@ -79,15 +83,15 @@ public class SubcreatePlayerInteract implements Listener {
 
             // Create new corner
             this.plugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner1(), player, Material.GLOWSTONE,
-                    (byte) 0);
+                (byte) 0);
 
             // If all needed variables are set
             if ((zoneMenuPlayer.getSubcreateWorld() != null) && (zoneMenuPlayer.getSubcreateCorner1() != null)
-                    && (zoneMenuPlayer.getSubcreateCorner2() != null)) {
+                && (zoneMenuPlayer.getSubcreateCorner2() != null)) {
                 // Reset beacons and create new ones
                 this.plugin.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner2(), player);
                 this.plugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner2(), player,
-                        Material.SEA_LANTERN, (byte) 0);
+                    Material.SEA_LANTERN, (byte) 0);
 
                 // Grab some values to work with
                 World playerworld = zoneMenuPlayer.getSubcreateWorld();
@@ -95,14 +99,32 @@ public class SubcreatePlayerInteract implements Listener {
                 Location playerpos2 = zoneMenuPlayer.getSubcreateCorner2().clone();
 
                 // Make a worldedit selection
-                CuboidSelection cs = new CuboidSelection(playerworld, playerpos1, playerpos2);
-                this.plugin.getWorldEditPlugin().setSelection(player, cs);
+                WorldEdit
+                    .getInstance()
+                    .getSessionManager()
+                    .findByName(player.getName())
+                    .getRegionSelector((com.sk89q.worldedit.world.World) player.getWorld())
+                    .selectPrimary(BlockVector3.at(playerpos1.getBlockX(), playerpos1.getBlockY(), playerpos1.getBlockZ()), null);
+
+                WorldEdit
+                    .getInstance()
+                    .getSessionManager()
+                    .findByName(player.getName())
+                    .getRegionSelector((com.sk89q.worldedit.world.World) player.getWorld())
+                    .selectSecondary(BlockVector3.at(playerpos2.getBlockX(), playerpos2.getBlockY(), playerpos2.getBlockZ()), null);
 
                 // Set actionbar message
-                sign1 = (String) plugin.configDelegate.getMap().get("event_sign_first")
+                try {
+                    // Set actionbar message
+                    sign1 = (String) plugin.configDelegate.getMap().get("event_sign_first")
                         + (String) ((String) plugin.configDelegate.getMap().get("event_sign_area")).replace("{0}",
-                                Integer.toString(this.plugin.getWorldEditPlugin().getSelection(player).getLength()
-                                        * this.plugin.getWorldEditPlugin().getSelection(player).getWidth()));
+                            Integer.toString(
+                                WorldEdit.getInstance().getSessionManager().findByName(player.getName()).getSelection((com.sk89q.worldedit.world.World) player.getWorld()).getArea()
+                            )
+                        );
+                } catch (IncompleteRegionException ex) {
+                    Logger.getLogger(CreatePlayerInteract.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else {
                 // Set actionbar message
                 sign1 = (String) plugin.configDelegate.getMap().get("event_sign_first");
@@ -132,15 +154,15 @@ public class SubcreatePlayerInteract implements Listener {
 
             // Create the corner
             this.plugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner2(), player,
-                    Material.SEA_LANTERN, (byte) 0);
+                Material.SEA_LANTERN, (byte) 0);
 
             // If all needed variables are set
             if ((zoneMenuPlayer.getSubcreateWorld() != null) && (zoneMenuPlayer.getSubcreateCorner1() != null)
-                    && (zoneMenuPlayer.getSubcreateCorner2() != null)) {
+                && (zoneMenuPlayer.getSubcreateCorner2() != null)) {
                 // Reset beacons and create new ones
                 this.plugin.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner1(), player);
                 this.plugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner1(), player,
-                        Material.GLOWSTONE, (byte) 0);
+                    Material.GLOWSTONE, (byte) 0);
 
                 // Grab some values to work with
                 World playerworld = zoneMenuPlayer.getSubcreateWorld();
@@ -148,14 +170,36 @@ public class SubcreatePlayerInteract implements Listener {
                 Location playerpos2 = zoneMenuPlayer.getSubcreateCorner2().clone();
 
                 // Make a worldedit selection
-                CuboidSelection cs = new CuboidSelection(playerworld, playerpos1, playerpos2);
-                this.plugin.getWorldEditPlugin().setSelection(player, cs);
+                WorldEdit
+                    .getInstance()
+                    .getSessionManager()
+                    .findByName(player.getName())
+                    .getRegionSelector((com.sk89q.worldedit.world.World) player.getWorld())
+                    .selectPrimary(BlockVector3.at(playerpos1.getBlockX(), playerpos1.getBlockY(), playerpos1.getBlockZ()), null);
 
-                // Set actionbar message
-                sign1 = (String) plugin.configDelegate.getMap().get("event_sign_second")
+                WorldEdit
+                    .getInstance()
+                    .getSessionManager()
+                    .findByName(player.getName())
+                    .getRegionSelector((com.sk89q.worldedit.world.World) player.getWorld())
+                    .selectSecondary(BlockVector3.at(playerpos2.getBlockX(), playerpos2.getBlockY(), playerpos2.getBlockZ()), null);
+
+                try {
+                    // Set actionbar message
+                    sign1 = (String) plugin.configDelegate.getMap().get("event_sign_second")
                         + (String) ((String) plugin.configDelegate.getMap().get("event_sign_area")).replace("{0}",
-                                Integer.toString(this.plugin.getWorldEditPlugin().getSelection(player).getLength()
-                                        * this.plugin.getWorldEditPlugin().getSelection(player).getWidth()));
+                            Integer.toString(
+                                WorldEdit
+                                    .getInstance()
+                                    .getSessionManager()
+                                    .findByName(player.getName())
+                                    .getSelection((com.sk89q.worldedit.world.World) player.getWorld())
+                                    .getArea()
+                            )
+                        );
+                } catch (IncompleteRegionException ex) {
+                    Logger.getLogger(CreatePlayerInteract.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else {
                 // Set actionbar message
                 sign1 = (String) plugin.configDelegate.getMap().get("event_sign_second");

@@ -1,5 +1,6 @@
 package xyz.joestr.zonemenu.command.subcommand;
 
+import com.sk89q.worldguard.WorldGuard;
 import java.util.List;
 
 import org.bukkit.entity.Player;
@@ -10,7 +11,7 @@ import xyz.joestr.zonemenu.ZoneMenu;
 
 /**
  * Class which handles subcommand "delete" of command "zone".
- * 
+ *
  * @author joestr
  * @since ${project.version}
  * @version ${project.version}
@@ -20,12 +21,10 @@ public class SubCommandZoneDelete {
     ZoneMenu plugin = null;
 
     /**
-     * Constrcutor for the
-     * {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneDelete
+     * Constrcutor for the      {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneDelete
      * SubCommandZoneDelete} class.
-     * 
-     * @param zoneMenuPlugin
-     *            A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
+     *
+     * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
      * @author joestr
      * @since ${project.version}
      * @version ${project.version}
@@ -37,11 +36,9 @@ public class SubCommandZoneDelete {
 
     /**
      * Processes.
-     * 
-     * @param player
-     *            A {@link org.bukkit.entity.Player Player}.
-     * @param arguments
-     *            An array of {@link java.lang.String String}s.
+     *
+     * @param player A {@link org.bukkit.entity.Player Player}.
+     * @param arguments An array of {@link java.lang.String String}s.
      * @author joestr
      * @since ${project.version}
      * @version ${project.version}
@@ -52,11 +49,10 @@ public class SubCommandZoneDelete {
         if (arguments.length != 2) {
 
             // ... wrong usage of "/zone delete <Zone>".
-
             // Send the player a message.
             player.sendMessage(
-                    this.plugin.colorCode('&', ((String) this.plugin.configDelegate.getMap().get("usage_message"))
-                            .replace("{0}", "/zone delete <Zone>")));
+                this.plugin.colorCode('&', ((String) this.plugin.configDelegate.getMap().get("usage_message"))
+                    .replace("{0}", "/zone delete <Zone>")));
 
             return;
         }
@@ -71,7 +67,7 @@ public class SubCommandZoneDelete {
 
                 // ... send the player a message.
                 player.sendMessage(
-                        this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
+                    this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
 
                 return;
             }
@@ -91,21 +87,20 @@ public class SubCommandZoneDelete {
             if (protectedRegion == null) {
 
                 // ... no region with this ID was not found.
-
                 // Send the player a message.
                 player.sendMessage(this.plugin.colorCode('&',
-                        ((String) this.plugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
-                                arguments[1])));
+                    ((String) this.plugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
+                        arguments[1])));
 
                 return;
             }
 
             // Remove the region from worlds region manager
-            plugin.worldGuardPlugin.getRegionManager(player.getWorld()).removeRegion(protectedRegion.getId());
+            WorldGuard.getInstance().getPlatform().getRegionContainer().get((com.sk89q.worldedit.world.World) player.getWorld()).removeRegion(protectedRegion.getId());
 
             // Send a message to the player
             player.sendMessage(this.plugin.colorCode('&',
-                    ((String) plugin.configDelegate.getMap().get("zone_delete")).replace("{0}", arguments[1])));
+                ((String) plugin.configDelegate.getMap().get("zone_delete")).replace("{0}", arguments[1])));
         });
     }
 }

@@ -10,17 +10,18 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.sk89q.squirrelid.resolver.ProfileService;
+import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.util.DomainInputResolver;
 import com.sk89q.worldguard.protection.util.DomainInputResolver.UserLocatorPolicy;
-import com.sk89q.worldguard.util.profile.resolver.ProfileService;
 
 import xyz.joestr.zonemenu.ZoneMenu;
 
 /**
  * Class which handles subcommand "addmember" of command "zone".
- * 
+ *
  * @author joestr
  * @since ${project.version}
  * @version ${project.version}
@@ -30,12 +31,10 @@ public class SubCommandZoneAddmember {
     ZoneMenu zoneMenuPlugin = null;
 
     /**
-     * Constrcutor for the
-     * {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneAddmember
+     * Constrcutor for the null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneAddmember
      * SubCommandZoneAddmember} class.
-     * 
-     * @param zoneMenuPlugin
-     *            A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
+     *
+     * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
      * @author joestr
      * @since ${project.version}
      * @version ${project.version}
@@ -47,11 +46,9 @@ public class SubCommandZoneAddmember {
 
     /**
      * Processes.
-     * 
-     * @param player
-     *            A {@link org.bukkit.entity.Player Player}.
-     * @param arguments
-     *            An array of {@link java.lang.String String}s.
+     *
+     * @param player A {@link org.bukkit.entity.Player Player}.
+     * @param arguments An array of {@link java.lang.String String}s.
      * @author joestr
      * @since ${project.version}
      * @version ${project.version}
@@ -62,9 +59,9 @@ public class SubCommandZoneAddmember {
         if (!player.hasPermission("zonemenu.addmember")) {
 
             player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
-                            + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("permission_message"))
-                                    .replace("{0}", "zonemenu.addmember")));
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("permission_message"))
+                    .replace("{0}", "zonemenu.addmember")));
 
             return;
         }
@@ -73,12 +70,11 @@ public class SubCommandZoneAddmember {
         if (arguments.length != 3) {
 
             // ... wrong usage of "/zone addmember <Zone> <Player>".
-
             // Send the player a message.
             player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
-                            + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message")).replace("{0}",
-                                    "/zone addmember <Zone> <Player>")));
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message")).replace("{0}",
+                    "/zone addmember <Zone> <Player>")));
 
             return;
         }
@@ -90,8 +86,8 @@ public class SubCommandZoneAddmember {
 
                 // ... send the player a message.
                 player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
-                                + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone"))));
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                    + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone"))));
 
                 return;
             }
@@ -114,12 +110,11 @@ public class SubCommandZoneAddmember {
             if (protectedRegion == null) {
 
                 // ... no region with this ID was not found.
-
                 // Send the player a message.
                 player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
-                                + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("not_exisiting_zone"))
-                                        .replace("{0}", arguments[1])));
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                    + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("not_exisiting_zone"))
+                        .replace("{0}", arguments[1])));
 
                 return;
             }
@@ -129,15 +124,14 @@ public class SubCommandZoneAddmember {
 
             // If members list contains the third argument (<Player>) ...
             if (domainMembers.contains(this.zoneMenuPlugin.worldGuardPlugin
-                    .wrapOfflinePlayer(this.zoneMenuPlugin.getServer().getOfflinePlayer(arguments[2])))) {
+                .wrapOfflinePlayer(this.zoneMenuPlugin.getServer().getOfflinePlayer(arguments[2])))) {
 
                 // ... the given player is laready a member.
-
                 // Send the player a message.
                 player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
-                                + ((String) zoneMenuPlugin.configDelegate.getMap().get("zone_addmember_already_member"))
-                                        .replace("{0}", arguments[2])));
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                    + ((String) zoneMenuPlugin.configDelegate.getMap().get("zone_addmember_already_member"))
+                        .replace("{0}", arguments[2])));
 
                 return;
             }
@@ -152,10 +146,10 @@ public class SubCommandZoneAddmember {
             // Google's Guava library provides useful concurrency classes.
             // The following executor would be re-used in your plugin.
             ListeningExecutorService listeningExecutorService = MoreExecutors
-                    .listeningDecorator(Executors.newCachedThreadPool());
+                .listeningDecorator(Executors.newCachedThreadPool());
 
-            String[] input = new String[] { arguments[2] };
-            ProfileService profileService = this.zoneMenuPlugin.worldGuardPlugin.getProfileService();
+            String[] input = new String[]{arguments[2]};
+            ProfileService profileService = WorldGuard.getInstance().getProfileService();
             DomainInputResolver domainInputResolver = new DomainInputResolver(profileService, input);
             domainInputResolver.setLocatorPolicy(UserLocatorPolicy.UUID_AND_NAME);
             ListenableFuture<DefaultDomain> listenableFuture = listeningExecutorService.submit(domainInputResolver);
@@ -168,13 +162,13 @@ public class SubCommandZoneAddmember {
 
                     // Add the player as member to a region.
                     protectedRegionForGuava.getMembers().addPlayer(zoneMenuPlugin.worldGuardPlugin
-                            .wrapOfflinePlayer(zoneMenuPlugin.getServer().getOfflinePlayer(arguments[2])));
+                        .wrapOfflinePlayer(zoneMenuPlugin.getServer().getOfflinePlayer(arguments[2])));
 
                     // Send the player a message.
                     player.sendMessage(zoneMenuPlugin.colorCode('&',
-                            ((String) zoneMenuPlugin.configDelegate.getMap().get("prefix"))
-                                    + ((String) zoneMenuPlugin.configDelegate.getMap().get("zone_addmember"))
-                                            .replace("{0}", arguments[2]).replace("{1}", arguments[1])));
+                        ((String) zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                        + ((String) zoneMenuPlugin.configDelegate.getMap().get("zone_addmember"))
+                            .replace("{0}", arguments[2]).replace("{1}", arguments[1])));
                 }
 
                 // If it was not successfull.
@@ -182,9 +176,9 @@ public class SubCommandZoneAddmember {
 
                     // Send the player a message.
                     player.sendMessage(zoneMenuPlugin.colorCode('&', ((String) zoneMenuPlugin.configDelegate.getMap()
-                            .get("prefix"))
-                            + ((String) zoneMenuPlugin.configDelegate.getMap().get("zone_addmember_not_existing"))
-                                    .replace("{0}", arguments[2])));
+                        .get("prefix"))
+                        + ((String) zoneMenuPlugin.configDelegate.getMap().get("zone_addmember_not_existing"))
+                            .replace("{0}", arguments[2])));
                 }
             });
             // --- end ---

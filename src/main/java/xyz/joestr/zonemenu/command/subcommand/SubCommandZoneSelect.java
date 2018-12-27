@@ -1,11 +1,14 @@
 package xyz.joestr.zonemenu.command.subcommand;
 
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.regions.Region;
 import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import xyz.joestr.zonemenu.ZoneMenu;
@@ -24,8 +27,8 @@ public class SubCommandZoneSelect {
 
             // Wrong usage of the /zone select <Zone> command
             player.sendMessage(this.zoneMenuPlugin
-                    .colorCode('&', (String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message"))
-                    .replace("{0}", "/zone select <Zone>"));
+                .colorCode('&', (String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message"))
+                .replace("{0}", "/zone select <Zone>"));
 
             return;
         }
@@ -38,7 +41,7 @@ public class SubCommandZoneSelect {
             if (t.isEmpty()) {
 
                 player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                        (String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone")));
+                    (String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone")));
 
                 return;
             }
@@ -55,23 +58,36 @@ public class SubCommandZoneSelect {
             if (protectedregion == null) {
 
                 player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
-                                args[1])));
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
+                        args[1])));
 
                 return;
             }
 
             Location minLoc = new Location(player.getWorld(), protectedregion.getMinimumPoint().getBlockX(),
-                    protectedregion.getMinimumPoint().getBlockY(), protectedregion.getMinimumPoint().getBlockZ());
+                protectedregion.getMinimumPoint().getBlockY(), protectedregion.getMinimumPoint().getBlockZ());
 
             Location maxLoc = new Location(player.getWorld(), protectedregion.getMaximumPoint().getBlockX(),
-                    protectedregion.getMaximumPoint().getBlockY(), protectedregion.getMaximumPoint().getBlockZ());
+                protectedregion.getMaximumPoint().getBlockY(), protectedregion.getMaximumPoint().getBlockZ());
 
-            this.zoneMenuPlugin.worldEditPlugin.setSelection(player,
-                    new CuboidSelection(player.getWorld(), minLoc, maxLoc));
+            WorldEdit
+                .getInstance()
+                .getSessionManager()
+                .findByName(player.getName())
+                .getRegionSelector((com.sk89q.worldedit.world.World) player.getWorld())
+                .selectPrimary(BlockVector3.at(minLoc.getBlockX(), minLoc.getBlockY(), minLoc.getBlockZ()), null);
 
-            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_select")).replace("{0}", args[1])));
+            WorldEdit
+                .getInstance()
+                .getSessionManager()
+                .findByName(player.getName())
+                .getRegionSelector((com.sk89q.worldedit.world.World) player.getWorld())
+                .selectSecondary(BlockVector3.at(maxLoc.getBlockX(), maxLoc.getBlockY(), maxLoc.getBlockZ()), null);
+
+            player.sendMessage(this.zoneMenuPlugin.colorCode(
+                '&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_select")).replace("{0}", args[1]))
+            );
 
             return;
         });

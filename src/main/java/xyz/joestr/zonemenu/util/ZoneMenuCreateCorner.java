@@ -8,7 +8,7 @@ import org.bukkit.plugin.Plugin;
 
 /**
  * Class which handles creation of create corners.
- * 
+ *
  * @author joestr
  * @since ${project.version}
  * @version ${project.version}
@@ -20,9 +20,8 @@ public class ZoneMenuCreateCorner {
     /**
      * Constructor of the {@link xyz.joestr.zonemenu.util.ZoneMenuCreateCorner
      * ZoneMenuCreateCorner} class.
-     * 
-     * @param plugin
-     *            A {@link org.bukkit.plugin.Plugin plugin}.
+     *
+     * @param plugin A {@link org.bukkit.plugin.Plugin plugin}.
      */
     public ZoneMenuCreateCorner(Plugin plugin) {
 
@@ -31,15 +30,13 @@ public class ZoneMenuCreateCorner {
 
     /**
      * Creates a beacon shown to a player via a blockchange.
-     * 
-     * @param location
-     *            A {@link org.bukkit.Location location} where the beacon should be.
-     * @param player
-     *            A {@link org.bukkit.entity.Player player} to send the blockchange
-     *            to.
-     * @param glassColor
-     *            A {@link java.lang.Byte byte} which represents the color of the
-     *            glass.
+     *
+     * @param location A {@link org.bukkit.Location location} where the beacon
+     * should be.
+     * @param player A {@link org.bukkit.entity.Player player} to send the
+     * blockchange to.
+     * @param glassColor A {@link java.lang.Byte byte} which represents the
+     * color of the glass.
      * @author joestr
      * @since ${project.version}
      * @version ${project.version}
@@ -64,7 +61,7 @@ public class ZoneMenuCreateCorner {
                 for (int zPoint = z - 1; zPoint <= z + 1; zPoint++) {
 
                     player.sendBlockChange(world.getBlockAt(xPoint, y, zPoint).getLocation(), Material.DIAMOND_BLOCK,
-                            (byte) 0);
+                        (byte) 0);
                 }
             }
 
@@ -78,29 +75,27 @@ public class ZoneMenuCreateCorner {
 
                     highestYPoint = yPoint;
 
-                    player.sendBlockChange(world.getBlockAt(x, yPoint, z).getLocation(), Material.STAINED_GLASS,
-                            glassColor);
+                    player.sendBlockChange(world.getBlockAt(x, yPoint, z).getLocation(), Material.LEGACY_STAINED_GLASS,
+                        glassColor);
                 }
             }
 
-            player.sendBlockChange(world.getBlockAt(x, highestYPoint, z).getLocation(), Material.STAINED_GLASS,
-                    glassColor);
+            player.sendBlockChange(world.getBlockAt(x, highestYPoint, z).getLocation(), Material.LEGACY_STAINED_GLASS,
+                glassColor);
         }, 10L);
     }
     // --- end
 
     /**
      * Resets a beacon shown to a player via a blockchange.
-     * 
-     * @param location
-     *            A {@linkplain org.bukkit.Location location}.
-     * @param player
-     *            A {@linkplain Player player} to send the blockchange to.
+     *
+     * @param location A {@linkplain org.bukkit.Location location}.
+     * @param player A {@linkplain Player player} to send the blockchange to.
      * @author joestr
      * @since ${project.version}
      * @version ${project.version}
      */
-    @SuppressWarnings({ "deprecation" })
+    @SuppressWarnings({"deprecation"})
     public void reset(Location location, Player player) {
 
         if (location == null || player == null) {
@@ -114,14 +109,14 @@ public class ZoneMenuCreateCorner {
         World world = location.getWorld();
 
         player.sendBlockChange(world.getBlockAt(x, 1, z).getLocation(), world.getBlockAt(x, 1, z).getType(),
-                world.getBlockAt(x, 1, z).getData());
+            world.getBlockAt(x, 1, z).getData());
 
         for (int i = 2; i <= 255; i++) {
 
             if (world.getBlockAt(x, i, z).getType() != Material.AIR) {
 
                 player.sendBlockChange(world.getBlockAt(x, i, z).getLocation(), world.getBlockAt(x, i, z).getType(),
-                        world.getBlockAt(x, i, z).getData());
+                    world.getBlockAt(x, i, z).getData());
             }
         }
 
@@ -130,7 +125,7 @@ public class ZoneMenuCreateCorner {
             for (int zPoint = z - 1; zPoint <= z + 1; zPoint++) {
 
                 player.sendBlockChange(world.getBlockAt(xPoint, y, zPoint).getLocation(),
-                        world.getBlockAt(x, y, z).getType(), world.getBlockAt(x, y, z).getData());
+                    world.getBlockAt(x, y, z).getType(), world.getBlockAt(x, y, z).getData());
             }
         }
     }

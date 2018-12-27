@@ -1,6 +1,7 @@
 package xyz.joestr.zonemenu.event.playerinteract;
 
-import com.sk89q.worldguard.bukkit.WGBukkit;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
@@ -17,7 +18,7 @@ import xyz.joestr.zonemenu.util.ZoneMenuToolType;
 
 /**
  * Class which handles player interaction with blocks
- * 
+ *
  * @author joestr
  * @since build_1
  * @version ${project.version}
@@ -50,7 +51,7 @@ public class FindPlayerInteract implements Listener {
 
         // Using a stick? ToolType correct?
         if ((player.getInventory().getItemInMainHand().getType() != Material.STICK)
-                || (this.plugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.FIND)) {
+            || (this.plugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.FIND)) {
 
             return;
         }
@@ -74,8 +75,14 @@ public class FindPlayerInteract implements Listener {
             event.setCancelled(true);
 
             // Get regions on clicked location
-            ApplicableRegionSet regiononloc = WGBukkit.getRegionManager(player.getWorld())
-                    .getApplicableRegions(event.getClickedBlock().getLocation());
+            ApplicableRegionSet regiononloc = WorldGuard.getInstance().getPlatform().getRegionContainer().get((com.sk89q.worldedit.world.World) player.getWorld())
+                .getApplicableRegions(
+                    BlockVector3.at(
+                        event.getClickedBlock().getLocation().getBlockX(),
+                        event.getClickedBlock().getLocation().getBlockY(),
+                        event.getClickedBlock().getLocation().getBlockZ()
+                    )
+                );
 
             // Add regions to the string
             for (ProtectedRegion region : regiononloc) {

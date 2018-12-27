@@ -12,50 +12,50 @@
   </properties>
   <repositories>
     <repository>
-      <id>central</id>
-      <url>http://repo1.maven.org/maven2/</url>
+      <id>joestr-releases</id>
+      <url>https://repo2.joestr.xyz/repositoy/releases/</url>
     </repository>
     <repository>
-      <id>spigot-repo</id>
-      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+      <id>joestr-snapshots</id>
+      <url>https://repo2.joestr.xyz/repository/snapshots/</url>
     </repository>
-    <repository>
-        <id>sk89q-repo</id>
-        <url>http://repo.joestr.xyz/zonemenu/</url>
-    </repository>
+    <!--<repository>
+    <id>sk89q-repo</id>
+    <url>http://maven.sk89q.com/artifactory/repo/</url>
+    </repository>-->
   </repositories>
   <dependencies>
-    <dependency>
-        <groupId>org.projectlombok</groupId>
-        <artifactId>lombok</artifactId>
-        <version>1.18.2</version>
-        <scope>provided</scope>
-    </dependency>
     <!--Spigot API-->
     <dependency>
-      <groupId>org.spigotmc</groupId>
-      <artifactId>spigot-api</artifactId>
-      <version>1.12.1-R0.1-SNAPSHOT</version>
-      <scope>provided</scope>
+        <groupId>org.spigotmc</groupId>
+        <artifactId>spigot-api</artifactId>
+        <version>1.13.2-R0.1-SNAPSHOT</version>
+        <scope>provided</scope>
     </dependency>
     <!--Bukkit API-->
     <!--<dependency>
       <groupId>org.bukkit</groupId>
       <artifactId>bukkit</artifactId>
-      <version>1.12.1-R0.1-SNAPSHOT</version>
+      <version>1.13.2-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
-	</dependency>-->
+    </dependency>-->
     <dependency>
-    	<groupId>com.sk89q</groupId>
-    	<artifactId>worldguard</artifactId>
-    	<version>6.2.1</version>
+    	<groupId>com.sk89q.worldedit</groupId>
+    	<artifactId>worldedit-bukkit</artifactId>
+    	<version>7.0.0-SNAPSHOT</version>
     	<scope>provided</scope>
     </dependency>
     <dependency>
-    	<groupId>com.sk89q</groupId>
-    	<artifactId>worldedit-bukkit</artifactId>
-    	<version>6.1.7.3</version>
+    	<groupId>com.sk89q.worldguard</groupId>
+    	<artifactId>worldguard-legacy</artifactId>
+    	<version>7.0.0-SNAPSHOT</version>
     	<scope>provided</scope>
+        <exclusions>
+            <exclusion>
+                <groupId>com.sk89q</groupId>
+                <artifactId>commandbook</artifactId>
+            </exclusion>
+        </exclusions>
     </dependency>
   </dependencies>
   <description>Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)</description>
@@ -63,9 +63,7 @@
   <build>
     <resources>
       <resource>
-        <directory>
-          src/main
-        </directory>
+        <directory>src/main</directory>
         <filtering>true</filtering>
       </resource>
     </resources>
@@ -80,7 +78,7 @@
   	<tag>zone, worldedit, worldguard, spigot-plugin</tag>
   </scm>
   <ciManagement>
-  	<url>https://jenkins.joestr.xyz/job/ZoneMenu_Dev/</url>
+  	<url>https://ci.joestr.xyz/job/ZoneMenu_Dev/</url>
   </ciManagement>
   <issueManagement>
   	<url>https://github.com/joestr/ZoneMenu/issues</url>

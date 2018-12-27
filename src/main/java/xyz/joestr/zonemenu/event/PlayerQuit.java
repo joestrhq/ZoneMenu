@@ -1,5 +1,8 @@
 package xyz.joestr.zonemenu.event;
 
+import com.sk89q.worldedit.IncompleteRegionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -8,7 +11,7 @@ import xyz.joestr.zonemenu.ZoneMenu;
 
 /**
  * Event listener which handles game quits of players
- * 
+ *
  * @author joestr
  * @since build_1
  * @version ${project.version}
@@ -26,6 +29,10 @@ public class PlayerQuit implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
 
-        this.plugin.clearUpZoneMenuPlayer(event.getPlayer());
+        try {
+            this.plugin.clearUpZoneMenuPlayer(event.getPlayer());
+        } catch (IncompleteRegionException ex) {
+            Logger.getLogger(PlayerQuit.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
