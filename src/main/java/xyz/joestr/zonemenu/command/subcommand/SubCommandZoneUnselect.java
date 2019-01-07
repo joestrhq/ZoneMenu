@@ -2,6 +2,7 @@ package xyz.joestr.zonemenu.command.subcommand;
 
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.entity.Player;
@@ -28,7 +29,12 @@ public class SubCommandZoneUnselect {
             return;
         }
 
-        WorldEdit.getInstance().getSessionManager().findByName(player.getName()).getRegionSelector((com.sk89q.worldedit.world.World) player.getWorld()).clear();
+        WorldEdit
+            .getInstance()
+            .getSessionManager()
+            .get(BukkitAdapter.adapt(player))
+            .getRegionSelector(BukkitAdapter.adapt(player.getWorld()))
+            .clear();
 
         return;
     }

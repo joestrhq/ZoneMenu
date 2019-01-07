@@ -43,11 +43,12 @@ public class ZoneTabComplete implements TabCompleter {
         this.plugin = zonemenu;
     }
 
+    @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
 
         // TODO: Comments
-        List<String> list = new ArrayList<String>();
-        List<String> l = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
+        List<String> l = new ArrayList<>();
 
         // Player
         if (sender instanceof Player) {
@@ -73,6 +74,7 @@ public class ZoneTabComplete implements TabCompleter {
                 list.add("cancel");
                 list.add("list");
                 list.add("update");
+                list.add("reload");
 
                 if (args.length == 1) {
                     for (String key : list) {
@@ -92,7 +94,7 @@ public class ZoneTabComplete implements TabCompleter {
                 if (args[0].equalsIgnoreCase("info")) {
 
                     for (ProtectedRegion pr : this.plugin.getRegions(player, false)) {
-                        list.add(pr.getId());
+                        list.add(pr.getId().replace("+", "#").replace("-", "."));
                     }
 
                     if (args.length == 2) {
@@ -109,7 +111,7 @@ public class ZoneTabComplete implements TabCompleter {
                 if (args[0].equalsIgnoreCase("delete")) {
 
                     for (ProtectedRegion pr : this.plugin.getRegions(player, false)) {
-                        list.add(pr.getId());
+                        list.add(pr.getId().replace("+", "#").replace("-", "."));
                     }
 
                     if (args.length == 2) {
@@ -130,7 +132,7 @@ public class ZoneTabComplete implements TabCompleter {
                         return list;
                     }
                     for (ProtectedRegion pr : t) {
-                        list.add(pr.getId());
+                        list.add(pr.getId().replace("+", "#").replace("-", "."));
                     }
 
                     if (args.length == 3) {
@@ -153,7 +155,7 @@ public class ZoneTabComplete implements TabCompleter {
                         return list;
                     }
                     for (ProtectedRegion pr : t) {
-                        list.add(pr.getId());
+                        list.add(pr.getId().replace("+", "#").replace("-", "."));
                     }
 
                     if (args.length == 2) {
@@ -176,7 +178,7 @@ public class ZoneTabComplete implements TabCompleter {
                         return list;
                     }
                     for (ProtectedRegion pr : t) {
-                        list.add(pr.getId());
+                        list.add(pr.getId().replace("+", "#").replace("-", "."));
                     }
 
                     if (args.length == 2) {
@@ -199,7 +201,7 @@ public class ZoneTabComplete implements TabCompleter {
                         return list;
                     }
                     for (ProtectedRegion pr : t) {
-                        list.add(pr.getId());
+                        list.add(pr.getId().replace("+", "#").replace("-", "."));
                     }
 
                     if (args.length == 2) {
@@ -251,7 +253,7 @@ public class ZoneTabComplete implements TabCompleter {
                         return list;
                     }
                     for (ProtectedRegion pr : t) {
-                        if (pr.getId().equalsIgnoreCase(args[1])) {
+                        if (pr.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(args[1])) {
                             protectedregion = pr;
                         }
                     }

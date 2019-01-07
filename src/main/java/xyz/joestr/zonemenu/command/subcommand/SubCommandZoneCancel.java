@@ -19,7 +19,7 @@ public class SubCommandZoneCancel {
     ZoneMenu zoneMenuPlugin = null;
 
     /**
-     * Constrcutor for the      {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneCancel
+     * Constrcutor for the null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneCancel
      * SubCommandZoneCancel} class.
      *
      * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
@@ -80,12 +80,8 @@ public class SubCommandZoneCancel {
             return;
         }
 
-        try {
-            // Clear up player.
-            this.zoneMenuPlugin.clearUpZoneMenuPlayer(player);
-        } catch (IncompleteRegionException ex) {
-            Logger.getLogger(SubCommandZoneCancel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // Clear up player.
+        this.zoneMenuPlugin.clearUpZoneMenuPlayer(player);
 
         // Send the player a message
         player.sendMessage(

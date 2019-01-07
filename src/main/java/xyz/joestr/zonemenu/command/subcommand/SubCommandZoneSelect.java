@@ -1,9 +1,12 @@
 package xyz.joestr.zonemenu.command.subcommand;
 
+import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.regions.selector.CuboidRegionSelector;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -48,7 +51,7 @@ public class SubCommandZoneSelect {
 
             for (ProtectedRegion pr : t) {
 
-                if (pr.getId().equalsIgnoreCase(args[1])) {
+                if (pr.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(args[1])) {
 
                     protectedregion = pr;
                 }
@@ -70,19 +73,25 @@ public class SubCommandZoneSelect {
             Location maxLoc = new Location(player.getWorld(), protectedregion.getMaximumPoint().getBlockX(),
                 protectedregion.getMaximumPoint().getBlockY(), protectedregion.getMaximumPoint().getBlockZ());
 
-            WorldEdit
-                .getInstance()
-                .getSessionManager()
-                .findByName(player.getName())
-                .getRegionSelector((com.sk89q.worldedit.world.World) player.getWorld())
-                .selectPrimary(BlockVector3.at(minLoc.getBlockX(), minLoc.getBlockY(), minLoc.getBlockZ()), null);
+            LocalSession session
+                = WorldEdit
+                    .getInstance()
+                    .getSessionManager()
+                    .get(BukkitAdapter.adapt(player));
 
-            WorldEdit
-                .getInstance()
-                .getSessionManager()
-                .findByName(player.getName())
-                .getRegionSelector((com.sk89q.worldedit.world.World) player.getWorld())
-                .selectSecondary(BlockVector3.at(maxLoc.getBlockX(), maxLoc.getBlockY(), maxLoc.getBlockZ()), null);
+            com.sk89q.worldedit.world.World weWorld
+                = BukkitAdapter.adapt(player.getWorld());
+
+            session.setRegionSelector(
+                weWorld,
+                new CuboidRegionSelector(
+                    weWorld,
+                    BukkitAdapter.asBlockVector(minLoc),
+                    BukkitAdapter.asBlockVector(maxLoc)
+                )
+            );
+
+            session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
             player.sendMessage(this.zoneMenuPlugin.colorCode(
                 '&',

@@ -25,8 +25,8 @@ public class SubCommandZoneRemovemember {
 
             // Wrong usage of the /zone command
             player.sendMessage(
-                    this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
-                            .replace("{0}", "/zone removemember <Zone> <Player>"));
+                this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
+                    .replace("{0}", "/zone removemember <Zone> <Player>"));
 
             return;
         }
@@ -39,14 +39,14 @@ public class SubCommandZoneRemovemember {
             if (t.isEmpty()) {
 
                 player.sendMessage(
-                        this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
+                    this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
 
                 return;
             }
 
             for (ProtectedRegion pr : t) {
 
-                if (pr.getId().equalsIgnoreCase(args[1])) {
+                if (pr.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(args[1])) {
 
                     protectedregion = pr;
                 }
@@ -56,8 +56,8 @@ public class SubCommandZoneRemovemember {
             if (protectedregion == null) {
 
                 player.sendMessage(this.plugin.colorCode('&',
-                        ((String) this.plugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
-                                args[1])));
+                    ((String) this.plugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
+                        args[1])));
 
                 return;
             }
@@ -67,24 +67,24 @@ public class SubCommandZoneRemovemember {
 
             // Check if members does not contain the specified player
             if (!domainmembers.contains(
-                    plugin.worldGuardPlugin.wrapOfflinePlayer(Bukkit.getServer().getOfflinePlayer(args[2])))) {
+                plugin.worldGuardPlugin.wrapOfflinePlayer(Bukkit.getServer().getOfflinePlayer(args[2])))) {
 
                 player.sendMessage(plugin
-                        .colorCode('&', (String) plugin.configDelegate.getMap().get("zone_removemember_unknownplayer"))
-                        .replace("{0}", args[2]).replace("{1}", args[1]));
+                    .colorCode('&', (String) plugin.configDelegate.getMap().get("zone_removemember_unknownplayer"))
+                    .replace("{0}", args[2]).replace("{1}", args[1]));
 
                 return;
             }
 
             // Remove specified player from the members
             domainmembers.removePlayer(
-                    plugin.worldGuardPlugin.wrapOfflinePlayer(Bukkit.getServer().getOfflinePlayer(args[2])));
+                plugin.worldGuardPlugin.wrapOfflinePlayer(Bukkit.getServer().getOfflinePlayer(args[2])));
 
             // Set the new members
             protectedregion.setMembers(domainmembers);
 
             player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_removemember"))
-                    .replace("{0}", args[2]).replace("{1}", args[1]));
+                .replace("{0}", args[2]).replace("{1}", args[1]));
         });
     }
 }

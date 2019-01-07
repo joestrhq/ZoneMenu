@@ -1,7 +1,9 @@
 package xyz.joestr.zonemenu;
 
 import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,15 +19,18 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import com.sk89q.worldguard.protection.regions.RegionContainer;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import xyz.joestr.zonemenu.command.CommandZone;
 import xyz.joestr.zonemenu.event.PlayerChangedWorld;
+import xyz.joestr.zonemenu.event.PlayerMove;
 import xyz.joestr.zonemenu.event.PlayerQuit;
 import xyz.joestr.zonemenu.event.playerinteract.CreatePlayerInteract;
 import xyz.joestr.zonemenu.event.playerinteract.FindPlayerInteract;
@@ -78,6 +83,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
      * @since ${project.version}
      * @version ${project.version}
      */
+    @Override
     public void onEnable() {
 
         // Add the delegates to the list
@@ -87,26 +93,22 @@ public class ZoneMenu extends JavaPlugin implements Listener {
         // Check the delegates for existence,
         // if not create them.
         // Finally load them.
-        for (YMLDelegate yd : ymlDelegates) {
-
+        ymlDelegates.stream().map((yd) -> {
             if (!yd.Exist()) {
 
                 yd.Create();
             }
-
+            return yd;
+        }).forEachOrdered((yd) -> {
             yd.Load();
-        }
+        });
 
         // Check the delegaes for their entries.
         // If they lack some entries,
         // add the missing ones and save the file.
-        for (YMLDelegate yd : ymlDelegates) {
-
-            if (!yd.EntryCheck()) {
-
-                yd.Save();
-            }
-        }
+        ymlDelegates.stream().filter((yd) -> (!yd.EntryCheck())).forEachOrdered((yd) -> {
+            yd.Save();
+        });
 
         this.zoneMenuCreateCorner = new ZoneMenuCreateCorner(this);
         this.zoneMenuSubcreateCorner = new ZoneMenuSubcreateCorner(this);
@@ -121,6 +123,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
         new SubcreatePlayerInteract(this);
         new PlayerQuit(this);
         new PlayerChangedWorld(this);
+        new PlayerMove(this);
 
         // Get WorldEdit
         this.worldEditPlugin = this.getWorldEditPlugin();
@@ -134,6 +137,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
      * @since ${project.version}
      * @version ${project.version}
      */
+    @Override
     public void onDisable() {
 
         this.getLogger().log(Level.INFO, "[ZoneMenu] Deactivated.");
@@ -166,8 +170,6 @@ public class ZoneMenu extends JavaPlugin implements Listener {
      * @since build_1
      * @version ${project.version}
      * @return {@linkplain WorldGuardPlugin} WorldGuard plugin
-     * @deprecated Use
-     * {@linkplain com.sk89q.worldguard.bukkit.WGBukkit#getPlugin()} instead.
      */
     public WorldGuardPlugin getWorldGuardPlugin() {
 
@@ -267,7 +269,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
      * @since build_7_pre_2
      * @version ${project.version}
      * @param player {@linkplain Player} A player
-     * @param player {@linkplain boolean} Show a message
+     * @param showMessage {@linkplain boolean} Show a message
      * @return {@linkplain ProtectedRegion} Region of a player
      */
     public ProtectedRegion getRegion(final Player player, boolean showMessage) {
@@ -291,7 +293,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
      * @since build_7_pre_2
      * @version ${project.version}
      * @param player {@linkplain Player} A player
-     * @param player {@linkplain boolean} Show a message
+     * @param showMessage {@linkplain boolean} Show a message
      * @return {@linkplain List}<{@linkplain ProtectedRegion}> List of regions
      * of a player
      */
@@ -304,7 +306,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
         }
 
         List<ProtectedRegion> protectedRegions = new ArrayList<>();
-        RegionManager regeionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get((com.sk89q.worldedit.world.World) player.getWorld());
+        RegionContainer rc = WorldGuard.getInstance().getPlatform().getRegionContainer();
+        RegionManager regeionManager = rc.get(BukkitAdapter.adapt(player.getWorld()));
 
         for (String string : regeionManager.getRegions().keySet()) {
 
@@ -328,7 +331,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
      * executed after the search
      */
     public void futuristicRegionProcessing(final Player player, final boolean showMessage,
-        final BiConsumer<List<ProtectedRegion>, Throwable> biConsumer) {
+        BiConsumer<List<ProtectedRegion>, Throwable> biConsumer) {
 
         if (showMessage) {
 
@@ -336,16 +339,22 @@ public class ZoneMenu extends JavaPlugin implements Listener {
                 this.colorCode('&', (String) this.configDelegate.getMap().get("wait_message")));
         }
 
+        //ProfileCache pc = WorldGuard.getInstance().getProfileCache();
+        //ProfileService ps = WorldGuard.getInstance().getProfileService();
         CompletableFuture.supplyAsync(() -> {
 
-            RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get((com.sk89q.worldedit.world.World) player.getWorld());
+            RegionManager regionManager
+                = WorldGuard
+                    .getInstance()
+                    .getPlatform()
+                    .getRegionContainer()
+                    .get(BukkitAdapter.adapt(player.getWorld()));
 
             List<ProtectedRegion> protectedRegions = new ArrayList<>();
 
             for (String string : regionManager.getRegions().keySet()) {
 
-                if (regionManager.getRegions().get(string).isOwner(worldGuardPlugin.wrapPlayer(player))) {
-
+                if (regionManager.getRegion(string).isOwner(worldGuardPlugin.wrapPlayer(player))) {
                     protectedRegions.add(regionManager.getRegions().get(string));
                 }
             }
@@ -354,16 +363,26 @@ public class ZoneMenu extends JavaPlugin implements Listener {
         }).whenCompleteAsync(biConsumer);
     }
 
-    public void clearUpZoneMenuPlayer(Player player) throws IncompleteRegionException {
+    ;
+
+    public void clearUpZoneMenuPlayer(Player player) {
 
         if (!this.zoneMenuPlayers.containsKey(player)) {
-
             return;
         }
 
         ZoneMenuPlayer zoneMenuPlayer = this.zoneMenuPlayers.get(player);
 
-        WorldEdit.getInstance().getSessionManager().findByName(player.getName()).getRegionSelector((com.sk89q.worldedit.world.World) player.getWorld()).clear();
+        LocalSession session
+            = WorldEdit
+                .getInstance()
+                .getSessionManager()
+                .get(BukkitAdapter.adapt(player));
+
+        com.sk89q.worldedit.world.World weWorld
+            = BukkitAdapter.adapt(player.getWorld());
+
+        session.getRegionSelector(weWorld).clear();
 
         this.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner1(), player);
         this.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner2(), player);
@@ -373,6 +392,29 @@ public class ZoneMenu extends JavaPlugin implements Listener {
         this.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner1(), player);
         this.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner2(), player);
 
+        zoneMenuPlayer.getZoneFindBossbar().removePlayer(player);
+
         this.zoneMenuPlayers.remove(player);
+    }
+
+    public Region getPlayerSelection(Player player) {
+
+        Region selectedRegion = null;
+
+        LocalSession session
+            = WorldEdit
+                .getInstance()
+                .getSessionManager()
+                .get(BukkitAdapter.adapt(player));
+
+        com.sk89q.worldedit.world.World weWorld = BukkitAdapter.adapt(player.getWorld());
+
+        try {
+            selectedRegion = session.getRegionSelector(weWorld).getRegion();
+        } catch (IncompleteRegionException ex) {
+
+        }
+
+        return selectedRegion;
     }
 }

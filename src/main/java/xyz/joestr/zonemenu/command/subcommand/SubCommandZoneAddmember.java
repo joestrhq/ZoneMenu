@@ -10,8 +10,8 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.sk89q.squirrelid.resolver.ProfileService;
 import com.sk89q.worldguard.WorldGuard;
+
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.util.DomainInputResolver;
@@ -31,7 +31,7 @@ public class SubCommandZoneAddmember {
     ZoneMenu zoneMenuPlugin = null;
 
     /**
-     * Constrcutor for the null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneAddmember
+     * Constrcutor for the null null null null null null null null null null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneAddmember
      * SubCommandZoneAddmember} class.
      *
      * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
@@ -99,7 +99,7 @@ public class SubCommandZoneAddmember {
             for (ProtectedRegion protectedRegion_ : t) {
 
                 // ... and if the region ID equals the second argument (<Zone>) ...
-                if (protectedRegion_.getId().equalsIgnoreCase(arguments[1])) {
+                if (protectedRegion_.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(arguments[1])) {
 
                     // ... set the found region.
                     protectedRegion = protectedRegion_;
@@ -149,8 +149,7 @@ public class SubCommandZoneAddmember {
                 .listeningDecorator(Executors.newCachedThreadPool());
 
             String[] input = new String[]{arguments[2]};
-            ProfileService profileService = WorldGuard.getInstance().getProfileService();
-            DomainInputResolver domainInputResolver = new DomainInputResolver(profileService, input);
+            DomainInputResolver domainInputResolver = new DomainInputResolver(WorldGuard.getInstance().getProfileService(), input);
             domainInputResolver.setLocatorPolicy(UserLocatorPolicy.UUID_AND_NAME);
             ListenableFuture<DefaultDomain> listenableFuture = listeningExecutorService.submit(domainInputResolver);
 

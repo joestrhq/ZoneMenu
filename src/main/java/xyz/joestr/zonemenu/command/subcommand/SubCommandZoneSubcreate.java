@@ -1,6 +1,5 @@
 package xyz.joestr.zonemenu.command.subcommand;
 
-import com.sk89q.squirrelid.resolver.ProfileService;
 import java.io.IOException;
 import java.util.List;
 
@@ -8,8 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.sk89q.worldedit.IncompleteRegionException;
-import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.domains.DefaultDomain;
@@ -37,7 +35,8 @@ public class SubCommandZoneSubcreate {
     ZoneMenu zoneMenuPlugin = null;
 
     /**
-     * Constrcutor for the null null null null null null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneSubcreate
+     * Constrcutor for the null null null null null null null null null null
+     * null null null null null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneSubcreate
      * SubCommandZoneSubcreate} class.
      *
      * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
@@ -59,10 +58,10 @@ public class SubCommandZoneSubcreate {
      * @since ${project.version}
      * @version ${project.version}
      */
-    public void process(Player player, String[] args) {
+    public void process(Player player, String[] arguments) {
 
         // If arguments' length does not equals 2 ...
-        if (args.length != 2) {
+        if (arguments.length != 2) {
 
             // ... wrong usage of "/zone subcreate <Zone>".
             // Send the player a message.
@@ -76,12 +75,7 @@ public class SubCommandZoneSubcreate {
         this.zoneMenuPlugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
             // Grab players worldedit selection
-            Region selectedRegion = null;
-            try {
-                selectedRegion = WorldEdit.getInstance().getSessionManager().findByName(player.getName()).getSelection((com.sk89q.worldedit.world.World) player.getWorld());
-            } catch (IncompleteRegionException ex) {
-                Logger.getLogger(SubCommandZoneSubcreate.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            Region selectedRegion = this.zoneMenuPlugin.getPlayerSelection(player);
 
             // Check if selection is valid
             if (selectedRegion == null) {
@@ -144,7 +138,7 @@ public class SubCommandZoneSubcreate {
 
             for (ProtectedRegion pr : t) {
 
-                if (pr.getId().equalsIgnoreCase(args[1])) {
+                if (pr.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(arguments[1])) {
 
                     protectedRegion = pr;
                 }
@@ -167,7 +161,7 @@ public class SubCommandZoneSubcreate {
 
                 player.sendMessage(this.zoneMenuPlugin.colorCode('&',
                     ((String) this.zoneMenuPlugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
-                        args[1])));
+                        arguments[1])));
 
                 return;
             }
@@ -215,17 +209,12 @@ public class SubCommandZoneSubcreate {
                 return;
             }
 
-            // Check if Worldguards profileservice contains players name
-            ProfileService ps = WorldGuard.getInstance().getProfileService();
-
             try {
-                ps.findByName(player.getName());
-            } catch (IOException e) {
-
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-
-                e.printStackTrace();
+                WorldGuard.getInstance().getProfileService().findByName(player.getName());
+            } catch (IOException ex) {
+                Logger.getLogger(SubCommandZoneSubcreate.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SubCommandZoneSubcreate.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             // Create a new domain
@@ -256,18 +245,14 @@ public class SubCommandZoneSubcreate {
              * StateFlag.State.DENY);
              */
             // Finally, add the region to worlds region manager
-            WorldGuard.getInstance().getPlatform().getRegionContainer().get((com.sk89q.worldedit.world.World) player.getWorld()).addRegion(protectedCuboidRegion);
+            WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld())).addRegion(protectedCuboidRegion);
 
-            try {
-                this.zoneMenuPlugin.clearUpZoneMenuPlayer(player);
-            } catch (IncompleteRegionException ex) {
-                Logger.getLogger(SubCommandZoneSubcreate.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            this.zoneMenuPlugin.clearUpZoneMenuPlayer(player);
 
             // Send player a message
             player.sendMessage(this.zoneMenuPlugin.colorCode('&',
                 ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_subcreate")).replace("{0}",
-                    protectedCuboidRegion.getId())));
+                    protectedCuboidRegion.getId().replace("+", "#").replace("-", "."))));
         });
     }
 }

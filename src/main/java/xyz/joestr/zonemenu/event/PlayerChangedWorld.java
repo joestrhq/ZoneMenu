@@ -29,10 +29,6 @@ public class PlayerChangedWorld implements Listener {
     @EventHandler
     public void onChangedWorld(PlayerChangedWorldEvent event) {
 
-        try {
-            this.plugin.clearUpZoneMenuPlayer(event.getPlayer());
-        } catch (IncompleteRegionException ex) {
-            Logger.getLogger(PlayerChangedWorld.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.plugin.clearUpZoneMenuPlayer(event.getPlayer());
     }
 }

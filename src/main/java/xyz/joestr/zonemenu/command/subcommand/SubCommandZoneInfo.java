@@ -25,7 +25,7 @@ public class SubCommandZoneInfo {
     ZoneMenu zoneMenuPlugin = null;
 
     /**
-     * Constrcutor for the      {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneInfo
+     * Constrcutor for the null null null null null null null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneInfo
      * SubCommandZoneInfo} class.
      *
      * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
@@ -33,9 +33,9 @@ public class SubCommandZoneInfo {
      * @since ${project.version}
      * @version ${project.version}
      */
-    public SubCommandZoneInfo(ZoneMenu plugin) {
+    public SubCommandZoneInfo(ZoneMenu zoneMenuPlugin) {
 
-        this.zoneMenuPlugin = plugin;
+        this.zoneMenuPlugin = zoneMenuPlugin;
     }
 
     /**
@@ -80,7 +80,7 @@ public class SubCommandZoneInfo {
             for (ProtectedRegion protectedRegion_ : t) {
 
                 // ... and if the region ID equals the second argument (<Zone>) ...
-                if (protectedRegion_.getId().equalsIgnoreCase(arguments[1])) {
+                if (protectedRegion_.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(arguments[1])) {
 
                     // ... set the found region.
                     protectedRegion = protectedRegion_;
@@ -123,12 +123,14 @@ public class SubCommandZoneInfo {
                 + (protectedRegion.getParent() == null ? "" : protectedRegion.getParent().getId())));
 
             player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_owners") + domainOwners
-                .toPlayersString(WorldGuard.getInstance().getProfileCache()).replace("*", "")));
+                (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_owners")
+                + domainOwners
+                    .toPlayersString(WorldGuard.getInstance().getProfileCache()).replace("*", "")));
 
             player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_members") + domainMembers
-                .toPlayersString(WorldGuard.getInstance().getProfileCache()).replace("*", "")));
+                (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_members")
+                + domainMembers
+                    .toPlayersString(WorldGuard.getInstance().getProfileCache()).replace("*", "")));
 
             Iterator<Entry<Flag<?>, Object>> iterator = protectedRegion.getFlags().entrySet().iterator();
 

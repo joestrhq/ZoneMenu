@@ -29,10 +29,6 @@ public class PlayerQuit implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
 
-        try {
-            this.plugin.clearUpZoneMenuPlayer(event.getPlayer());
-        } catch (IncompleteRegionException ex) {
-            Logger.getLogger(PlayerQuit.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.plugin.clearUpZoneMenuPlayer(event.getPlayer());
     }
 }

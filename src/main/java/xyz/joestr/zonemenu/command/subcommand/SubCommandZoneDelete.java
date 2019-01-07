@@ -1,11 +1,15 @@
 package xyz.joestr.zonemenu.command.subcommand;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.managers.RemovalStrategy;
 import java.util.List;
 
 import org.bukkit.entity.Player;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import com.sk89q.worldguard.protection.regions.RegionContainer;
 
 import xyz.joestr.zonemenu.ZoneMenu;
 
@@ -18,10 +22,10 @@ import xyz.joestr.zonemenu.ZoneMenu;
  */
 public class SubCommandZoneDelete {
 
-    ZoneMenu plugin = null;
+    ZoneMenu zoneMenuPlugin = null;
 
     /**
-     * Constrcutor for the      {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneDelete
+     * Constrcutor for the null null null null null null null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneDelete
      * SubCommandZoneDelete} class.
      *
      * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
@@ -29,9 +33,9 @@ public class SubCommandZoneDelete {
      * @since ${project.version}
      * @version ${project.version}
      */
-    public SubCommandZoneDelete(ZoneMenu plugin) {
+    public SubCommandZoneDelete(ZoneMenu zoneMenuPlugin) {
 
-        this.plugin = plugin;
+        this.zoneMenuPlugin = zoneMenuPlugin;
     }
 
     /**
@@ -50,14 +54,13 @@ public class SubCommandZoneDelete {
 
             // ... wrong usage of "/zone delete <Zone>".
             // Send the player a message.
-            player.sendMessage(
-                this.plugin.colorCode('&', ((String) this.plugin.configDelegate.getMap().get("usage_message"))
-                    .replace("{0}", "/zone delete <Zone>")));
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&', ((String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message"))
+                .replace("{0}", "/zone delete <Zone>")));
 
             return;
         }
 
-        plugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
+        zoneMenuPlugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
             // Initialise region
             ProtectedRegion protectedRegion = null;
@@ -66,8 +69,7 @@ public class SubCommandZoneDelete {
             if (t.isEmpty()) {
 
                 // ... send the player a message.
-                player.sendMessage(
-                    this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&', (String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone")));
 
                 return;
             }
@@ -76,7 +78,7 @@ public class SubCommandZoneDelete {
             for (ProtectedRegion protectedRegion_ : t) {
 
                 // ... and if the region ID equals the second argument (<Zone>) ...
-                if (protectedRegion_.getId().equalsIgnoreCase(arguments[1])) {
+                if (protectedRegion_.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(arguments[1])) {
 
                     // ... set the found region.
                     protectedRegion = protectedRegion_;
@@ -88,19 +90,27 @@ public class SubCommandZoneDelete {
 
                 // ... no region with this ID was not found.
                 // Send the player a message.
-                player.sendMessage(this.plugin.colorCode('&',
-                    ((String) this.plugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
                         arguments[1])));
 
                 return;
             }
 
             // Remove the region from worlds region manager
-            WorldGuard.getInstance().getPlatform().getRegionContainer().get((com.sk89q.worldedit.world.World) player.getWorld()).removeRegion(protectedRegion.getId());
+            WorldGuard
+                .getInstance()
+                .getPlatform()
+                .getRegionContainer()
+                .get(BukkitAdapter.adapt(player.getWorld()))
+                .removeRegion(
+                    protectedRegion.getId(),
+                    RemovalStrategy.REMOVE_CHILDREN
+                );
 
             // Send a message to the player
-            player.sendMessage(this.plugin.colorCode('&',
-                ((String) plugin.configDelegate.getMap().get("zone_delete")).replace("{0}", arguments[1])));
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                ((String) zoneMenuPlugin.configDelegate.getMap().get("zone_delete")).replace("{0}", arguments[1])));
         });
     }
 }

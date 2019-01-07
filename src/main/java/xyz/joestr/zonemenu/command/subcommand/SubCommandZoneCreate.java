@@ -1,23 +1,18 @@
 package xyz.joestr.zonemenu.command.subcommand;
 
-import com.sk89q.squirrelid.resolver.ProfileService;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import java.io.IOException;
 import java.util.List;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.sk89q.worldedit.IncompleteRegionException;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,8 +33,7 @@ public class SubCommandZoneCreate {
     ZoneMenu zoneMenuPlugin = null;
 
     /**
-     * Constrcutor for the null null null null null null null null null null
-     * null null null null null null null null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneCreate
+     * Constrcutor for the {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneCreate
      * SubCommandZoneCreate} class.
      *
      * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
@@ -61,10 +55,10 @@ public class SubCommandZoneCreate {
      * @since ${project.version}
      * @version ${project.version}
      */
-    public void process(Player player, String[] args) {
+    public void process(Player player, String[] arguments) {
 
         // If arguments' length does not equals 1 ...
-        if (args.length != 1) {
+        if (arguments.length != 1) {
 
             // ... wrong usage of "/zone cancel".
             // Send the player a message.
@@ -94,12 +88,7 @@ public class SubCommandZoneCreate {
         }
 
         // Grab players worldedit selection
-        Region selectedRegion_ = null;
-        try {
-            selectedRegion_ = WorldEdit.getInstance().getSessionManager().findByName(player.getName()).getSelection((com.sk89q.worldedit.world.World) player.getWorld());
-        } catch (IncompleteRegionException ex) {
-            Logger.getLogger(SubCommandZoneCreate.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Region selectedRegion_ = this.zoneMenuPlugin.getPlayerSelection(player);
 
         // Check if selection is valid
         if (selectedRegion_ == null) {
@@ -122,6 +111,11 @@ public class SubCommandZoneCreate {
         final Region selectedRegion = selectedRegion_;
 
         this.zoneMenuPlugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
+
+            if (u != null) {
+                u.printStackTrace(System.err);
+                return;
+            }
 
             // If the player is not in the map ...
             if (!this.zoneMenuPlugin.zoneMenuPlayers.containsKey(player)) {
@@ -150,20 +144,30 @@ public class SubCommandZoneCreate {
 
                 // ... do not proceed.
                 // Send the player a message.
-                player.sendMessage(this.zoneMenuPlugin.colorCode('&', ((String) this.zoneMenuPlugin.configDelegate
-                    .getMap().get("prefix"))
-                    + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_create_width_length_error"))
-                        .replace("{0}",
-                            (String) this.zoneMenuPlugin.configDelegate.getMap()
-                                .get("zone_create_length_min"))
-                        .replace("{1}",
-                            (String) this.zoneMenuPlugin.configDelegate.getMap()
-                                .get("zone_create_length_max"))
-                        .replace("{2}",
-                            (String) this.zoneMenuPlugin.configDelegate.getMap()
-                                .get("zone_create_width_min"))
-                        .replace("{3}", (String) this.zoneMenuPlugin.configDelegate.getMap()
-                            .get("zone_create_width_max"))));
+                player.sendMessage(
+                    this.zoneMenuPlugin.colorCode(
+                        '&',
+                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                        + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_create_width_length_error"))
+                            .replace(
+                                "{0}",
+                                ((Integer) this.zoneMenuPlugin.configDelegate.getMap()
+                                    .get("zone_create_length_min")).toString()
+                            ).replace(
+                                "{1}",
+                                ((Integer) this.zoneMenuPlugin.configDelegate.getMap()
+                                    .get("zone_create_width_min")).toString()
+                            ).replace(
+                                "{2}",
+                                ((Integer) this.zoneMenuPlugin.configDelegate.getMap()
+                                    .get("zone_create_length_max")).toString()
+                            ).replace(
+                                "{3}",
+                                ((Integer) this.zoneMenuPlugin.configDelegate.getMap()
+                                    .get("zone_create_width_max")).toString()
+                            )
+                    )
+                );
 
                 return;
             }
@@ -252,8 +256,7 @@ public class SubCommandZoneCreate {
                 selectedRegion.getMinimumPoint(), selectedRegion.getMaximumPoint());
 
             // If region overlaps with unowned regions ...
-            if (WorldGuard.getInstance().getPlatform().getRegionContainer().get((com.sk89q.worldedit.world.World) player.getWorld()).overlapsUnownedRegion(
-                protectedCuboidRegion, this.zoneMenuPlugin.worldGuardPlugin.wrapPlayer(player))) {
+            if (WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld())).overlapsUnownedRegion(protectedCuboidRegion, this.zoneMenuPlugin.worldGuardPlugin.wrapPlayer(player))) {
 
                 // ... do not proceed.
                 // Send the player a message.
@@ -265,14 +268,9 @@ public class SubCommandZoneCreate {
                 return;
             }
 
-            // Check if Worldguards profileservice contains players name
-            ProfileService profileService = WorldGuard.getInstance().getProfileService();
-
             try {
-                profileService.findByName(player.getName());
-            } catch (IOException ex) {
-                Logger.getLogger(SubCommandZoneCreate.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
+                WorldGuard.getInstance().getProfileService().findByName(player.getName());
+            } catch (IOException | InterruptedException ex) {
                 Logger.getLogger(SubCommandZoneCreate.class.getName()).log(Level.SEVERE, null, ex);
             }
 
@@ -305,20 +303,21 @@ public class SubCommandZoneCreate {
              * StateFlag.State.DENY);
              */
             // Finally, add the region to worlds region manager
-            WorldGuard.getInstance().getPlatform().getRegionContainer().get((com.sk89q.worldedit.world.World) player.getWorld()).addRegion(protectedCuboidRegion);
+            WorldGuard
+                .getInstance()
+                .getPlatform()
+                .getRegionContainer()
+                .get(BukkitAdapter.adapt(player.getWorld()))
+                .addRegion(protectedCuboidRegion);
 
             // Clear up player
-            try {
-                this.zoneMenuPlugin.clearUpZoneMenuPlayer(player);
-            } catch (IncompleteRegionException ex) {
-                Logger.getLogger(SubCommandZoneCreate.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            this.zoneMenuPlugin.clearUpZoneMenuPlayer(player);
 
             // Send player a message
             player.sendMessage(this.zoneMenuPlugin.colorCode('&',
                 ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
                 + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_create")).replace("{0}",
-                    protectedCuboidRegion.getId())));
+                    protectedCuboidRegion.getId().replace("+", "#").replace("-", "."))));
         });
     }
 }

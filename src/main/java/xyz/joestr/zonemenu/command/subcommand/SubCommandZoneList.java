@@ -11,7 +11,7 @@ import xyz.joestr.zonemenu.ZoneMenu;
 
 /**
  * Class which handles subcommand "list" of command "zone".
- * 
+ *
  * @author joestr
  * @since ${project.version}
  * @version ${project.version}
@@ -21,12 +21,10 @@ public class SubCommandZoneList {
     ZoneMenu zoneMenuPlugin = null;
 
     /**
-     * Constrcutor for the
-     * {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneList
+     * Constrcutor for the      {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneList
      * SubCommandZoneList} class.
-     * 
-     * @param zoneMenuPlugin
-     *            A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
+     *
+     * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
      * @author joestr
      * @since ${project.version}
      * @version ${project.version}
@@ -38,11 +36,9 @@ public class SubCommandZoneList {
 
     /**
      * Processes.
-     * 
-     * @param player
-     *            A {@link org.bukkit.entity.Player Player}.
-     * @param arguments
-     *            An array of {@link java.lang.String String}s.
+     *
+     * @param player A {@link org.bukkit.entity.Player Player}.
+     * @param arguments An array of {@link java.lang.String String}s.
      * @author joestr
      * @since ${project.version}
      * @version ${project.version}
@@ -53,11 +49,10 @@ public class SubCommandZoneList {
         if (args.length != 1) {
 
             // ... wrong usage of "/zone cancel".
-
             // Send the player a message.
             player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message")).replace("{0}",
-                            "/zone list")));
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message")).replace("{0}",
+                    "/zone list")));
 
             return;
         }
@@ -69,7 +64,7 @@ public class SubCommandZoneList {
 
                 // ... send the player a message.
                 player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone"))));
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone"))));
 
                 return;
             }
@@ -84,16 +79,16 @@ public class SubCommandZoneList {
 
                 if (iterator.hasNext()) {
 
-                    sregionString = sregionString + protectedRegion_.getId() + ", ";
+                    sregionString = sregionString + protectedRegion_.getId().replace("+", "#").replace("-", ".") + ", ";
                 } else {
 
-                    sregionString = sregionString + protectedRegion_.getId();
+                    sregionString = sregionString + protectedRegion_.getId().replace("+", "#").replace("-", ".");
                 }
             }
 
             player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_list")).replace("{list}",
-                            sregionString)));
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_list")).replace("{list}",
+                    sregionString)));
 
             return;
         });

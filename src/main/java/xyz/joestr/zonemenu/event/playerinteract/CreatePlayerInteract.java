@@ -1,12 +1,9 @@
 package xyz.joestr.zonemenu.event.playerinteract;
 
-import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.regions.CuboidRegion;
-import com.sk89q.worldedit.regions.Region;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.regions.selector.CuboidRegionSelector;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -117,31 +114,34 @@ public class CreatePlayerInteract implements Listener {
                 playerpos2.setY(255);
 
                 // Make a worldedit selection
-                WorldEdit
-                    .getInstance()
-                    .getSessionManager()
-                    .findByName(player.getName())
-                    .getRegionSelector((com.sk89q.worldedit.world.World) player.getWorld())
-                    .selectPrimary(BlockVector3.at(playerpos1.getBlockX(), playerpos1.getBlockY(), playerpos1.getBlockZ()), null);
+                // Make a worldedit selection
+                LocalSession session
+                    = WorldEdit
+                        .getInstance()
+                        .getSessionManager()
+                        .get(BukkitAdapter.adapt(player));
 
-                WorldEdit
-                    .getInstance()
-                    .getSessionManager()
-                    .findByName(player.getName())
-                    .getRegionSelector((com.sk89q.worldedit.world.World) player.getWorld())
-                    .selectSecondary(BlockVector3.at(playerpos2.getBlockX(), playerpos2.getBlockY(), playerpos2.getBlockZ()), null);
+                com.sk89q.worldedit.world.World weWorld
+                    = BukkitAdapter.adapt(playerworld);
 
-                try {
-                    // Set actionbar message
-                    sign1 = (String) plugin.configDelegate.getMap().get("event_sign_first")
-                        + (String) ((String) plugin.configDelegate.getMap().get("event_sign_area")).replace("{0}",
-                            Integer.toString(
-                                WorldEdit.getInstance().getSessionManager().findByName(player.getName()).getSelection((com.sk89q.worldedit.world.World) player.getWorld()).getArea()
-                            )
-                        );
-                } catch (IncompleteRegionException ex) {
-                    Logger.getLogger(CreatePlayerInteract.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                session.setRegionSelector(
+                    weWorld,
+                    new CuboidRegionSelector(
+                        weWorld,
+                        BukkitAdapter.asBlockVector(playerpos1),
+                        BukkitAdapter.asBlockVector(playerpos2)
+                    )
+                );
+
+                session.dispatchCUISelection(BukkitAdapter.adapt(player));
+
+                // Set actionbar message
+                sign1 = (String) plugin.configDelegate.getMap().get("event_sign_first")
+                    + (String) ((String) plugin.configDelegate.getMap().get("event_sign_area")).replace("{0}",
+                        Integer.toString(
+                            this.plugin.getPlayerSelection(player).getLength() * this.plugin.getPlayerSelection(player).getWidth()
+                        )
+                    );
             } else {
                 // Set actionbar message
                 sign1 = (String) plugin.configDelegate.getMap().get("event_sign_first");
@@ -201,37 +201,33 @@ public class CreatePlayerInteract implements Listener {
                 playerpos2.setY(255);
 
                 // Make a worldedit selection
-                // Make a worldedit selection
-                WorldEdit
-                    .getInstance()
-                    .getSessionManager()
-                    .findByName(player.getName())
-                    .getRegionSelector((com.sk89q.worldedit.world.World) player.getWorld())
-                    .selectPrimary(BlockVector3.at(playerpos1.getBlockX(), playerpos1.getBlockY(), playerpos1.getBlockZ()), null);
+                LocalSession session
+                    = WorldEdit
+                        .getInstance()
+                        .getSessionManager()
+                        .get(BukkitAdapter.adapt(player));
 
-                WorldEdit
-                    .getInstance()
-                    .getSessionManager()
-                    .findByName(player.getName())
-                    .getRegionSelector((com.sk89q.worldedit.world.World) player.getWorld())
-                    .selectSecondary(BlockVector3.at(playerpos2.getBlockX(), playerpos2.getBlockY(), playerpos2.getBlockZ()), null);
+                com.sk89q.worldedit.world.World weWorld
+                    = BukkitAdapter.adapt(playerworld);
 
-                try {
-                    // Set actionbar message
-                    sign1 = (String) plugin.configDelegate.getMap().get("event_sign_second")
-                        + (String) ((String) plugin.configDelegate.getMap().get("event_sign_area")).replace("{0}",
-                            Integer.toString(
-                                WorldEdit
-                                    .getInstance()
-                                    .getSessionManager()
-                                    .findByName(player.getName())
-                                    .getSelection((com.sk89q.worldedit.world.World) player.getWorld())
-                                    .getArea()
-                            )
-                        );
-                } catch (IncompleteRegionException ex) {
-                    Logger.getLogger(CreatePlayerInteract.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                session.setRegionSelector(
+                    weWorld,
+                    new CuboidRegionSelector(
+                        weWorld,
+                        BukkitAdapter.asBlockVector(playerpos1),
+                        BukkitAdapter.asBlockVector(playerpos2)
+                    )
+                );
+
+                session.dispatchCUISelection(BukkitAdapter.adapt(player));
+
+                // Set actionbar message
+                sign1 = (String) plugin.configDelegate.getMap().get("event_sign_second")
+                    + (String) ((String) plugin.configDelegate.getMap().get("event_sign_area")).replace("{0}",
+                        Integer.toString(
+                            this.plugin.getPlayerSelection(player).getLength() * this.plugin.getPlayerSelection(player).getWidth()
+                        )
+                    );
             } else {
                 // Set actionbar message
                 sign1 = (String) plugin.configDelegate.getMap().get("event_sign_second");

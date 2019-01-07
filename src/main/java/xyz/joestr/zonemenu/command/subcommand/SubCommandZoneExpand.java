@@ -1,13 +1,9 @@
 package xyz.joestr.zonemenu.command.subcommand;
 
-import com.sk89q.squirrelid.resolver.ProfileService;
 import java.io.IOException;
 import java.util.List;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.WorldEdit;
@@ -16,8 +12,11 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import com.sk89q.worldguard.util.profile.resolver.ProfileService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import xyz.joestr.zonemenu.ZoneMenu;
 import xyz.joestr.zonemenu.util.ZoneMenuPlayer;
@@ -246,11 +245,7 @@ public class SubCommandZoneExpand {
             // Finally, add the region to worlds region manager
             WorldGuard.getInstance().getPlatform().getRegionContainer().get((com.sk89q.worldedit.world.World) player.getWorld()).addRegion(protectedcuboidregion);
 
-            try {
-                this.plugin.clearUpZoneMenuPlayer(player);
-            } catch (IncompleteRegionException ex) {
-                Logger.getLogger(SubCommandZoneExpand.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            this.plugin.clearUpZoneMenuPlayer(player);
 
             // Send player a message
             player.sendMessage(

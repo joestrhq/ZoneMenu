@@ -1,5 +1,6 @@
 package xyz.joestr.zonemenu.event.playerinteract;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -75,7 +76,7 @@ public class FindPlayerInteract implements Listener {
             event.setCancelled(true);
 
             // Get regions on clicked location
-            ApplicableRegionSet regiononloc = WorldGuard.getInstance().getPlatform().getRegionContainer().get((com.sk89q.worldedit.world.World) player.getWorld())
+            ApplicableRegionSet regiononloc = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()))
                 .getApplicableRegions(
                     BlockVector3.at(
                         event.getClickedBlock().getLocation().getBlockX(),
@@ -89,7 +90,7 @@ public class FindPlayerInteract implements Listener {
                 if (find2 != "") {
                     find2 = find2 + ", ";
                 }
-                find2 = find2 + region.getId();
+                find2 = find2 + region.getId().replace("+", "#").replace("-", ".");
             }
 
             // Check if no regions were found
