@@ -1,75 +1,116 @@
 package xyz.joestr.zonemenu.command.subcommand;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.managers.RemovalStrategy;
 import java.util.List;
 
 import org.bukkit.entity.Player;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import com.sk89q.worldguard.protection.regions.RegionContainer;
 
 import xyz.joestr.zonemenu.ZoneMenu;
 
+/**
+ * Class which handles subcommand "delete" of command "zone".
+ *
+ * @author joestr
+ * @since ${project.version}
+ * @version ${project.version}
+ */
 public class SubCommandZoneDelete {
 
-	ZoneMenu plugin = null;
+    ZoneMenu zoneMenuPlugin = null;
 
-	public SubCommandZoneDelete(ZoneMenu plugin) {
-		this.plugin = plugin;
-	}
+    /**
+     * Constrcutor for the null null null null null null null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneDelete
+     * SubCommandZoneDelete} class.
+     *
+     * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
+     * @author joestr
+     * @since ${project.version}
+     * @version ${project.version}
+     */
+    public SubCommandZoneDelete(ZoneMenu zoneMenuPlugin) {
 
-	public void process(Player player, String[] args) {
+        this.zoneMenuPlugin = zoneMenuPlugin;
+    }
 
-		if(args.length != 2) {
-			
-			// Wrong usage of the /zone command
-			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-			player.sendMessage(
-					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
-							.replace("{0}", "/zone delete <Zone>"));
+    /**
+     * Processes.
+     *
+     * @param player A {@link org.bukkit.entity.Player Player}.
+     * @param arguments An array of {@link java.lang.String String}s.
+     * @author joestr
+     * @since ${project.version}
+     * @version ${project.version}
+     */
+    public void process(Player player, String[] arguments) {
 
-			return;
-		}
-		
-		plugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
+        // If arguments' length does not equals 2 ...
+        if (arguments.length != 2) {
 
-			// Initialise region
-			ProtectedRegion protectedregion = null;
+            // ... wrong usage of "/zone delete <Zone>".
+            // Send the player a message.
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&', ((String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message"))
+                .replace("{0}", "/zone delete <Zone>")));
 
-			if (t.isEmpty()) {
+            return;
+        }
 
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
+        zoneMenuPlugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
-				return;
-			}
+            // Initialise region
+            ProtectedRegion protectedRegion = null;
 
-			for (ProtectedRegion pr : t) {
+            // If the list is empty ...
+            if (t.isEmpty()) {
 
-				if (pr.getId().equalsIgnoreCase(args[1])) {
+                // ... send the player a message.
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&', (String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone")));
 
-					protectedregion = pr;
-				}
-			}
+                return;
+            }
 
-			// Check if region in invalid
-			if (protectedregion == null) {
+            // Loop through all regions ...
+            for (ProtectedRegion protectedRegion_ : t) {
 
-				player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(this.plugin.colorCode('&',
-						((String) this.plugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
-								args[1])));
+                // ... and if the region ID equals the second argument (<Zone>) ...
+                if (protectedRegion_.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(arguments[1])) {
 
-				return;
-			}
+                    // ... set the found region.
+                    protectedRegion = protectedRegion_;
+                }
+            }
 
-			// Remove the region from worlds region manager
-			plugin.worldGuardPlugin.getRegionManager(player.getWorld()).removeRegion(protectedregion.getId());
+            // If region equals null ...
+            if (protectedRegion == null) {
 
-			// Send a message to the player
-			player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("head")));
-			player.sendMessage(plugin.colorCode('&', (String) plugin.configDelegate.getMap().get("zone_delete")).replace("{0}",
-					args[1]));
-		});
-	}
+                // ... no region with this ID was not found.
+                // Send the player a message.
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
+                        arguments[1])));
+
+                return;
+            }
+
+            // Remove the region from worlds region manager
+            WorldGuard
+                .getInstance()
+                .getPlatform()
+                .getRegionContainer()
+                .get(BukkitAdapter.adapt(player.getWorld()))
+                .removeRegion(
+                    protectedRegion.getId(),
+                    RemovalStrategy.REMOVE_CHILDREN
+                );
+
+            // Send a message to the player
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                ((String) zoneMenuPlugin.configDelegate.getMap().get("zone_delete")).replace("{0}", arguments[1])));
+        });
+    }
 }

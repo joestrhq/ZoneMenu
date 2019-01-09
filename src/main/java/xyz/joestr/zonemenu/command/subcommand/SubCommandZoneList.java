@@ -9,61 +9,88 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import xyz.joestr.zonemenu.ZoneMenu;
 
+/**
+ * Class which handles subcommand "list" of command "zone".
+ *
+ * @author joestr
+ * @since ${project.version}
+ * @version ${project.version}
+ */
 public class SubCommandZoneList {
 
-	ZoneMenu plugin = null;
+    ZoneMenu zoneMenuPlugin = null;
 
-	public SubCommandZoneList(ZoneMenu plugin) {
-		this.plugin = plugin;
-	}
+    /**
+     * Constrcutor for the      {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneList
+     * SubCommandZoneList} class.
+     *
+     * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
+     * @author joestr
+     * @since ${project.version}
+     * @version ${project.version}
+     */
+    public SubCommandZoneList(ZoneMenu plugin) {
 
-	public void process(Player player, String[] args) {
+        this.zoneMenuPlugin = plugin;
+    }
 
-		if(args.length != 1) {
-			
-			// Wrong usage of the /zone command
-			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-			player.sendMessage(
-					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
-							.replace("{0}", "/zone list"));
+    /**
+     * Processes.
+     *
+     * @param player A {@link org.bukkit.entity.Player Player}.
+     * @param arguments An array of {@link java.lang.String String}s.
+     * @author joestr
+     * @since ${project.version}
+     * @version ${project.version}
+     */
+    public void process(Player player, String[] args) {
 
-			return;
-		}
-		
-		plugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
+        // If arguments' length does not equals 1 ...
+        if (args.length != 1) {
 
-			if (t.isEmpty()) {
+            // ... wrong usage of "/zone cancel".
+            // Send the player a message.
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message")).replace("{0}",
+                    "/zone list")));
 
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
+            return;
+        }
 
-				return;
-			}
+        this.zoneMenuPlugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
-			String s = "";
+            // If the list is empty ...
+            if (t.isEmpty()) {
 
-			Iterator<ProtectedRegion> it = t.iterator();
+                // ... send the player a message.
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone"))));
 
-			while (it.hasNext()) {
+                return;
+            }
 
-				ProtectedRegion pr = it.next();
+            String sregionString = "";
 
-				if (it.hasNext()) {
+            Iterator<ProtectedRegion> iterator = t.iterator();
 
-					s = s + pr.getId() + ", ";
-				} else {
+            while (iterator.hasNext()) {
 
-					s = s + pr.getId();
-				}
-			}
+                ProtectedRegion protectedRegion_ = iterator.next();
 
-			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-			player.sendMessage(this.plugin.colorCode('&',
-					((String) this.plugin.configDelegate.getMap().get("zone_list")).replace("{list}", s)));
+                if (iterator.hasNext()) {
 
-			return;
-		});
-	}
+                    sregionString = sregionString + protectedRegion_.getId().replace("+", "#").replace("-", ".") + ", ";
+                } else {
+
+                    sregionString = sregionString + protectedRegion_.getId().replace("+", "#").replace("-", ".");
+                }
+            }
+
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_list")).replace("{list}",
+                    sregionString)));
+
+            return;
+        });
+    }
 }

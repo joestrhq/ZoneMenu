@@ -1,5 +1,6 @@
 package xyz.joestr.zonemenu.command.subcommand;
 
+import com.sk89q.worldguard.WorldGuard;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
@@ -12,110 +13,148 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import xyz.joestr.zonemenu.ZoneMenu;
 
+/**
+ * Class which handles subcommand "info" of command "zone".
+ *
+ * @author joestr
+ * @since ${project.version}
+ * @version ${project.version}
+ */
 public class SubCommandZoneInfo {
 
-	ZoneMenu plugin = null;
+    ZoneMenu zoneMenuPlugin = null;
 
-	public SubCommandZoneInfo(ZoneMenu plugin) {
-		this.plugin = plugin;
-	}
+    /**
+     * Constrcutor for the null null null null null null null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneInfo
+     * SubCommandZoneInfo} class.
+     *
+     * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
+     * @author joestr
+     * @since ${project.version}
+     * @version ${project.version}
+     */
+    public SubCommandZoneInfo(ZoneMenu zoneMenuPlugin) {
 
-	public void process(Player player, String[] args) {
+        this.zoneMenuPlugin = zoneMenuPlugin;
+    }
 
-		if(args.length != 2) {
-			
-			// Wrong usage of the /zone command
-			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-			player.sendMessage(
-					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("usage_message"))
-							.replace("{0}", "/zone info <Zone>"));
+    /**
+     * Processes.
+     *
+     * @param player A {@link org.bukkit.entity.Player Player}.
+     * @param arguments An array of {@link java.lang.String String}s.
+     * @author joestr
+     * @since ${project.version}
+     * @version ${project.version}
+     */
+    public void process(Player player, String[] arguments) {
 
-			return;
-		}
-		
-		plugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
+        // If arguments' length does not equals 3 ...
+        if (arguments.length != 2) {
 
-			// Initialise new region
-			ProtectedRegion protectedregion = null;
+            // ... wrong usage of "/zone info <Zone>".
+            // Send the player a message.
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message")).replace("{0}",
+                    "/zone info <Zone>")));
 
-			if (t.isEmpty()) {
+            return;
+        }
 
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("no_zone")));
+        this.zoneMenuPlugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
-				return;
-			}
+            // If the list is empty ...
+            if (t.isEmpty()) {
 
-			for (ProtectedRegion pr : t) {
+                // ... send the player a message.
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone"))));
 
-				if (pr.getId().equalsIgnoreCase(args[1])) {
+                return;
+            }
 
-					protectedregion = pr;
-				}
-			}
+            // Initialise new region with null
+            ProtectedRegion protectedRegion = null;
 
-			// Check if region in invalid
-			if (protectedregion == null) {
+            // Loop through all regions ...
+            for (ProtectedRegion protectedRegion_ : t) {
 
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
-				player.sendMessage(this.plugin.colorCode('&',
-						((String) this.plugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
-								args[1])));
+                // ... and if the region ID equals the second argument (<Zone>) ...
+                if (protectedRegion_.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(arguments[1])) {
 
-				return;
-			}
+                    // ... set the found region.
+                    protectedRegion = protectedRegion_;
+                }
+            }
 
-			// Grab some infos
-			DefaultDomain domainowners = protectedregion.getOwners();
-			DefaultDomain regionmembers = protectedregion.getMembers();
-			int min_x = protectedregion.getMinimumPoint().getBlockX();
-			int min_z = protectedregion.getMinimumPoint().getBlockZ();
-			int max_x = protectedregion.getMaximumPoint().getBlockX();
-			int max_z = protectedregion.getMaximumPoint().getBlockZ();
-			int area = (this.plugin.difference(min_x, max_x) + 1) * (this.plugin.difference(min_z, max_z) + 1);
+            // If region equals null ...
+            if (protectedRegion == null) {
 
-			// Send infos to player
-			player.sendMessage(this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("head")));
+                // ... no region with this ID was not found.
+                // Send the player a message.
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
+                        arguments[1])));
 
-			player.sendMessage(
-					this.plugin.colorCode('&', ((String) this.plugin.configDelegate.getMap().get("zone_info_id"))
-							.replace("{id}", protectedregion.getId())));
+                return;
+            }
 
-			player.sendMessage(
-					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_info_priority"))
-							+ protectedregion.getPriority());
-			player.sendMessage(
-					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_info_parent"))
-							+ (protectedregion.getParent() == null ? "" : protectedregion.getParent().getId()));
-			
-			player.sendMessage(this.plugin.colorCode('&',
-					(String) this.plugin.configDelegate.getMap().get("zone_info_owners"))
-					+ domainowners.toPlayersString(this.plugin.worldGuardPlugin.getProfileCache()).replace("*", ""));
-			player.sendMessage(this.plugin.colorCode('&',
-					(String) this.plugin.configDelegate.getMap().get("zone_info_members"))
-					+ regionmembers.toPlayersString(this.plugin.worldGuardPlugin.getProfileCache()).replace("*", ""));
-			
-			Iterator<Entry<Flag<?>, Object>> it = protectedregion.getFlags().entrySet().iterator();
-			while (it.hasNext()) {
-				Entry<Flag<?>, Object> e = it.next();
-				player.sendMessage(
-						this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_info_flag"))
-								.replace("{0}", e.getKey().getName()).replace("{1}", e.getValue().toString()));
-			}
+            // Grab some infos
+            DefaultDomain domainOwners = protectedRegion.getOwners();
+            DefaultDomain domainMembers = protectedRegion.getMembers();
+            int minimumX = protectedRegion.getMinimumPoint().getBlockX();
+            int minimumZ = protectedRegion.getMinimumPoint().getBlockZ();
+            int maximumX = protectedRegion.getMaximumPoint().getBlockX();
+            int maximumZ = protectedRegion.getMaximumPoint().getBlockZ();
+            int area = (this.zoneMenuPlugin.difference(minimumX, maximumX) + 1)
+                * (this.zoneMenuPlugin.difference(minimumZ, maximumZ) + 1);
 
-			player.sendMessage(
-					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_info_start"))
-							.replace("{0}", Integer.toString(min_x)).replace("{1}", Integer.toString(min_z)));
-			player.sendMessage(
-					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_info_end"))
-							.replace("{0}", Integer.toString(max_x)).replace("{1}", Integer.toString(max_z)));
-			player.sendMessage(
-					this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("zone_info_area"))
-							.replace("{0}", Integer.toString(area)));
+            // Send infos to the player.
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_id")).replace("{id}",
+                    protectedRegion.getId())));
 
-		});
-	}
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_priority")
+                + protectedRegion.getPriority()));
+
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_parent")
+                + (protectedRegion.getParent() == null ? "" : protectedRegion.getParent().getId())));
+
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_owners")
+                + domainOwners
+                    .toPlayersString(WorldGuard.getInstance().getProfileCache()).replace("*", "")));
+
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_members")
+                + domainMembers
+                    .toPlayersString(WorldGuard.getInstance().getProfileCache()).replace("*", "")));
+
+            Iterator<Entry<Flag<?>, Object>> iterator = protectedRegion.getFlags().entrySet().iterator();
+
+            while (iterator.hasNext()) {
+
+                Entry<Flag<?>, Object> entry_ = iterator.next();
+
+                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_flag"))
+                        .replace("{0}", entry_.getKey().getName())
+                        .replace("{1}", entry_.getValue().toString())));
+            }
+
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_start"))
+                    .replace("{0}", Integer.toString(minimumX)).replace("{1}", Integer.toString(minimumZ))));
+
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_end"))
+                    .replace("{0}", Integer.toString(maximumX)).replace("{1}", Integer.toString(maximumZ))));
+
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_area")).replace("{0}",
+                    Integer.toString(area))));
+        });
+    }
 }
