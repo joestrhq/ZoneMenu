@@ -151,4 +151,4 @@ Since version 0.0.3 missing config entries will be automatically placed while ol
 
 
 **Builds**  
-Builds are available [here](https://jenkins.joestr.xyz/job/ZoneMenu_Dev/).
+Builds are available [here](https://jenkins.joestr.xyz/job/ZoneMenu/).
