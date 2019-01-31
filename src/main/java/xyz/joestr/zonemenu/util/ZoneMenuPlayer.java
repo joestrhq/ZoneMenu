@@ -244,7 +244,7 @@ public class ZoneMenuPlayer {
     /**
      * Sets the {@linkplain org.bukkit.Location first corner} for subcreation.
      *
-     * @param createCorner1 A {@linkplain org.bukkit.Location Location}.
+     * @param subcreateCorner1 A {@linkplain org.bukkit.Location Location}.
      */
     public void setSubcreateCorner1(Location subcreateCorner1) {
         this.subcreateCorner1 = subcreateCorner1;
@@ -262,7 +262,7 @@ public class ZoneMenuPlayer {
     /**
      * Sets the {@linkplain org.bukkit.Location second corner} for subcreation.
      *
-     * @param createCorner1 A {@linkplain org.bukkit.Location Location}.
+     * @param subcreateCorner2 A {@linkplain org.bukkit.Location Location}.
      */
     public void setSubcreateCorner2(Location subcreateCorner2) {
         this.subcreateCorner2 = subcreateCorner2;

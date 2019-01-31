@@ -1,6 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+    
     <groupId>xyz.joestr</groupId>
     <artifactId>zonemenu</artifactId>
     <version>0.1.0-SNAPSHOT</version>
@@ -8,11 +13,48 @@
     <name>ZoneMenu</name>
     <description>Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)</description>
     <url>https://repo.joestr.xyz/zonemenu</url>
+    <inceptionYear>2017</inceptionYear>
     
     <organization>
         <name>joestr</name>
         <url>https://joestr.xyz</url>
     </organization>
+    
+    <licenses>
+        <license>
+            <name>X11/MIT license</name>
+            <distribution>repo</distribution>
+            <url>https://github.com/joestr/ZoneMenu/LICENSE</url>
+            <!--<comments></comments>-->
+        </license>
+    </licenses>
+    
+    <developers>
+        <developer>
+            <id>joestr</id>
+            <name>Joel Strasser</name>
+            <email>strasser999@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <url>https://joestr.xyz</url>
+            <organization>joestr</organization>
+            <organizationUrl>https://joestr.xyz</organizationUrl>
+        </developer>
+    </developers>
+    
+    <contributors>
+        <contributor>
+            <name>Joel Strasser</name>
+            <email>strasser999@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <url>https://joestr.xyz</url>
+            <organization>joestr</organization>
+            <organizationUrl>https://joestr.xyz</organizationUrl>
+        </contributor>
+    </contributors>
     
     <scm>
         <url>https://github.com/joestr/ZoneMenu/</url>
@@ -20,6 +62,7 @@
         <developerConnection>scm:git:https://github.com/joestr/ZoneMenu.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
+    
     
     <ciManagement>
         <url>https://ci.joestr.xyz/job/ZoneMenu/</url>
@@ -30,39 +73,35 @@
                 <sendOnError>true</sendOnError>
                 <sendOnFailure>true</sendOnFailure>
                 <sendOnSuccess>false</sendOnSuccess>
-                <sendOnWarning>false</sendOnWarning>
+                <sendOnWarning>true</sendOnWarning>
                 <configuration>
-                    <address>mail@joestr.xyz</address>
+                    <address>email@joestr.xyz</address>
                 </configuration>
             </notifier>
         </notifiers>
     </ciManagement>
     
-    <issueManagement>
-        <url>https://github.com/joestr/ZoneMenu/issues</url>
-    </issueManagement>
-    
     <distributionManagement>
         <repository>
-            <id>joestr-repository</id>
+            <id>joestr-repo</id>
             <name>joestr Repository</name>
             <url>https://repo.joestr.xyz/maven/repository/repository/</url>
+            <uniqueVersion>false</uniqueVersion>
         </repository>
         <snapshotRepository>
-            <id>joestr-repository</id>
+            <id>joestr-repo</id>
             <name>joestr Repository</name>
             <url>https://repo.joestr.xyz/maven/repository/repository/</url>
+            <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
         <!--<downloadUrl></downloadUrl>-->
         <!--<status></status>-->
     </distributionManagement>
     
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/joestr/ZoneMenu/issues</url>
+    </issueManagement>
     
     <repositories>
         <repository>
@@ -77,20 +116,6 @@
             </snapshots>
         </repository>
     </repositories>
-    
-    <pluginRepositories>
-        <pluginRepository>
-            <id>joestr-repository</id>
-            <name>joestr Repository</name>
-            <url>https://repo.joestr.xyz/maven/repository/repository/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
     
     <dependencies>
         <dependency>
@@ -113,7 +138,32 @@
         </dependency>
     </dependencies>
     
+    <pluginRepositories>
+        <pluginRepository>
+            <id>joestr-repository</id>
+            <name>joestr Repository</name>
+            <url>https://repo.joestr.xyz/maven/repository/repository/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+    
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
         <resources>
             <resource>
                 <directory>src/main/java</directory>

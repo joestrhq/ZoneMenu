@@ -16,7 +16,7 @@ import org.bukkit.plugin.Plugin;
 
 /**
  * YMLDelegate class which can handle functions for YML-Files.
- * 
+ *
  * @author Joel
  * @since build_1
  * @version build_7_pre_2
@@ -30,16 +30,14 @@ public class YMLDelegate {
 
     /**
      * Create a new YMLDelegate instace
-     * 
+     *
      * @author joestr
      * @since build_1
      * @version build_7_pre_2
-     * @param plugin
-     *            {@linkplain Plugin} Instace of a plugin
-     * @param configurationSection
-     *            {@linkplain String} Name of the configuration section
-     * @param fileName
-     *            {@linkplain String} Name of the file
+     * @param plugin {@linkplain Plugin} Instace of a plugin
+     * @param configurationSection {@linkplain String} Name of the configuration
+     * section
+     * @param fileName {@linkplain String} Name of the file
      */
     public YMLDelegate(Plugin plugin, String configurationSection, String fileName) {
 
@@ -50,7 +48,7 @@ public class YMLDelegate {
 
     /**
      * Get the name of the file.
-     * 
+     *
      * @author joestr
      * @since build_1
      * @version build_7_pre_2
@@ -63,12 +61,12 @@ public class YMLDelegate {
 
     /**
      * Get the configuration section as a map.
-     * 
+     *
      * @author joestr
      * @since build_1
      * @version build_7_pre_2
-     * @return {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map with
-     *         entries
+     * @return {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map
+     * with entries
      */
     public Map<String, Object> getMap() {
 
@@ -77,13 +75,12 @@ public class YMLDelegate {
 
     /**
      * Set the configuration section with a map.
-     * 
+     *
      * @author joestr
      * @since build_1
      * @version build_7_pre_2
-     * @param map
-     *            {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map
-     *            with entries
+     * @param map {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map
+     * with entries
      */
     public void setMap(Map<String, Object> map) {
 
@@ -92,12 +89,12 @@ public class YMLDelegate {
 
     /**
      * Get the configuration section as a map.
-     * 
+     *
      * @author joestr
      * @since build_1
      * @version build_7_pre_2
-     * @return {@linkplain Map}<{@linkplain String}, {@linkplain Onject}> Map with
-     *         entries
+     * @return {@linkplain Map}<{@linkplain String}, {@linkplain Onject}> Map
+     * with entries
      * @deprecated Use {@linkplain #getMap()} instead.
      */
     public Map<String, Object> Map() {
@@ -106,13 +103,12 @@ public class YMLDelegate {
 
     /**
      * Set the configuration section with a map.
-     * 
+     *
      * @author joestr
      * @since build_1
      * @version build_7_pre_2
-     * @param map
-     *            {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map
-     *            with entries
+     * @param map {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map
+     * with entries
      * @deprecated Use {@linkplain #setMap(Map)} instead.
      */
     public void Map(Map<String, Object> map) {
@@ -121,7 +117,7 @@ public class YMLDelegate {
 
     /**
      * Load the file, get the configuration section and put it into a map.
-     * 
+     *
      * @author joestr
      * @since build_1
      * @version build_7_pre_2
@@ -131,7 +127,7 @@ public class YMLDelegate {
         try {
 
             FileConfiguration fileConfiguration = YamlConfiguration
-                    .loadConfiguration(new File(this.plugin.getDataFolder(), fileName));
+                .loadConfiguration(new File(this.plugin.getDataFolder(), fileName));
             hashMap.putAll(fileConfiguration.getConfigurationSection(configurationSection).getValues(true));
         } catch (Exception exception) {
 
@@ -141,7 +137,7 @@ public class YMLDelegate {
 
     /**
      * Save the map to the file.
-     * 
+     *
      * @author joestr
      * @since build_1
      * @version build_7_pre_2
@@ -151,7 +147,7 @@ public class YMLDelegate {
         try {
 
             FileConfiguration fileConfiguration = YamlConfiguration
-                    .loadConfiguration(new File(this.plugin.getDataFolder(), fileName));
+                .loadConfiguration(new File(this.plugin.getDataFolder(), fileName));
             fileConfiguration.createSection(configurationSection, hashMap);
             fileConfiguration.save(new File(this.plugin.getDataFolder(), fileName));
         } catch (NullPointerException exception) {
@@ -165,7 +161,7 @@ public class YMLDelegate {
 
     /**
      * Reset the file with the ressource file.
-     * 
+     *
      * @author joestr
      * @since build_1
      * @version build_7_pre_2
@@ -185,7 +181,7 @@ public class YMLDelegate {
 
     /**
      * Create a new file.
-     * 
+     *
      * @author joestr
      * @since version_1
      */
@@ -202,7 +198,7 @@ public class YMLDelegate {
 
     /**
      * Check for existing file.
-     * 
+     *
      * @author joestr
      * @since build_1
      * @version build_7_pre_2
@@ -238,7 +234,7 @@ public class YMLDelegate {
 
     /**
      * Check if loaded file contains the same entries as the ressource file.
-     * 
+     *
      * @author joestr
      * @since build_1
      * @version build_7_pre_2
@@ -262,7 +258,7 @@ public class YMLDelegate {
         }
 
         for (String s : YamlConfiguration.loadConfiguration(reader).getConfigurationSection(configurationSection)
-                .getKeys(true)) {
+            .getKeys(true)) {
 
             if (!this.hashMap.containsKey(s)) {
 
@@ -275,9 +271,9 @@ public class YMLDelegate {
     }
 
     /**
-     * Check if loaded file contains the same entries as the ressource file and if
-     * not add the missing entries to the map.
-     * 
+     * Check if loaded file contains the same entries as the ressource file and
+     * if not add the missing entries to the map.
+     *
      * @since build_1
      * @version build_7_pre_2
      * @return {@linkplain Boolean} If an entry was added.
@@ -300,14 +296,19 @@ public class YMLDelegate {
         }
 
         ConfigurationSection configurationsection = YamlConfiguration.loadConfiguration(reader)
-                .getConfigurationSection(configurationSection);
+            .getConfigurationSection(configurationSection);
 
         for (String s : configurationsection.getKeys(true)) {
 
             if (!this.hashMap.containsKey(s)) {
 
-                Bukkit.getLogger().log(Level.WARNING,
-                        "File: " + this.getFileName() + "; Missing entry: " + s + "; (using from default config)");
+                Bukkit
+                    .getLogger()
+                    .log(
+                        Level.WARNING,
+                        "File: {0}; Missing entry: {1}; (using from default config)",
+                        new Object[]{this.getFileName(), s}
+                    );
                 this.hashMap.put(s, configurationsection.get(s));
 
                 if (!addedEntry) {

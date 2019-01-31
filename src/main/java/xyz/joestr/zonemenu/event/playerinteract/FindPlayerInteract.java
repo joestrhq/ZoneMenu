@@ -26,12 +26,12 @@ import xyz.joestr.zonemenu.util.ZoneMenuToolType;
  */
 public class FindPlayerInteract implements Listener {
 
-    private ZoneMenu plugin;
+    private ZoneMenu zoneMenuPlugin;
 
     public FindPlayerInteract(ZoneMenu zonemenu) {
 
-        this.plugin = zonemenu;
-        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+        this.zoneMenuPlugin = zonemenu;
+        this.zoneMenuPlugin.getServer().getPluginManager().registerEvents(this, this.zoneMenuPlugin);
     }
 
     @EventHandler
@@ -41,18 +41,18 @@ public class FindPlayerInteract implements Listener {
         Player player = event.getPlayer();
 
         // If the player is not in the map ...
-        if (!this.plugin.zoneMenuPlayers.containsKey(player)) {
+        if (!this.zoneMenuPlugin.zoneMenuPlayers.containsKey(player)) {
 
             // .. do not proceed.
             return;
         }
 
         // Grab the ZoneMenuPlayer
-        ZoneMenuPlayer zoneMenuPlayer = this.plugin.zoneMenuPlayers.get(player);
+        ZoneMenuPlayer zoneMenuPlayer = this.zoneMenuPlugin.zoneMenuPlayers.get(player);
 
         // Using a stick? ToolType correct?
         if ((player.getInventory().getItemInMainHand().getType() != Material.STICK)
-            || (this.plugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.FIND)) {
+            || (this.zoneMenuPlugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.FIND)) {
 
             return;
         }
@@ -95,19 +95,19 @@ public class FindPlayerInteract implements Listener {
 
             // Check if no regions were found
             if (find2 == "") {
-                find1 = (String) this.plugin.configDelegate.getMap().get("event_find_no");
+                find1 = (String) this.zoneMenuPlugin.configDelegate.getMap().get("event_find_no");
                 // Check for multiple regions
             } else if (find2.contains(",")) {
-                find1 = (String) this.plugin.configDelegate.getMap().get("event_find_multi");
+                find1 = (String) this.zoneMenuPlugin.configDelegate.getMap().get("event_find_multi");
                 // Only one found
             } else {
-                find1 = (String) this.plugin.configDelegate.getMap().get("event_find");
+                find1 = (String) this.zoneMenuPlugin.configDelegate.getMap().get("event_find");
             }
 
             find1 = find1.replace("{ids}", find2);
 
             // Send player a actionbar message
-            this.plugin.sendActionBarToPlayer(player, this.plugin.colorCode('&', find1));
+            this.zoneMenuPlugin.sendActionBarToPlayer(player, this.zoneMenuPlugin.colorCode('&', find1));
         }
     }
 }

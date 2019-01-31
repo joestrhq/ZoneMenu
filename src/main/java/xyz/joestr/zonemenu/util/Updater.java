@@ -14,51 +14,51 @@ public class Updater {
     private String updateURI = "";
     private String donwloadURI = "";
     private String thisVersion = "";
-    
+
     public Updater(String updateURI, String thisVersion) {
-        
+
         this.updateURI = updateURI;
         this.thisVersion = thisVersion;
     }
-    
+
     public boolean isUpdateAvailable() throws IOException {
-        
+
         Properties pomProperties = new Properties();
-        
+
         URL updateURL = new URL(updateURI);
-        
+
         URLConnection updateURLConnection = updateURL.openConnection();
-        
+
         BufferedReader updateBufferedReader = new BufferedReader(
             new InputStreamReader(
                 updateURLConnection.getInputStream()
             )
         );
-        
+
         pomProperties.load(updateBufferedReader);
-        
+
         updateBufferedReader.close();
-        
+
         String version = pomProperties.getProperty("version");
-        
-        return version != thisVersion ? true : false;
+
+        return version.equals(thisVersion);
     }
-    
+
     public void asyncIsUpdateAvailable(BiConsumer<Boolean, Throwable> whenComplete) {
-        
+
         CompletableFuture.supplyAsync(
             () -> {
-                
+
                 boolean result = false;
-                
+
                 try {
-                    
+
                     result = this.isUpdateAvailable();
                 } catch (IOException e) {
-                    
+
                     e.printStackTrace();
                 }
-                
+
                 return result;
             }
         ).whenComplete(

@@ -28,12 +28,12 @@ import xyz.joestr.zonemenu.util.ZoneMenuToolType;
  */
 public class CreatePlayerInteract implements Listener {
 
-    private ZoneMenu plugin;
+    private ZoneMenu zoneMenuPlugin;
 
     public CreatePlayerInteract(ZoneMenu zonemenu) {
 
-        this.plugin = zonemenu;
-        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+        this.zoneMenuPlugin = zonemenu;
+        this.zoneMenuPlugin.getServer().getPluginManager().registerEvents(this, this.zoneMenuPlugin);
     }
 
     @EventHandler
@@ -43,19 +43,19 @@ public class CreatePlayerInteract implements Listener {
         Player player = event.getPlayer();
 
         // If the player is not in the map ...
-        if (!this.plugin.zoneMenuPlayers.containsKey(player)) {
+        if (!this.zoneMenuPlugin.zoneMenuPlayers.containsKey(player)) {
 
             // ... do not proceed.
             return;
         }
 
         // Grab the ZoneMenuPlayer
-        ZoneMenuPlayer zoneMenuPlayer = this.plugin.zoneMenuPlayers.get(player);
+        ZoneMenuPlayer zoneMenuPlayer = this.zoneMenuPlugin.zoneMenuPlayers.get(player);
 
         // Using a stick? ToolType and SignType correct?
         if ((player.getInventory().getItemInMainHand().getType() != Material.STICK)
-            || (this.plugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN)
-            || (this.plugin.zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.ZONE)) {
+            || (this.zoneMenuPlugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN)
+            || (this.zoneMenuPlugin.zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.ZONE)) {
 
             return;
         }
@@ -79,32 +79,32 @@ public class CreatePlayerInteract implements Listener {
             zoneMenuPlayer.setCreateWorld(event.getClickedBlock().getLocation().getWorld());
 
             // Reset old beacon
-            this.plugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner1(), player);
+            this.zoneMenuPlugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner1(), player);
 
             // set the 1st corner
             zoneMenuPlayer.setCreateCorner1(event.getClickedBlock().getLocation());
 
             // Create new beacon
-            this.plugin.zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner1(), player, (byte) 10);
+            this.zoneMenuPlugin.zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner1(), player, (byte) 10);
 
             // If all needed variables are set
             if ((zoneMenuPlayer.getCreateWorld() != null) && (zoneMenuPlayer.getCreateCorner1() != null)
                 && (zoneMenuPlayer.getCreateCorner2() != null)) {
                 // Reset beacons and create new ones
-                this.plugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner2(), player);
-                this.plugin.zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner2(), player, (byte) 2);
+                this.zoneMenuPlugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner2(), player);
+                this.zoneMenuPlugin.zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner2(), player, (byte) 2);
 
-                this.plugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner3(), player);
+                this.zoneMenuPlugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner3(), player);
                 Location loc = zoneMenuPlayer.getCreateCorner1().clone();
                 loc.setX(zoneMenuPlayer.getCreateCorner2().getX());
                 zoneMenuPlayer.setCreateCorner3(loc);
-                this.plugin.zoneMenuCreateCorner.create(loc, player, (byte) 0);
+                this.zoneMenuPlugin.zoneMenuCreateCorner.create(loc, player, (byte) 0);
 
-                this.plugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner4(), player);
+                this.zoneMenuPlugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner4(), player);
                 loc = zoneMenuPlayer.getCreateCorner1().clone();
                 loc.setZ(zoneMenuPlayer.getCreateCorner2().getZ());
                 zoneMenuPlayer.setCreateCorner4(loc);
-                this.plugin.zoneMenuCreateCorner.create(loc, player, (byte) 0);
+                this.zoneMenuPlugin.zoneMenuCreateCorner.create(loc, player, (byte) 0);
 
                 // Grab some values to work with
                 World playerworld = zoneMenuPlayer.getCreateWorld();
@@ -136,19 +136,18 @@ public class CreatePlayerInteract implements Listener {
                 session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
                 // Set actionbar message
-                sign1 = (String) plugin.configDelegate.getMap().get("event_sign_first")
-                    + (String) ((String) plugin.configDelegate.getMap().get("event_sign_area")).replace("{0}",
-                        Integer.toString(
-                            this.plugin.getPlayerSelection(player).getLength() * this.plugin.getPlayerSelection(player).getWidth()
+                sign1 = (String) zoneMenuPlugin.configDelegate.getMap().get("event_sign_first")
+                    + (String) ((String) zoneMenuPlugin.configDelegate.getMap().get("event_sign_area")).replace("{0}",
+                        Integer.toString(this.zoneMenuPlugin.getPlayerSelection(player).getLength() * this.zoneMenuPlugin.getPlayerSelection(player).getWidth()
                         )
                     );
             } else {
                 // Set actionbar message
-                sign1 = (String) plugin.configDelegate.getMap().get("event_sign_first");
+                sign1 = (String) zoneMenuPlugin.configDelegate.getMap().get("event_sign_first");
             }
 
             // Send actiobar message to the player
-            plugin.sendActionBarToPlayer(player, this.plugin.colorCode('&', sign1));
+            zoneMenuPlugin.sendActionBarToPlayer(player, this.zoneMenuPlugin.colorCode('&', sign1));
         }
 
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -166,32 +165,32 @@ public class CreatePlayerInteract implements Listener {
             zoneMenuPlayer.setCreateWorld(event.getClickedBlock().getLocation().getWorld());
 
             // Reset old beacon
-            this.plugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner2(), player);
+            this.zoneMenuPlugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner2(), player);
 
             // Set the 2nd corner
             zoneMenuPlayer.setCreateCorner2(event.getClickedBlock().getLocation());
 
             // Create new beacon
-            this.plugin.zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner2(), player, (byte) 2);
+            this.zoneMenuPlugin.zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner2(), player, (byte) 2);
 
             // If all needed variables are set
             if ((zoneMenuPlayer.getCreateWorld() != null) && (zoneMenuPlayer.getCreateCorner1() != null)
                 && (zoneMenuPlayer.getCreateCorner2() != null)) {
                 // Reset beacons and create new ones
-                this.plugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner1(), player);
-                this.plugin.zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner1(), player, (byte) 10);
+                this.zoneMenuPlugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner1(), player);
+                this.zoneMenuPlugin.zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner1(), player, (byte) 10);
 
-                this.plugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner3(), player);
+                this.zoneMenuPlugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner3(), player);
                 Location loc = zoneMenuPlayer.getCreateCorner1().clone();
                 loc.setX(zoneMenuPlayer.getCreateCorner2().getX());
                 zoneMenuPlayer.setCreateCorner3(loc);
-                this.plugin.zoneMenuCreateCorner.create(loc, player, (byte) 0);
+                this.zoneMenuPlugin.zoneMenuCreateCorner.create(loc, player, (byte) 0);
 
-                this.plugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner4(), player);
+                this.zoneMenuPlugin.zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner4(), player);
                 loc = zoneMenuPlayer.getCreateCorner1().clone();
                 loc.setZ(zoneMenuPlayer.getCreateCorner2().getZ());
                 zoneMenuPlayer.setCreateCorner4(loc);
-                this.plugin.zoneMenuCreateCorner.create(loc, player, (byte) 0);
+                this.zoneMenuPlugin.zoneMenuCreateCorner.create(loc, player, (byte) 0);
 
                 // Grab some values to work with
                 World playerworld = zoneMenuPlayer.getCreateWorld();
@@ -222,19 +221,18 @@ public class CreatePlayerInteract implements Listener {
                 session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
                 // Set actionbar message
-                sign1 = (String) plugin.configDelegate.getMap().get("event_sign_second")
-                    + (String) ((String) plugin.configDelegate.getMap().get("event_sign_area")).replace("{0}",
-                        Integer.toString(
-                            this.plugin.getPlayerSelection(player).getLength() * this.plugin.getPlayerSelection(player).getWidth()
+                sign1 = (String) zoneMenuPlugin.configDelegate.getMap().get("event_sign_second")
+                    + (String) ((String) zoneMenuPlugin.configDelegate.getMap().get("event_sign_area")).replace("{0}",
+                        Integer.toString(this.zoneMenuPlugin.getPlayerSelection(player).getLength() * this.zoneMenuPlugin.getPlayerSelection(player).getWidth()
                         )
                     );
             } else {
                 // Set actionbar message
-                sign1 = (String) plugin.configDelegate.getMap().get("event_sign_second");
+                sign1 = (String) zoneMenuPlugin.configDelegate.getMap().get("event_sign_second");
             }
 
             // Send actiobar message to the player
-            plugin.sendActionBarToPlayer(player, this.plugin.colorCode('&', sign1));
+            zoneMenuPlugin.sendActionBarToPlayer(player, this.zoneMenuPlugin.colorCode('&', sign1));
         }
     }
 }

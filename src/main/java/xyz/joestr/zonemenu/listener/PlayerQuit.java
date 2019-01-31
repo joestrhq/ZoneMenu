@@ -1,4 +1,4 @@
-package xyz.joestr.zonemenu.event;
+package xyz.joestr.zonemenu.listener;
 
 import com.sk89q.worldedit.IncompleteRegionException;
 import java.util.logging.Level;
@@ -18,17 +18,17 @@ import xyz.joestr.zonemenu.ZoneMenu;
  */
 public class PlayerQuit implements Listener {
 
-    private ZoneMenu plugin;
+    private ZoneMenu zoneMenuPlugin;
 
     public PlayerQuit(ZoneMenu zonemenu) {
 
-        this.plugin = zonemenu;
-        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+        this.zoneMenuPlugin = zonemenu;
+        this.zoneMenuPlugin.getServer().getPluginManager().registerEvents(this, this.zoneMenuPlugin);
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
 
-        this.plugin.clearUpZoneMenuPlayer(event.getPlayer());
+        this.zoneMenuPlugin.clearUpZoneMenuPlayer(event.getPlayer());
     }
 }

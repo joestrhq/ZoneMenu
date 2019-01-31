@@ -60,12 +60,17 @@ public class ZoneMenuCreateCorner {
 
                 for (int zPoint = z - 1; zPoint <= z + 1; zPoint++) {
 
-                    player.sendBlockChange(world.getBlockAt(xPoint, y, zPoint).getLocation(), Material.DIAMOND_BLOCK,
-                        (byte) 0);
+                    player.sendBlockChange(
+                        world.getBlockAt(xPoint, y, zPoint).getLocation(),
+                        Material.DIAMOND_BLOCK.createBlockData()
+                    );
                 }
             }
 
-            player.sendBlockChange(world.getBlockAt(x, 1, z).getLocation(), Material.BEACON, (byte) 0);
+            player.sendBlockChange(
+                world.getBlockAt(x, 1, z).getLocation(),
+                Material.BEACON.createBlockData()
+            );
 
             int highestYPoint = 0;
 
@@ -75,13 +80,19 @@ public class ZoneMenuCreateCorner {
 
                     highestYPoint = yPoint;
 
-                    player.sendBlockChange(world.getBlockAt(x, yPoint, z).getLocation(), Material.LEGACY_STAINED_GLASS,
-                        glassColor);
+                    player.sendBlockChange(
+                        world.getBlockAt(x, yPoint, z).getLocation(),
+                        Material.LEGACY_STAINED_GLASS,
+                        glassColor
+                    );
                 }
             }
 
-            player.sendBlockChange(world.getBlockAt(x, highestYPoint, z).getLocation(), Material.LEGACY_STAINED_GLASS,
-                glassColor);
+            player.sendBlockChange(
+                world.getBlockAt(x, highestYPoint, z).getLocation(),
+                Material.LEGACY_STAINED_GLASS,
+                glassColor
+            );
         }, 10L);
     }
     // --- end
@@ -108,15 +119,19 @@ public class ZoneMenuCreateCorner {
         int z = location.getBlockZ();
         World world = location.getWorld();
 
-        player.sendBlockChange(world.getBlockAt(x, 1, z).getLocation(), world.getBlockAt(x, 1, z).getType(),
-            world.getBlockAt(x, 1, z).getData());
+        player.sendBlockChange(
+            world.getBlockAt(x, 1, z).getLocation(),
+            world.getBlockAt(x, 1, z).getBlockData()
+        );
 
         for (int i = 2; i <= 255; i++) {
 
             if (world.getBlockAt(x, i, z).getType() != Material.AIR) {
 
-                player.sendBlockChange(world.getBlockAt(x, i, z).getLocation(), world.getBlockAt(x, i, z).getType(),
-                    world.getBlockAt(x, i, z).getData());
+                player.sendBlockChange(
+                    world.getBlockAt(x, i, z).getLocation(),
+                    world.getBlockAt(x, i, z).getBlockData()
+                );
             }
         }
 
@@ -124,8 +139,10 @@ public class ZoneMenuCreateCorner {
 
             for (int zPoint = z - 1; zPoint <= z + 1; zPoint++) {
 
-                player.sendBlockChange(world.getBlockAt(xPoint, y, zPoint).getLocation(),
-                    world.getBlockAt(x, y, z).getType(), world.getBlockAt(x, y, z).getData());
+                player.sendBlockChange(
+                    world.getBlockAt(xPoint, y, zPoint).getLocation(),
+                    world.getBlockAt(x, y, z).getBlockData()
+                );
             }
         }
     }

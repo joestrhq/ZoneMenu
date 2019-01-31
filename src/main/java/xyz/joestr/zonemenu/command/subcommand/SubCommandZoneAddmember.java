@@ -31,7 +31,8 @@ public class SubCommandZoneAddmember {
     ZoneMenu zoneMenuPlugin = null;
 
     /**
-     * Constrcutor for the null null null null null null null null null null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneAddmember
+     * Constrcutor for the null null null null null null null null null null
+     * null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneAddmember
      * SubCommandZoneAddmember} class.
      *
      * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
@@ -157,6 +158,7 @@ public class SubCommandZoneAddmember {
             Futures.addCallback(listenableFuture, new FutureCallback<DefaultDomain>() {
 
                 // If it was successfull.
+                @Override
                 public void onSuccess(DefaultDomain result) {
 
                     // Add the player as member to a region.
@@ -171,6 +173,7 @@ public class SubCommandZoneAddmember {
                 }
 
                 // If it was not successfull.
+                @Override
                 public void onFailure(Throwable throwable) {
 
                     // Send the player a message.

@@ -24,7 +24,7 @@ import xyz.joestr.zonemenu.command.subcommand.SubCommandZoneUpdate;
 
 public class CommandZone implements CommandExecutor {
 
-    private ZoneMenu plugin = null;
+    private ZoneMenu zoneMenuPlugin = null;
 
     private SubCommandZoneFind subCommandZoneFind = null;
     private SubCommandZoneCreate subCommandZoneCreate = null;
@@ -39,19 +39,19 @@ public class CommandZone implements CommandExecutor {
     private SubCommandZoneUpdate subCommandZoneUpdate = null;
 
     public CommandZone(ZoneMenu zonemenu) {
-        this.plugin = zonemenu;
+        this.zoneMenuPlugin = zonemenu;
 
-        this.subCommandZoneFind = new SubCommandZoneFind(this.plugin);
-        this.subCommandZoneCreate = new SubCommandZoneCreate(this.plugin);
-        this.subCommandZoneSubcreate = new SubCommandZoneSubcreate(this.plugin);
-        this.subCommandZoneCancel = new SubCommandZoneCancel(this.plugin);
-        this.subCommandZoneList = new SubCommandZoneList(this.plugin);
-        this.subCommandZoneAddmember = new SubCommandZoneAddmember(this.plugin);
-        this.subCommandZoneRemovemember = new SubCommandZoneRemovemember(this.plugin);
-        this.subCommandZoneFlag = new SubCommandZoneFlag(this.plugin);
-        this.subCommandZoneInfo = new SubCommandZoneInfo(this.plugin);
-        this.subCommandZoneDelete = new SubCommandZoneDelete(this.plugin);
-        this.subCommandZoneUpdate = new SubCommandZoneUpdate(this.plugin);
+        this.subCommandZoneFind = new SubCommandZoneFind(this.zoneMenuPlugin);
+        this.subCommandZoneCreate = new SubCommandZoneCreate(this.zoneMenuPlugin);
+        this.subCommandZoneSubcreate = new SubCommandZoneSubcreate(this.zoneMenuPlugin);
+        this.subCommandZoneCancel = new SubCommandZoneCancel(this.zoneMenuPlugin);
+        this.subCommandZoneList = new SubCommandZoneList(this.zoneMenuPlugin);
+        this.subCommandZoneAddmember = new SubCommandZoneAddmember(this.zoneMenuPlugin);
+        this.subCommandZoneRemovemember = new SubCommandZoneRemovemember(this.zoneMenuPlugin);
+        this.subCommandZoneFlag = new SubCommandZoneFlag(this.zoneMenuPlugin);
+        this.subCommandZoneInfo = new SubCommandZoneInfo(this.zoneMenuPlugin);
+        this.subCommandZoneDelete = new SubCommandZoneDelete(this.zoneMenuPlugin);
+        this.subCommandZoneUpdate = new SubCommandZoneUpdate(this.zoneMenuPlugin);
     }
 
     @Override
@@ -62,8 +62,8 @@ public class CommandZone implements CommandExecutor {
 
             // ... send the command sender a message and do not proceed.
             commandSender
-                .sendMessage(this.plugin.colorCode('&', ((String) this.plugin.configDelegate.getMap().get("prefix"))
-                    + ((String) this.plugin.configDelegate.getMap().get("not_a_player_message"))));
+                .sendMessage(this.zoneMenuPlugin.colorCode('&', ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                    + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("not_a_player_message"))));
 
             return true;
         }
@@ -75,9 +75,9 @@ public class CommandZone implements CommandExecutor {
         if (!player.hasPermission("zonemenu.*")) {
 
             // ... send the player a message and do not proceed.
-            player.sendMessage(this.plugin.colorCode('&',
-                ((String) this.plugin.configDelegate.getMap().get("prefix"))
-                + ((String) this.plugin.configDelegate.getMap().get("permission_message")).replace("{0}",
+            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("permission_message")).replace("{0}",
                     "zonemenu.*")));
 
             return true;
@@ -90,108 +90,107 @@ public class CommandZone implements CommandExecutor {
 
             // Crappy click menu
             player.spigot()
-                .sendMessage(
-                    new ComponentBuilder(
-                        this.plugin.colorCode('&',
-                            ((String) this.plugin.configDelegate.getMap().get("prefix"))
-                            + ((String) this.plugin.configDelegate.getMap().get("head"))))
+                .sendMessage(new ComponentBuilder(
+                        this.zoneMenuPlugin.colorCode('&',
+                            ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                            + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("head"))))
                         .create());
 
             player.spigot()
-                .sendMessage(new ComponentBuilder(this.plugin.colorCode('&',
-                    ((String) this.plugin.configDelegate.getMap().get("prefix"))
-                    + ((String) this.plugin.configDelegate.getMap().get("find")))).event(new HoverEvent(
+                .sendMessage(new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                    + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("find")))).event(new HoverEvent(
                     HoverEvent.Action.SHOW_TEXT,
-                    new ComponentBuilder(this.plugin.colorCode('&',
-                        ((String) this.plugin.configDelegate.getMap().get("find_hover"))))
+                    new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("find_hover"))))
                         .create()))
                     .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/zone find"))
                     .create());
 
-            player.spigot().sendMessage(new ComponentBuilder(this.plugin.colorCode('&',
-                ((String) this.plugin.configDelegate.getMap().get("prefix"))
-                + ((String) this.plugin.configDelegate.getMap().get("create"))))
+            player.spigot().sendMessage(new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("create"))))
                 .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                    new ComponentBuilder(this.plugin.colorCode('&',
-                        ((String) this.plugin.configDelegate.getMap().get("create_hover"))))
+                    new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("create_hover"))))
                         .create()))
                 .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/zone create")).create());
 
-            player.spigot().sendMessage(new ComponentBuilder(this.plugin.colorCode('&',
-                ((String) this.plugin.configDelegate.getMap().get("prefix"))
-                + ((String) this.plugin.configDelegate.getMap().get("subcreate")))).event(new HoverEvent(
+            player.spigot().sendMessage(new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("subcreate")))).event(new HoverEvent(
                 HoverEvent.Action.SHOW_TEXT,
-                new ComponentBuilder(this.plugin.colorCode('&',
-                    ((String) this.plugin.configDelegate.getMap().get("subcreate_hover"))))
+                new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("subcreate_hover"))))
                     .create()))
                 .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/zone subcreate "))
                 .create());
 
-            player.spigot().sendMessage(new ComponentBuilder(this.plugin.colorCode('&',
-                ((String) this.plugin.configDelegate.getMap().get("prefix"))
-                + ((String) this.plugin.configDelegate.getMap().get("cancel"))))
+            player.spigot().sendMessage(new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("cancel"))))
                 .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                    new ComponentBuilder(this.plugin.colorCode('&',
-                        ((String) this.plugin.configDelegate.getMap().get("cancel_hover"))))
+                    new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("cancel_hover"))))
                         .create()))
                 .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/zone cancel")).create());
 
-            player.spigot().sendMessage(new ComponentBuilder(this.plugin.colorCode('&',
-                ((String) this.plugin.configDelegate.getMap().get("prefix"))
-                + ((String) this.plugin.configDelegate.getMap().get("list")))).event(new HoverEvent(
+            player.spigot().sendMessage(new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("list")))).event(new HoverEvent(
                 HoverEvent.Action.SHOW_TEXT,
-                new ComponentBuilder(this.plugin.colorCode('&',
-                    (String) this.plugin.configDelegate.getMap().get("list_hover"))).create()))
+                new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                    (String) this.zoneMenuPlugin.configDelegate.getMap().get("list_hover"))).create()))
                 .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/zone list")).create());
 
-            player.spigot().sendMessage(new ComponentBuilder(this.plugin.colorCode('&',
-                ((String) this.plugin.configDelegate.getMap().get("prefix"))
-                + ((String) this.plugin.configDelegate.getMap().get("addmember")))).event(new HoverEvent(
+            player.spigot().sendMessage(new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("addmember")))).event(new HoverEvent(
                 HoverEvent.Action.SHOW_TEXT,
-                new ComponentBuilder(this.plugin.colorCode('&',
-                    (String) this.plugin.configDelegate.getMap().get("addmember_hover")))
+                new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                    (String) this.zoneMenuPlugin.configDelegate.getMap().get("addmember_hover")))
                     .create()))
                 .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/zone addmember "))
                 .create());
 
-            player.spigot().sendMessage(new ComponentBuilder(this.plugin.colorCode('&',
-                ((String) this.plugin.configDelegate.getMap().get("prefix"))
-                + ((String) this.plugin.configDelegate.getMap().get("removemember")))).event(new HoverEvent(
+            player.spigot().sendMessage(new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("removemember")))).event(new HoverEvent(
                 HoverEvent.Action.SHOW_TEXT,
-                new ComponentBuilder(this.plugin.colorCode('&',
-                    ((String) this.plugin.configDelegate.getMap().get("removemember_hover"))))
+                new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("removemember_hover"))))
                     .create()))
                 .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/zone removemember "))
                 .create());
 
             player.spigot()
-                .sendMessage(new ComponentBuilder(this.plugin.colorCode('&',
-                    ((String) this.plugin.configDelegate.getMap().get("prefix"))
-                    + ((String) this.plugin.configDelegate.getMap().get("info")))).event(new HoverEvent(
+                .sendMessage(new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                    + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("info")))).event(new HoverEvent(
                     HoverEvent.Action.SHOW_TEXT,
-                    new ComponentBuilder(this.plugin.colorCode('&',
-                        ((String) this.plugin.configDelegate.getMap().get("info_hover"))))
+                    new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("info_hover"))))
                         .create()))
                     .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/zone info "))
                     .create());
 
             player.spigot()
-                .sendMessage(new ComponentBuilder(this.plugin.colorCode('&',
-                    ((String) this.plugin.configDelegate.getMap().get("prefix"))
-                    + ((String) this.plugin.configDelegate.getMap().get("flag")))).event(new HoverEvent(
+                .sendMessage(new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                    + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("flag")))).event(new HoverEvent(
                     HoverEvent.Action.SHOW_TEXT,
-                    new ComponentBuilder(this.plugin.colorCode('&',
-                        ((String) this.plugin.configDelegate.getMap().get("flag_hover"))))
+                    new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("flag_hover"))))
                         .create()))
                     .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/zone flag "))
                     .create());
 
-            player.spigot().sendMessage(new ComponentBuilder(this.plugin.colorCode('&',
-                ((String) this.plugin.configDelegate.getMap().get("prefix"))
-                + ((String) this.plugin.configDelegate.getMap().get("delete"))))
+            player.spigot().sendMessage(new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("delete"))))
                 .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                    new ComponentBuilder(this.plugin.colorCode('&',
-                        ((String) this.plugin.configDelegate.getMap().get("delete_hover"))))
+                    new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
+                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("delete_hover"))))
                         .create()))
                 .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/zone delete "))
                 .create());
@@ -303,14 +302,14 @@ public class CommandZone implements CommandExecutor {
         if (args[0].equalsIgnoreCase("reload")) {
 
             // Continue the work
-            this.plugin.ymlDelegates.forEach((y) -> y.Load());
+            this.zoneMenuPlugin.ymlDelegates.forEach((y) -> y.Load());
 
             return true;
         }
 
         // If we are here an invalid sub command was provided -> Wrong usage
-        player.sendMessage(this.plugin.colorCode('&', ((String) this.plugin.configDelegate.getMap().get("prefix"))
-            + ((String) this.plugin.configDelegate.getMap().get("usage_message")).replace("{0}", "/zone")));
+        player.sendMessage(this.zoneMenuPlugin.colorCode('&', ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+            + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message")).replace("{0}", "/zone")));
 
         return true;
     }

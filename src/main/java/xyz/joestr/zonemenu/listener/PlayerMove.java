@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package xyz.joestr.zonemenu.event;
+package xyz.joestr.zonemenu.listener;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
@@ -26,27 +26,26 @@ import xyz.joestr.zonemenu.util.ZoneMenuToolType;
  */
 public class PlayerMove implements Listener {
 
-    private ZoneMenu plugin;
+    private ZoneMenu zoneMenuPlugin;
 
     public PlayerMove(ZoneMenu zonemenu) {
 
-        this.plugin = zonemenu;
-        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+        this.zoneMenuPlugin = zonemenu;
+        this.zoneMenuPlugin.getServer().getPluginManager().registerEvents(this, this.zoneMenuPlugin);
     }
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
 
-        if (!this.plugin.zoneMenuPlayers.containsKey(event.getPlayer())) {
+        if (!this.zoneMenuPlugin.zoneMenuPlayers.containsKey(event.getPlayer())) {
             return;
         }
 
-        if (!this.plugin.zoneMenuPlayers.get(event.getPlayer()).getToolType().equals(ZoneMenuToolType.FIND)) {
+        if (!this.zoneMenuPlugin.zoneMenuPlayers.get(event.getPlayer()).getToolType().equals(ZoneMenuToolType.FIND)) {
             return;
         }
 
-        CompletableFuture.supplyAsync(
-            () -> {
+        CompletableFuture.supplyAsync(() -> {
                 RegionQuery regionQuery
                 = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
 
@@ -59,19 +58,16 @@ public class PlayerMove implements Listener {
                 String regions = regionNames.stream().collect(Collectors.joining(", "));
 
                 if (regions.isEmpty()) {
-                    this.plugin.zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setColor(BarColor.GREEN);
-                    this.plugin.zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setTitle(
-                        this.plugin.colorCode('&', (String) this.plugin.configDelegate.getMap().get("event_find_no")));
+                    this.zoneMenuPlugin.zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setColor(BarColor.GREEN);
+                    this.zoneMenuPlugin.zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setTitle(this.zoneMenuPlugin.colorCode('&', (String) this.zoneMenuPlugin.configDelegate.getMap().get("event_find_no")));
                 } else if (applicableRegions.size() > 1) {
-                    this.plugin.zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setColor(BarColor.RED);
-                    this.plugin.zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setTitle(
-                        this.plugin.colorCode('&',
-                            ((String) this.plugin.configDelegate.getMap().get("event_find_multi")).replace("{ids}", regions)));
+                    this.zoneMenuPlugin.zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setColor(BarColor.RED);
+                    this.zoneMenuPlugin.zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setTitle(this.zoneMenuPlugin.colorCode('&',
+                            ((String) this.zoneMenuPlugin.configDelegate.getMap().get("event_find_multi")).replace("{ids}", regions)));
                 } else {
-                    this.plugin.zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setColor(BarColor.RED);
-                    this.plugin.zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setTitle(
-                        this.plugin.colorCode('&',
-                            ((String) this.plugin.configDelegate.getMap().get("event_find")).replace("{ids}", regions)));
+                    this.zoneMenuPlugin.zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setColor(BarColor.RED);
+                    this.zoneMenuPlugin.zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setTitle(this.zoneMenuPlugin.colorCode('&',
+                            ((String) this.zoneMenuPlugin.configDelegate.getMap().get("event_find")).replace("{ids}", regions)));
                 }
 
                 return true;

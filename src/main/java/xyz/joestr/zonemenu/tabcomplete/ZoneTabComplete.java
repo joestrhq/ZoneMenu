@@ -37,10 +37,10 @@ import xyz.joestr.zonemenu.ZoneMenu;
  */
 public class ZoneTabComplete implements TabCompleter {
 
-    private ZoneMenu plugin;
+    private ZoneMenu zoneMenuPlugin;
 
     public ZoneTabComplete(ZoneMenu zonemenu) {
-        this.plugin = zonemenu;
+        this.zoneMenuPlugin = zonemenu;
     }
 
     @Override
@@ -93,7 +93,7 @@ public class ZoneTabComplete implements TabCompleter {
                 // /zone info []
                 if (args[0].equalsIgnoreCase("info")) {
 
-                    for (ProtectedRegion pr : this.plugin.getRegions(player, false)) {
+                    for (ProtectedRegion pr : this.zoneMenuPlugin.getRegions(player, false)) {
                         list.add(pr.getId().replace("+", "#").replace("-", "."));
                     }
 
@@ -110,7 +110,7 @@ public class ZoneTabComplete implements TabCompleter {
                 // /zone delete []
                 if (args[0].equalsIgnoreCase("delete")) {
 
-                    for (ProtectedRegion pr : this.plugin.getRegions(player, false)) {
+                    for (ProtectedRegion pr : this.zoneMenuPlugin.getRegions(player, false)) {
                         list.add(pr.getId().replace("+", "#").replace("-", "."));
                     }
 
@@ -127,7 +127,7 @@ public class ZoneTabComplete implements TabCompleter {
                 // /zone addmember []
                 if (args[0].equalsIgnoreCase("addmember")) {
 
-                    List<ProtectedRegion> t = this.plugin.getRegions(player, false);
+                    List<ProtectedRegion> t = this.zoneMenuPlugin.getRegions(player, false);
                     if (t.isEmpty()) {
                         return list;
                     }
@@ -150,7 +150,7 @@ public class ZoneTabComplete implements TabCompleter {
                 // /zone removemember []
                 if (args[0].equalsIgnoreCase("removemember")) {
 
-                    List<ProtectedRegion> t = this.plugin.getRegions(player, false);
+                    List<ProtectedRegion> t = this.zoneMenuPlugin.getRegions(player, false);
                     if (t.isEmpty()) {
                         return list;
                     }
@@ -173,7 +173,7 @@ public class ZoneTabComplete implements TabCompleter {
                 // /zone flag []
                 if (args[0].equalsIgnoreCase("flag")) {
 
-                    List<ProtectedRegion> t = this.plugin.getRegions(player, false);
+                    List<ProtectedRegion> t = this.zoneMenuPlugin.getRegions(player, false);
                     if (t.isEmpty()) {
                         return list;
                     }
@@ -196,7 +196,7 @@ public class ZoneTabComplete implements TabCompleter {
                 // /zone subcreate []
                 if (args[0].equalsIgnoreCase("subcreate")) {
 
-                    List<ProtectedRegion> t = this.plugin.getRegions(player, false);
+                    List<ProtectedRegion> t = this.zoneMenuPlugin.getRegions(player, false);
                     if (t.isEmpty()) {
                         return list;
                     }
@@ -247,7 +247,7 @@ public class ZoneTabComplete implements TabCompleter {
                 // /zone removemember <> []
                 if (args[0].equalsIgnoreCase("removemember")) {
 
-                    List<ProtectedRegion> t = this.plugin.getRegions(player, false);
+                    List<ProtectedRegion> t = this.zoneMenuPlugin.getRegions(player, false);
                     ProtectedRegion protectedregion = null;
                     if (t.isEmpty()) {
                         return list;

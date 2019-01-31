@@ -3,8 +3,6 @@ package xyz.joestr.zonemenu.event.playerinteract;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.regions.RegionSelector;
 import com.sk89q.worldedit.regions.selector.CuboidRegionSelector;
 
 import org.bukkit.Location;
@@ -30,12 +28,12 @@ import xyz.joestr.zonemenu.util.ZoneMenuToolType;
  */
 public class SubcreatePlayerInteract implements Listener {
 
-    private ZoneMenu plugin;
+    private ZoneMenu zoneMenuPlugin;
 
     public SubcreatePlayerInteract(ZoneMenu zonemenu) {
 
-        this.plugin = zonemenu;
-        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+        this.zoneMenuPlugin = zonemenu;
+        this.zoneMenuPlugin.getServer().getPluginManager().registerEvents(this, this.zoneMenuPlugin);
     }
 
     @EventHandler
@@ -45,17 +43,17 @@ public class SubcreatePlayerInteract implements Listener {
         Player player = event.getPlayer();
 
         // If the player is not in the map ...
-        if (!this.plugin.zoneMenuPlayers.containsKey(player)) {
+        if (!this.zoneMenuPlugin.zoneMenuPlayers.containsKey(player)) {
 
             // ... do not proceed.
             return;
         }
 
-        ZoneMenuPlayer zoneMenuPlayer = this.plugin.zoneMenuPlayers.get(player);
+        ZoneMenuPlayer zoneMenuPlayer = this.zoneMenuPlugin.zoneMenuPlayers.get(player);
 
         if ((player.getInventory().getItemInMainHand().getType() != Material.STICK)
-            || (this.plugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN)
-            || (this.plugin.zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.SUBZONE)) {
+            || (this.zoneMenuPlugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN)
+            || (this.zoneMenuPlugin.zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.SUBZONE)) {
 
             return;
         }
@@ -77,21 +75,21 @@ public class SubcreatePlayerInteract implements Listener {
             event.setCancelled(true);
 
             // Reset corner
-            this.plugin.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner1(), player);
+            this.zoneMenuPlugin.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner1(), player);
 
             // Set the 1st corner
             zoneMenuPlayer.setSubcreateCorner1(event.getClickedBlock().getLocation());
 
             // Create new corner
-            this.plugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner1(), player, Material.GLOWSTONE,
+            this.zoneMenuPlugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner1(), player, Material.GLOWSTONE,
                 (byte) 0);
 
             // If all needed variables are set
             if ((zoneMenuPlayer.getSubcreateWorld() != null) && (zoneMenuPlayer.getSubcreateCorner1() != null)
                 && (zoneMenuPlayer.getSubcreateCorner2() != null)) {
                 // Reset beacons and create new ones
-                this.plugin.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner2(), player);
-                this.plugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner2(), player,
+                this.zoneMenuPlugin.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner2(), player);
+                this.zoneMenuPlugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner2(), player,
                     Material.SEA_LANTERN, (byte) 0);
 
                 // Grab some values to work with
@@ -122,19 +120,18 @@ public class SubcreatePlayerInteract implements Listener {
                 session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
                 // Set actionbar message
-                sign1 = (String) plugin.configDelegate.getMap().get("event_sign_first")
-                    + (String) ((String) plugin.configDelegate.getMap().get("event_sign_area")).replace("{0}",
-                        Integer.toString(
-                            this.plugin.getPlayerSelection(player).getLength() * this.plugin.getPlayerSelection(player).getWidth()
+                sign1 = (String) zoneMenuPlugin.configDelegate.getMap().get("event_sign_first")
+                    + (String) ((String) zoneMenuPlugin.configDelegate.getMap().get("event_sign_area")).replace("{0}",
+                        Integer.toString(this.zoneMenuPlugin.getPlayerSelection(player).getLength() * this.zoneMenuPlugin.getPlayerSelection(player).getWidth()
                         )
                     );
             } else {
                 // Set actionbar message
-                sign1 = (String) plugin.configDelegate.getMap().get("event_sign_first");
+                sign1 = (String) zoneMenuPlugin.configDelegate.getMap().get("event_sign_first");
             }
 
             // Send actiobar message to the player
-            plugin.sendActionBarToPlayer(player, this.plugin.colorCode('&', sign1));
+            zoneMenuPlugin.sendActionBarToPlayer(player, this.zoneMenuPlugin.colorCode('&', sign1));
         }
 
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -150,21 +147,21 @@ public class SubcreatePlayerInteract implements Listener {
             event.setCancelled(true);
 
             // Reset corner
-            this.plugin.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner2(), player);
+            this.zoneMenuPlugin.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner2(), player);
 
             // Set the 2nd corner
             zoneMenuPlayer.setSubcreateCorner2(event.getClickedBlock().getLocation());
 
             // Create the corner
-            this.plugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner2(), player,
+            this.zoneMenuPlugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner2(), player,
                 Material.SEA_LANTERN, (byte) 0);
 
             // If all needed variables are set
             if ((zoneMenuPlayer.getSubcreateWorld() != null) && (zoneMenuPlayer.getSubcreateCorner1() != null)
                 && (zoneMenuPlayer.getSubcreateCorner2() != null)) {
                 // Reset beacons and create new ones
-                this.plugin.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner1(), player);
-                this.plugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner1(), player,
+                this.zoneMenuPlugin.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner1(), player);
+                this.zoneMenuPlugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner1(), player,
                     Material.GLOWSTONE, (byte) 0);
 
                 // Grab some values to work with
@@ -195,19 +192,18 @@ public class SubcreatePlayerInteract implements Listener {
                 session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
                 // Set actionbar message
-                sign1 = (String) plugin.configDelegate.getMap().get("event_sign_second")
-                    + (String) ((String) plugin.configDelegate.getMap().get("event_sign_area")).replace("{0}",
-                        Integer.toString(
-                            this.plugin.getPlayerSelection(player).getLength() * this.plugin.getPlayerSelection(player).getWidth()
+                sign1 = (String) zoneMenuPlugin.configDelegate.getMap().get("event_sign_second")
+                    + (String) ((String) zoneMenuPlugin.configDelegate.getMap().get("event_sign_area")).replace("{0}",
+                        Integer.toString(this.zoneMenuPlugin.getPlayerSelection(player).getLength() * this.zoneMenuPlugin.getPlayerSelection(player).getWidth()
                         )
                     );
             } else {
                 // Set actionbar message
-                sign1 = (String) plugin.configDelegate.getMap().get("event_sign_second");
+                sign1 = (String) zoneMenuPlugin.configDelegate.getMap().get("event_sign_second");
             }
 
             // Send actiobar message to the player
-            plugin.sendActionBarToPlayer(player, this.plugin.colorCode('&', sign1));
+            zoneMenuPlugin.sendActionBarToPlayer(player, this.zoneMenuPlugin.colorCode('&', sign1));
         }
     }
 }
