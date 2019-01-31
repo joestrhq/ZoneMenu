@@ -91,10 +91,10 @@ public class CommandZone implements CommandExecutor {
             // Crappy click menu
             player.spigot()
                 .sendMessage(new ComponentBuilder(
-                        this.zoneMenuPlugin.colorCode('&',
-                            ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
-                            + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("head"))))
-                        .create());
+                    this.zoneMenuPlugin.colorCode('&',
+                        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
+                        + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("head"))))
+                    .create());
 
             player.spigot()
                 .sendMessage(new ComponentBuilder(this.zoneMenuPlugin.colorCode('&',
@@ -298,11 +298,20 @@ public class CommandZone implements CommandExecutor {
             return true;
         }
 
-        // /zone update
+        // /zone reload
         if (args[0].equalsIgnoreCase("reload")) {
 
             // Continue the work
             this.zoneMenuPlugin.ymlDelegates.forEach((y) -> y.Load());
+
+            return true;
+        }
+
+        // /zone update
+        if (args[0].equalsIgnoreCase("update")) {
+
+            // Continue the work
+            this.subCommandZoneUpdate.process(player, args);
 
             return true;
         }

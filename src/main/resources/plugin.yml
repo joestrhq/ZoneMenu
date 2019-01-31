@@ -4,7 +4,7 @@ api-version: 1.13
 description: ZoneMenu
 author: joestr
 authors: [Joe83, Joe84, 9YB]
-website: https://repo.joestr.xyz/zonemenu
+website: https://github.com/joestr/ZoneMenu/wiki
 
 main: xyz.joestr.zonemenu.ZoneMenu
 database: false
@@ -12,10 +12,10 @@ depend: [WorldEdit, WorldGuard]
 
 commands:
   zone:
-    description: List all possible sub-commands.
+    description: List all possible subcommands.
     #permission: zonemenu.*
     #permission-message: You need zonemenu.*.
-    usage: Please use /zone.
+    usage: /<command> [[addmember <zone> <player>]|cancel|create|[delete <zone>]|find|[flag <zone> <flag> <flagvalue>]|[info <zone>]|list|[removemember <zone> <player>]|[select <zone>]|[subcreate <zone>]|unselect>
     
 permissions:
   zonemenu.*:
