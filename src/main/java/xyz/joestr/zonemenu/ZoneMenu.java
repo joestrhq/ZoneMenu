@@ -28,6 +28,7 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.command.PluginCommand;
 import xyz.joestr.zonemenu.command.CommandZone;
 import xyz.joestr.zonemenu.listener.PlayerChangedWorld;
 import xyz.joestr.zonemenu.listener.PlayerMove;
@@ -35,7 +36,7 @@ import xyz.joestr.zonemenu.listener.PlayerQuit;
 import xyz.joestr.zonemenu.event.playerinteract.CreatePlayerInteract;
 import xyz.joestr.zonemenu.event.playerinteract.FindPlayerInteract;
 import xyz.joestr.zonemenu.event.playerinteract.SubcreatePlayerInteract;
-import xyz.joestr.zonemenu.tabcomplete.ZoneTabComplete;
+import xyz.joestr.zonemenu.tabcomplete.TabCompleteZone;
 import xyz.joestr.zonemenu.util.Updater;
 import xyz.joestr.zonemenu.util.YMLDelegate;
 import xyz.joestr.zonemenu.util.ZoneMenuCreateCorner;
@@ -114,8 +115,9 @@ public class ZoneMenu extends JavaPlugin implements Listener {
         this.zoneMenuSubcreateCorner = new ZoneMenuSubcreateCorner(this);
 
         // Register command /zone
-        this.getCommand("zone").setExecutor(new CommandZone(this));
-        this.getCommand("zone").setTabCompleter(new ZoneTabComplete(this));
+        PluginCommand zoneCommand = this.getCommand("zone");
+        zoneCommand.setExecutor(new CommandZone(this));
+        zoneCommand.setTabCompleter(new TabCompleteZone(this));
 
         // Register the events
         new FindPlayerInteract(this);

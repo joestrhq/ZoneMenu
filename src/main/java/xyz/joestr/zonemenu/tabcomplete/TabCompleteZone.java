@@ -25,6 +25,7 @@ import com.sk89q.worldguard.protection.flags.SetFlag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.flags.StringFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import java.util.stream.Collectors;
 
 import xyz.joestr.zonemenu.ZoneMenu;
 
@@ -35,11 +36,11 @@ import xyz.joestr.zonemenu.ZoneMenu;
  * @since build_1
  * @version ${project.version}
  */
-public class ZoneTabComplete implements TabCompleter {
+public class TabCompleteZone implements TabCompleter {
 
     private ZoneMenu zoneMenuPlugin;
 
-    public ZoneTabComplete(ZoneMenu zonemenu) {
+    public TabCompleteZone(ZoneMenu zonemenu) {
         this.zoneMenuPlugin = zonemenu;
     }
 
@@ -76,15 +77,10 @@ public class ZoneTabComplete implements TabCompleter {
                 list.add("update");
                 list.add("reload");
 
-                if (args.length == 1) {
-                    for (String key : list) {
-                        if (key.startsWith(args[0])) {
-                            l.add(key);
-                        }
-                    }
-                    list = l;
-                }
-                return list;
+                return list
+                    .stream()
+                    .filter((string) -> string.startsWith(args[0]))
+                    .collect(Collectors.toList());
             }
 
             // /zone <> []
