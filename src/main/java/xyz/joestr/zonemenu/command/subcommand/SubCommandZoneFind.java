@@ -27,7 +27,8 @@ public class SubCommandZoneFind {
         if (args.length != 1) {
 
             player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message")).replace("{0}",
+                (String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix")
+                + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message")).replace("{0}",
                     "/zone find")));
 
             return;
@@ -64,6 +65,7 @@ public class SubCommandZoneFind {
 
         // Send the player a message
         player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-            (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_find")));
+            (String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix")
+            + (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_find")));
     }
 }

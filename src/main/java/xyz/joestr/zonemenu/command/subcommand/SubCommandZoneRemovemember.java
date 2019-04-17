@@ -46,7 +46,7 @@ public class SubCommandZoneRemovemember {
 
             for (ProtectedRegion pr : t) {
 
-                if (pr.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(args[1])) {
+                if (pr.getId().equalsIgnoreCase(args[1])) {
 
                     protectedregion = pr;
                 }

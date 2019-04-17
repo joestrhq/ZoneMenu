@@ -24,7 +24,7 @@ public class SubCommandZoneUnselect {
             // Wrong usage of the "/zone unselect" command
             player.sendMessage(this.zoneMenuPlugin
                 .colorCode('&', (String) this.zoneMenuPlugin.configDelegate.getMap().get("usage_message"))
-                .replace("{0}", "/zone list"));
+                .replace("{0}", "/zone unselect"));
 
             return;
         }

@@ -32,7 +32,7 @@ public class SubCommandZoneAddmember {
 
     /**
      * Constrcutor for the null null null null null null null null null null
-     * null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneAddmember
+     * null null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneAddmember
      * SubCommandZoneAddmember} class.
      *
      * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
@@ -100,7 +100,7 @@ public class SubCommandZoneAddmember {
             for (ProtectedRegion protectedRegion_ : t) {
 
                 // ... and if the region ID equals the second argument (<Zone>) ...
-                if (protectedRegion_.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(arguments[1])) {
+                if (protectedRegion_.getId().equalsIgnoreCase(arguments[1])) {
 
                     // ... set the found region.
                     protectedRegion = protectedRegion_;

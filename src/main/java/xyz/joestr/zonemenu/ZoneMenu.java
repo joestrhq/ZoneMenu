@@ -42,6 +42,7 @@ import xyz.joestr.zonemenu.util.YMLDelegate;
 import xyz.joestr.zonemenu.util.ZoneMenuCreateCorner;
 import xyz.joestr.zonemenu.util.ZoneMenuPlayer;
 import xyz.joestr.zonemenu.util.ZoneMenuSubcreateCorner;
+import xyz.joestr.zonemenu.util.Metrics;
 
 /**
  * ZoneMenu class
@@ -86,6 +87,9 @@ public class ZoneMenu extends JavaPlugin implements Listener {
      */
     @Override
     public void onEnable() {
+
+        // bStats' plugin metrics
+        Metrics metrics = new Metrics(this);
 
         // Add the delegates to the list
         ymlDelegates.add(configDelegate);

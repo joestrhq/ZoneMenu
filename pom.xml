@@ -8,7 +8,7 @@
     
     <groupId>xyz.joestr</groupId>
     <artifactId>zonemenu</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.2-SNAPSHOT</version>
     
     <name>ZoneMenu</name>
     <description>Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)</description>
@@ -83,13 +83,13 @@
     
     <distributionManagement>
         <repository>
-            <id>joestr-repo</id>
+            <id>joestr-repository</id>
             <name>joestr Repository</name>
             <url>https://repo.joestr.xyz/maven/repository/repository/</url>
             <uniqueVersion>false</uniqueVersion>
         </repository>
         <snapshotRepository>
-            <id>joestr-repo</id>
+            <id>joestr-repository</id>
             <name>joestr Repository</name>
             <url>https://repo.joestr.xyz/maven/repository/repository/</url>
             <uniqueVersion>false</uniqueVersion>

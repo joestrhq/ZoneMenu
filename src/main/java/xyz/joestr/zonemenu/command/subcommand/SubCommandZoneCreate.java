@@ -317,7 +317,7 @@ public class SubCommandZoneCreate {
             player.sendMessage(this.zoneMenuPlugin.colorCode('&',
                 ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
                 + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_create")).replace("{0}",
-                    protectedCuboidRegion.getId().replace("+", "#").replace("-", "."))));
+                    protectedCuboidRegion.getId())));
         });
     }
 }

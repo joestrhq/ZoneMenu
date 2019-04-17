@@ -21,7 +21,7 @@ public class SubCommandZoneList {
     ZoneMenu zoneMenuPlugin = null;
 
     /**
-     * Constrcutor for the      {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneList
+     * Constrcutor for the null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneList
      * SubCommandZoneList} class.
      *
      * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
@@ -79,10 +79,10 @@ public class SubCommandZoneList {
 
                 if (iterator.hasNext()) {
 
-                    sregionString = sregionString + protectedRegion_.getId().replace("+", "#").replace("-", ".") + ", ";
+                    sregionString = sregionString + protectedRegion_.getId() + ", ";
                 } else {
 
-                    sregionString = sregionString + protectedRegion_.getId().replace("+", "#").replace("-", ".");
+                    sregionString = sregionString + protectedRegion_.getId();
                 }
             }
 

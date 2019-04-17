@@ -36,7 +36,7 @@ public class SubCommandZoneSubcreate {
 
     /**
      * Constrcutor for the null null null null null null null null null null
-     * null null null null null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneSubcreate
+     * null null null null null null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneSubcreate
      * SubCommandZoneSubcreate} class.
      *
      * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
@@ -138,7 +138,7 @@ public class SubCommandZoneSubcreate {
 
             for (ProtectedRegion pr : t) {
 
-                if (pr.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(arguments[1])) {
+                if (pr.getId().equalsIgnoreCase(arguments[1])) {
 
                     protectedRegion = pr;
                 }

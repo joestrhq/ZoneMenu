@@ -4,7 +4,7 @@
   <groupId>xyz.joestr</groupId>
   <artifactId>zonemenu</artifactId>
   <name>ZoneMenu</name>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.1-SNAPSHOT</version>
   <description>Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)</description>
   <url>https://repo.joestr.xyz/zonemenu</url>
   <issueManagement>
@@ -160,12 +160,12 @@
           <groupId>com.google.code.gson</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>snakeyaml</artifactId>
-          <groupId>org.yaml</groupId>
-        </exclusion>
-        <exclusion>
           <artifactId>bungeecord-chat</artifactId>
           <groupId>net.md-5</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>snakeyaml</artifactId>
+          <groupId>org.yaml</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -198,6 +198,10 @@
         <exclusion>
           <artifactId>jlibnoise</artifactId>
           <groupId>com.sk89q.lib</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>slf4j-api</artifactId>
+          <groupId>org.slf4j</groupId>
         </exclusion>
         <exclusion>
           <artifactId>snakeyaml</artifactId>
@@ -249,13 +253,13 @@
   <distributionManagement>
     <repository>
       <uniqueVersion>false</uniqueVersion>
-      <id>joestr-repo</id>
+      <id>joestr-repository</id>
       <name>joestr Repository</name>
       <url>https://repo.joestr.xyz/maven/repository/repository/</url>
     </repository>
     <snapshotRepository>
       <uniqueVersion>false</uniqueVersion>
-      <id>joestr-repo</id>
+      <id>joestr-repository</id>
       <name>joestr Repository</name>
       <url>https://repo.joestr.xyz/maven/repository/repository/</url>
     </snapshotRepository>
