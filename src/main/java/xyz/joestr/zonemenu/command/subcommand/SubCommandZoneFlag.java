@@ -39,8 +39,7 @@ public class SubCommandZoneFlag {
     ZoneMenu zoneMenuPlugin = null;
 
     /**
-     * Constrcutor for the null null null null null null null null null null
-     * null null null null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneFlag
+     * Constrcutor for the {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneFlag
      * SubCommandZoneFlag} class.
      *
      * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
@@ -54,8 +53,7 @@ public class SubCommandZoneFlag {
     }
 
     /**
-     * Constrcutor for the null null null null null null null null null null
-     * null null null null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneCreate
+     * Constrcutor for the {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneCreate
      * SubCommandZoneCreate} class.
      *
      * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.

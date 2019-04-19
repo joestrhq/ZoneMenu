@@ -16,7 +16,7 @@ public class SubCommandZoneUpdate {
     ZoneMenu zoneMenuPlugin = null;
 
     /**
-     * Constrcutor for the      {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneUpdate
+     * Constrcutor for the {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneUpdate
      * SubCommandZoneInfo} class.
      *
      * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.

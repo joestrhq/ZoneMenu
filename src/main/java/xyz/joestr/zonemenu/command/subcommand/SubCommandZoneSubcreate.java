@@ -35,8 +35,7 @@ public class SubCommandZoneSubcreate {
     ZoneMenu zoneMenuPlugin = null;
 
     /**
-     * Constrcutor for the null null null null null null null null null null
-     * null null null null null null null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneSubcreate
+     * Constrcutor for the {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneSubcreate
      * SubCommandZoneSubcreate} class.
      *
      * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.

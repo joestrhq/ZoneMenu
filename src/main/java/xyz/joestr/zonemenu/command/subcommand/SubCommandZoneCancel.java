@@ -19,7 +19,7 @@ public class SubCommandZoneCancel {
     ZoneMenu zoneMenuPlugin = null;
 
     /**
-     * Constrcutor for the null     {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneCancel
+     * Constrcutor for the {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneCancel
      * SubCommandZoneCancel} class.
      *
      * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
