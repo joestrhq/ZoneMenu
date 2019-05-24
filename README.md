@@ -1,7 +1,5 @@
 # ZoneMenu
 
-This is the development branch.
-
 **Important**  
 This plugin requires [WorldEdit](https://github.com/sk89q/WorldEdit) and [WorldGuard](https://github.com/sk89q/WorldGuard)!
 
