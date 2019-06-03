@@ -149,7 +149,7 @@ Since version 0.0.3 missing config entries will be automatically placed while ol
 
 **Report Bugs, Features etc.**
 
-[Bugtracker](https://bugs.joestr.xyz/proj2);
+The bugtracker is located [here](https://bugs.joestr.xyz/proj2).
 
 **Builds**  
 Builds are available [here](https://ci.joestr.xyz/job/ZoneMenu/).
