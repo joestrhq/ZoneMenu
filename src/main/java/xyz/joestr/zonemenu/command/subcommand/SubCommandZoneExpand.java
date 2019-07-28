@@ -1,5 +1,6 @@
 package xyz.joestr.zonemenu.command.subcommand;
 
+import com.sk89q.squirrelid.resolver.ProfileService;
 import java.io.IOException;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import com.sk89q.worldguard.util.profile.resolver.ProfileService;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Material;
