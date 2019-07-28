@@ -3,7 +3,7 @@ version: ${project.version}
 api-version: 1.13
 description: ZoneMenu
 author: joestr
-authors: [2YB, 9YB, xandi3000]
+authors: [2YB, 9YB]
 website: https://github.com/joestr/ZoneMenu/wiki
 
 main: xyz.joestr.zonemenu.ZoneMenu
