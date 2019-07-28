@@ -1,6 +1,6 @@
 # ZoneMenu
 
-This is the development branch.
+![Build Status](https://ci.joestr.xyz/job/ZoneMenu/badge/icon)
 
 **Important**  
 This plugin requires [WorldEdit](https://github.com/sk89q/WorldEdit) and [WorldGuard](https://github.com/sk89q/WorldGuard)!
@@ -147,8 +147,15 @@ id:
 Since version 0.0.3 missing config entries will be automatically placed while older versions (0.0.1, 0.0.2) don't do that.
 
 **Version history**  
-0.0.1; 0.0.2; 0.0.3; 0.0.4; build\_5; build\_6; build\_7\_pre\_1; build\_7\_pre\_2; build\_7\_pre\_3; build\_8; *build\_9 latest*
+0.0.1; 0.0.2; 0.0.3; 0.0.4; build\_5; build\_6; build\_7\_pre\_1; build\_7\_pre\_2; build\_7\_pre\_3; build\_8; build\_9 latest; 0.1.0; __latest__: *0.1.2-SNAPSHOT.jar*
 
+**Wiki**
+
+Wiki is located [here](https://github.com/joestr/ZoneMenu/wiki).
+
+**Report Bugs, Features etc.**
+
+The bugtracker is located [here](https://github.com/joestr/ZoneMenu/issues).
 
 **Builds**  
-Builds are available [here](https://jenkins.joestr.xyz/job/ZoneMenu/).
+Builds are available [here](https://ci.joestr.xyz/job/ZoneMenu/).
