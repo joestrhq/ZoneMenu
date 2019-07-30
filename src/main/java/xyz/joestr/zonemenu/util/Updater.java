@@ -1,5 +1,7 @@
 package xyz.joestr.zonemenu.util;
 
+import com.vdurmont.semver4j.Semver;
+import com.vdurmont.semver4j.Semver.SemverType;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,15 +12,17 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 public class Updater {
-
+    
     private String updateURI = "";
     private String donwloadURI = "";
     private String thisVersion = "";
+    private boolean releaseOnly = true;
 
-    public Updater(String updateURI, String thisVersion) {
+    public Updater(String updateURI, String thisVersion, boolean releaseOnly) {
 
         this.updateURI = updateURI;
         this.thisVersion = thisVersion;
+        this.releaseOnly = releaseOnly;
     }
 
     public boolean isUpdateAvailable() throws IOException {
@@ -41,7 +45,14 @@ public class Updater {
 
         String version = pomProperties.getProperty("version");
 
-        return version.equals(thisVersion);
+        Semver thisVersion = new Semver(this.thisVersion, SemverType.STRICT);
+        Semver updateVersion = new Semver(version, SemverType.STRICT);
+        
+        if(this.releaseOnly) {
+            if(!updateVersion.isStable()) { return false; }
+        }
+        
+        return updateVersion.isGreaterThan(thisVersion);
     }
 
     public void asyncIsUpdateAvailable(BiConsumer<Boolean, Throwable> whenComplete) {

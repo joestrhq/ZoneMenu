@@ -48,7 +48,6 @@ import xyz.joestr.zonemenu.util.Metrics;
  * ZoneMenu class
  *
  * @author Joel
- * @since build_1
  * @version ${project.version}
  */
 public class ZoneMenu extends JavaPlugin implements Listener {
@@ -76,7 +75,11 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     public Map<Player, ZoneMenuPlayer> zoneMenuPlayers = new HashMap<>();
 
     // Updater
-    public Updater updater = new Updater("${project.ciManagement.url}lastSuccessfulBuild/artifact/target/maven-archiver/pom.properties", "${project.version}");
+    public Updater updater = new Updater(
+        "${project.ciManagement.url}lastSuccessfulBuild/artifact/target/maven-archiver/pom.properties",
+        "${project.version}",
+        ((Boolean) configDelegate.getMap().get("update_release_only"))
+    );
 
     /**
      * Plugin starts.

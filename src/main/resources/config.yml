@@ -77,6 +77,7 @@ config:
   usage_message: "&cUsage: &7{0}"
   permission_message: "&cLacking permission: &7{0}"
   not_a_player_message: "&cNot a player?"
+  update_release_only: true
   update_available: "&bAn update is available at &7{0}&b."
   no_update_available: "&bYou are running the latest version."
   update_error: "&cError during update check."
