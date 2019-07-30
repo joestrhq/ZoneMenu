@@ -202,10 +202,6 @@
                                     <pattern>me.lucko.commodore</pattern>
                                     <shadedPattern>xyz.joestr.zonemenu.me.lucko.commodore</shadedPattern>
                                 </relocation>
-                                <relocation>
-									<pattern>com.sk89q.squirrelid</pattern>
-									<shadedPattern>com.sk89q.worldguard.util.profile</shadedPattern>
-								</relocation>
                             </relocations>
                         </configuration>
                     </execution>

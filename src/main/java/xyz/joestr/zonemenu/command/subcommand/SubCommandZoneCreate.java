@@ -109,17 +109,7 @@ public class SubCommandZoneCreate {
             return;
         }
         
-        player.sendMessage("Test");
-        
-        Bukkit.getLogger().log(Level.INFO, "Hot swapping");
-        
         final Region selectedRegion = selectedRegion_;
-        
-        try {
-                WorldGuard.getInstance().getProfileService().findByName(player.getName());
-            } catch (IOException | InterruptedException ex) {
-                Logger.getLogger(SubCommandZoneCreate.class.getName()).log(Level.SEVERE, null, ex);
-            }
 
         this.zoneMenuPlugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
@@ -282,7 +272,7 @@ public class SubCommandZoneCreate {
             try {
                 WorldGuard.getInstance().getProfileService().findByName(player.getName());
             } catch (IOException | InterruptedException ex) {
-                Logger.getLogger(SubCommandZoneCreate.class.getName()).log(Level.SEVERE, null, ex);
+                Bukkit.getLogger().log(Level.SEVERE, null, ex);
             }
 
             // Create a new domain

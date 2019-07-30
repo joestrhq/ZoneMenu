@@ -403,7 +403,9 @@ public class ZoneMenu extends JavaPlugin implements Listener {
         this.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner1(), player);
         this.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner2(), player);
 
-        zoneMenuPlayer.getZoneFindBossbar().removePlayer(player);
+        if (zoneMenuPlayer.getZoneFindBossbar() != null) {
+            zoneMenuPlayer.getZoneFindBossbar().removePlayer(player);
+        }
 
         this.zoneMenuPlayers.remove(player);
     }
