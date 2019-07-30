@@ -1,6 +1,5 @@
 package xyz.joestr.zonemenu.command.subcommand;
 
-import com.sk89q.squirrelid.resolver.ProfileService;
 import java.io.IOException;
 import java.util.List;
 
@@ -208,10 +207,8 @@ public class SubCommandZoneExpand {
             }
 
             // Check if Worldguards profileservice contains players name
-            ProfileService ps = WorldGuard.getInstance().getProfileService();
-
             try {
-                ps.findByName(player.getName());
+                WorldGuard.getInstance().getProfileService().findByName(player.getName());
             } catch (IOException ex) {
                 Logger.getLogger(SubCommandZoneExpand.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
