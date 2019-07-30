@@ -15,6 +15,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.bukkit.Bukkit;
 
 import xyz.joestr.zonemenu.ZoneMenu;
 import xyz.joestr.zonemenu.util.ZoneMenuPlayer;
@@ -107,8 +108,18 @@ public class SubCommandZoneCreate {
 
             return;
         }
-
+        
+        player.sendMessage("Test");
+        
+        Bukkit.getLogger().log(Level.INFO, "Hot swapping");
+        
         final Region selectedRegion = selectedRegion_;
+        
+        try {
+                WorldGuard.getInstance().getProfileService().findByName(player.getName());
+            } catch (IOException | InterruptedException ex) {
+                Logger.getLogger(SubCommandZoneCreate.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         this.zoneMenuPlugin.futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
