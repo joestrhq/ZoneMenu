@@ -75,11 +75,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     public Map<Player, ZoneMenuPlayer> zoneMenuPlayers = new HashMap<>();
 
     // Updater
-    public Updater updater = new Updater(
-        "${project.ciManagement.url}lastSuccessfulBuild/artifact/target/maven-archiver/pom.properties",
-        "${project.version}",
-        ((Boolean) configDelegate.getMap().get("update_release_only"))
-    );
+    public Updater updater;
 
     /**
      * Plugin starts.
@@ -118,6 +114,12 @@ public class ZoneMenu extends JavaPlugin implements Listener {
             yd.Save();
         });
 
+        this.updater = new Updater(
+            "${project.ciManagement.url}lastSuccessfulBuild/artifact/target/maven-archiver/pom.properties",
+            "${project.version}",
+            ((Boolean) configDelegate.getMap().get("update_release_only"))
+        );
+        
         this.zoneMenuCreateCorner = new ZoneMenuCreateCorner(this);
         this.zoneMenuSubcreateCorner = new ZoneMenuSubcreateCorner(this);
 
