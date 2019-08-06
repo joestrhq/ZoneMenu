@@ -4,7 +4,7 @@
   <groupId>xyz.joestr</groupId>
   <artifactId>zonemenu</artifactId>
   <name>ZoneMenu</name>
-  <version>0.1.6-SNAPSHOT</version>
+  <version>0.1.7-SNAPSHOT</version>
   <description>Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)</description>
   <url>https://repo.joestr.xyz/zonemenu</url>
   <issueManagement>
