@@ -25,6 +25,12 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.logging.Logger;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -45,9 +51,9 @@ import xyz.joestr.zonemenu.util.ZoneMenuSubcreateCorner;
 import xyz.joestr.zonemenu.util.Metrics;
 
 /**
- * ZoneMenu class
+ * The main class of this plugin.
  *
- * @author Joel
+ * @author Joel Strasser (joestr)
  * @version ${project.version}
  */
 public class ZoneMenu extends JavaPlugin implements Listener {
@@ -76,16 +82,26 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
     // Updater
     public Updater updater;
+    
+    public Properties appProperties;
 
     /**
      * Plugin starts.
      */
     @Override
     public void onEnable() {
-
+        
         // bStats' plugin metrics
         Metrics metrics = new Metrics(this);
 
+        try {
+            this.appProperties.load(new FileInputStream(getClass().getResource("app.properties").toString()));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ZoneMenu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ZoneMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         // Add the delegates to the list
         ymlDelegates.add(configDelegate);
         ymlDelegates.add(idDelegate);
@@ -111,8 +127,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
         });
 
         this.updater = new Updater(
-            "${project.ciManagement.url}lastSuccessfulBuild/artifact/target/maven-archiver/pom.properties",
-            "${project.version}",
+            this.appProperties.getProperty("updater.uri", "https://repo.joestr.xyz/unconfigured.properties"),
+            this.appProperties.getProperty("updater.version", "0.1.0-SNAPSHOT"),
             ((Boolean) configDelegate.getMap().get("update_release_only"))
         );
         
@@ -349,12 +365,20 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
     ;
 
+    /**
+     * Clear up information (regarding this plugin) about the {@link Player player}.
+     * 
+     * @param player A {@link Player player}.
+     */
     public void clearUpZoneMenuPlayer(Player player) {
 
+        // If the player is not in this list ...
         if (!this.zoneMenuPlayers.containsKey(player)) {
+            // ... we have nothing to do.
             return;
         }
-
+        
+        // Get the custom player here.
         ZoneMenuPlayer zoneMenuPlayer = this.zoneMenuPlayers.get(player);
 
         LocalSession session
@@ -383,6 +407,12 @@ public class ZoneMenu extends JavaPlugin implements Listener {
         this.zoneMenuPlayers.remove(player);
     }
 
+    /**
+     * Returns the WorldEdit selection of a player as a {@link ProtectedRegion region}.
+     * 
+     * @param player A {@link Player player}.
+     * @return The WorldEdit selection as a region.
+     */
     public Region getPlayerSelection(Player player) {
 
         Region selectedRegion = null;

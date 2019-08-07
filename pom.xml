@@ -176,39 +176,17 @@
     </pluginRepositories>
     
     <build>
-        <sourceDirectory>${basedir}/target/filtered-sources/java</sourceDirectory>
         <resources>
             <resource>
-                <directory>${basedir}/src/main/java</directory>
-                <includes>
-                    <include>**/*.java</include>
-                </includes>
-                <filtering>true</filtering>
-                <targetPath>${basedir}/target/filtered-sources/java</targetPath>
-            </resource>
-            <resource>
-                <directory>${basedir}/src/main/resources</directory>
+                <directory>./src/main/resources</directory>
                 <includes>
                     <include>**/*.yml</include>
+                    <include>**/*.properties</include>
                 </includes>
                 <filtering>true</filtering>
             </resource>
         </resources>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>templating-maven-plugin</artifactId>
-                <version>1.0.0</version>
-                <executions>
-                    <execution>
-                        <id>filter-src</id>
-                        <goals>
-                            <goal>filter-sources</goal>
-                            <goal>filter-test-sources</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -246,6 +224,7 @@
                                     <shadedPattern>xyz.joestr.zonemenu.me.lucko.commodore</shadedPattern>
                                 </relocation>
                             </relocations>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
                             <shadedClassifierName>shaded</shadedClassifierName>
                         </configuration>
                     </execution>
