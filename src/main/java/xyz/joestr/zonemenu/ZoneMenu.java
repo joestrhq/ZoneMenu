@@ -79,10 +79,6 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
     /**
      * Plugin starts.
-     *
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
      */
     @Override
     public void onEnable() {
@@ -143,10 +139,6 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
     /**
      * Plugin ends.
-     *
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
      */
     @Override
     public void onDisable() {
@@ -155,11 +147,9 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     }
 
     /**
-     * Gets the WorldEdit plugin.
+     * Get the WorldEdit plugin.
      *
-     * @since ${project.version}
-     * @version ${project.version}
-     * @return {@linkplain WorldEditPlugin} WorldEdit plugin
+     * @return The {@link WorldEditPlugin}. 
      */
     public WorldEditPlugin getWorldEditPlugin() {
 
@@ -176,11 +166,9 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     }
 
     /**
-     * Gets the WorldGuard plugin.
+     * Get the WorldGuard plugin.
      *
-     * @since build_1
-     * @version ${project.version}
-     * @return {@linkplain WorldGuardPlugin} WorldGuard plugin
+     * @return The {@link WorldGuardPlugin}.
      */
     public WorldGuardPlugin getWorldGuardPlugin() {
 
@@ -198,14 +186,12 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     }
 
     /**
-     * Calls {@linkplain ChatColor#translateAlternateColorCodes(char, String)}
+     * Calls {@link ChatColor#translateAlternateColorCodes(char, String)}
      * with the parameters {@code alternativeCode} and {@code stringToInspect}.
      *
-     * @since build_7_pre_2
-     * @version ${project.version}
-     * @param alternativeCode {@linkplain char} Alternative color code
-     * @param stringToInspect {@linkplain String} String to inspect
-     * @return {@linkplain String} Modified string
+     * @param alternativeCode The alternative color code {@link char character}.
+     * @param stringToInspect The {@link String string} to inspect.
+     * @return The modified string.
      */
     public String colorCode(char alternativeCode, String stringToInspect) {
 
@@ -216,11 +202,9 @@ public class ZoneMenu extends JavaPlugin implements Listener {
      * Replaces all occurrences of {@linkplain ChatColor#COLOR_CHAR} with
      * paramter {@code alternativeCode}.
      *
-     * @since build_7_pre_2
-     * @version ${project.version}
-     * @param alternativeCode {@linkplain char} Alternative color code
-     * @param stringToInspect {@linkplain String} String to inspect
-     * @return {@linkplain String} Modified string
+     * @param alternativeCode The alternative color code {@link char character}.
+     * @param stringToInspect The {@link String string} to inspect.
+     * @return The modified string.
      */
     public String alternativeColorCode(char alternativeCode, String stringToInspect) {
 
@@ -230,11 +214,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     /**
      * Sends a message to a players action bar.
      *
-     * @author joestr
-     * @since build_7_pre_2
-     * @version ${project.version}
-     * @param player {@linkplain Player} A player
-     * @param message {@linkplain String} A message
+     * @param player A {@link Player player}.
+     * @param message A message as a {@linkplain String string}.
      */
     public void sendActionBarToPlayer(Player player, String message) {
 
@@ -244,13 +225,10 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     /**
      * Calculates the difference beetween two given numbers.
      *
-     * @author joestr
-     * @since build_7_pre_2
-     * @version ${project.version}
-     * @param num1 {@linkplain Integer} First number
-     * @param num2 {@linkplain Integer} Second number
-     * @return {@linkplain Integer} Difference beetwen {@code num1} and
-     * {@code num2}
+     * @param num1 First {@link Integer integer} number.
+     * @param num2 Second integer number.
+     * @return The difference between {@code num1} and
+     * {@code num2}.
      */
     public int difference(int num1, int num2) {
 
@@ -261,11 +239,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
      * Calls {@linkplain #getRegion(Player, boolean)} with second parameter to
      * be {@code true}.
      *
-     * @author joestr
-     * @since build_7_pre_2
-     * @version ${project.version}
-     * @param player {@linkplain Player} A player
-     * @return {@linkplain ProtectedRegion} Region of a player
+     * @param player A {@link Player player}.
+     * @return The {@linkplain ProtectedRegion region} of a player.
      */
     public ProtectedRegion getRegion(Player player) {
 
@@ -276,12 +251,10 @@ public class ZoneMenu extends JavaPlugin implements Listener {
      * Calls {@linkplain #getRegions(Player, boolean)} with parameters and
      * returns the first element or {@code null}.
      *
-     * @author joestr
-     * @since build_7_pre_2
-     * @version ${project.version}
-     * @param player {@linkplain Player} A player
-     * @param showMessage {@linkplain boolean} Show a message
-     * @return {@linkplain ProtectedRegion} Region of a player
+     * @param player A {@link Player player}.
+     * @param showMessage A {@link Boolean boolean} flag; {@code true} - if a
+     * message should be displayed
+     * @return The {@linkplain ProtectedRegion region} of the player.
      */
     public ProtectedRegion getRegion(final Player player, boolean showMessage) {
 
@@ -300,13 +273,11 @@ public class ZoneMenu extends JavaPlugin implements Listener {
      * Get a list of players regions an control whether you like to show a
      * message or not.
      *
-     * @author joestr
-     * @since build_7_pre_2
-     * @version ${project.version}
-     * @param player {@linkplain Player} A player
-     * @param showMessage {@linkplain boolean} Show a message
-     * @return {@linkplain List}<{@linkplain ProtectedRegion}> List of regions
-     * of a player
+     * @param player A {@link Player player}.
+     * @param showMessage A {@link Boolean boolean} flag; {@code} - if a message
+     * should be displayed
+     * @return A {@link List list} of {@link ProtectedRegion region}s
+     * of a player.
      */
     public List<ProtectedRegion> getRegions(final Player player, final Boolean showMessage) {
 
@@ -335,11 +306,13 @@ public class ZoneMenu extends JavaPlugin implements Listener {
      * Gets all regions belonging to a player in a {@link CompletableFuture} and
      * gives it to a provided {@link BiConsumer}
      *
-     * @param player {@linkplain Player} Player to search
-     * @param showMessage {@linkplain String} Show a message during the search
-     * @param biConsumer {@linkplain BiConsumer}<{@linkplain
-     * List}<{@linkplain ProtectedRegion}>, {@linkplain Throwable}> Gets
-     * executed after the search
+     * @param player A {@link Player player}.
+     * @param showMessage A {@link Boolean boolean} flag; {@code true} - if a
+     * message should be displayed
+     * @param biConsumer A {@linkplain BiConsumer bi-consumer} which takes a
+     * {@link List list} of {@link ProtectedRegion region}s and a
+     * {@link Throwable throwable} object; This bi-consumer gets executed when
+     * the search request finished.
      */
     public void futuristicRegionProcessing(final Player player, final boolean showMessage,
         BiConsumer<List<ProtectedRegion>, Throwable> biConsumer) {

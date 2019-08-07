@@ -6,19 +6,19 @@
   <name>ZoneMenu</name>
   <version>0.1.7-SNAPSHOT</version>
   <description>Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)</description>
-  <url>https://repo.joestr.xyz/zonemenu</url>
+  <url>https://joestr.github.io/ZoneMenu/</url>
   <issueManagement>
     <system>github</system>
     <url>https://github.com/joestr/ZoneMenu/issues</url>
   </issueManagement>
   <ciManagement>
-    <system>Jenkins</system>
+    <system>jenkins</system>
     <url>https://ci.joestr.xyz/job/ZoneMenu/</url>
     <notifiers>
       <notifier>
         <sendOnSuccess>false</sendOnSuccess>
         <configuration>
-          <address>email@joestr.xyz</address>
+          <address>strasser999@gmail.com</address>
         </configuration>
       </notifier>
     </notifiers>
@@ -29,9 +29,9 @@
       <id>joestr</id>
       <name>Joel Strasser</name>
       <email>strasser999@gmail.com</email>
-      <url>https://joestr.xyz</url>
+      <url>https://www.joestr.xyz</url>
       <organization>joestr</organization>
-      <organizationUrl>https://joestr.xyz</organizationUrl>
+      <organizationUrl>https://www.joestr.xyz</organizationUrl>
       <roles>
         <role>developer</role>
       </roles>
@@ -41,9 +41,9 @@
     <contributor>
       <name>Joel Strasser</name>
       <email>strasser999@gmail.com</email>
-      <url>https://joestr.xyz</url>
+      <url>https://www.joestr.xyz</url>
       <organization>joestr</organization>
-      <organizationUrl>https://joestr.xyz</organizationUrl>
+      <organizationUrl>https://www.joestr.xyz</organizationUrl>
       <roles>
         <role>developer</role>
       </roles>
@@ -51,8 +51,8 @@
   </contributors>
   <licenses>
     <license>
-      <name>X11/MIT license</name>
-      <url>https://github.com/joestr/ZoneMenu/LICENSE</url>
+      <name>X11 license</name>
+      <url>https://github.com/joestr/ZoneMenu/blob/master/LICENSE</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -63,20 +63,22 @@
   </scm>
   <organization>
     <name>joestr</name>
-    <url>https://joestr.xyz</url>
+    <url>https://www.joestr.xyz</url>
   </organization>
   <build>
+    <sourceDirectory>${basedir}/target/filtered-source/java</sourceDirectory>
     <resources>
       <resource>
+        <targetPath>${basedir}/target/filtered-source/java</targetPath>
         <filtering>true</filtering>
-        <directory>src/main/java</directory>
+        <directory>${basedir}/src/main/java</directory>
         <includes>
           <include>**/*.java</include>
         </includes>
       </resource>
       <resource>
         <filtering>true</filtering>
-        <directory>src/main/resources</directory>
+        <directory>${basedir}/src/main/resources</directory>
         <includes>
           <include>**/*.yml</include>
         </includes>
@@ -84,12 +86,31 @@
     </resources>
     <plugins>
       <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.0</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>templating-maven-plugin</artifactId>
+        <version>1.0.0</version>
+        <executions>
+          <execution>
+            <id>filter-src</id>
+            <goals>
+              <goal>filter-sources</goal>
+              <goal>filter-test-sources</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration />
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
@@ -112,9 +133,18 @@
                   <shadedPattern>xyz.joestr.zonemenu.me.lucko.commodore</shadedPattern>
                 </relocation>
               </relocations>
+              <shadedClassifierName>shaded</shadedClassifierName>
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -123,8 +153,8 @@
       <releases />
       <snapshots />
       <id>joestr-repository</id>
-      <name>joestr Repository</name>
-      <url>https://repo.joestr.xyz/maven/repository/repository/</url>
+      <name>joestr's Maven Repository</name>
+      <url>https://mvn-repo.joestr.xyz/repository/repository/</url>
     </repository>
   </repositories>
   <pluginRepositories>
@@ -132,8 +162,8 @@
       <releases />
       <snapshots />
       <id>joestr-repository</id>
-      <name>joestr Repository</name>
-      <url>https://repo.joestr.xyz/maven/repository/repository/</url>
+      <name>joestr's Maven Repository</name>
+      <url>https://mvn-repo.joestr.xyz/repository/repository/</url>
     </pluginRepository>
   </pluginRepositories>
   <dependencies>
@@ -264,6 +294,10 @@
           <groupId>org.bukkit</groupId>
         </exclusion>
         <exclusion>
+          <artifactId>paperlib</artifactId>
+          <groupId>io.papermc</groupId>
+        </exclusion>
+        <exclusion>
           <artifactId>bstats-bukkit</artifactId>
           <groupId>org.bstats</groupId>
         </exclusion>
@@ -280,14 +314,14 @@
     <repository>
       <uniqueVersion>false</uniqueVersion>
       <id>joestr-repository</id>
-      <name>joestr Repository</name>
-      <url>https://repo.joestr.xyz/maven/repository/repository/</url>
+      <name>joestr's Maven Repository</name>
+      <url>https://mvn-repo.joestr.xyz/repository/repository/</url>
     </repository>
     <snapshotRepository>
       <uniqueVersion>false</uniqueVersion>
       <id>joestr-repository</id>
-      <name>joestr Repository</name>
-      <url>https://repo.joestr.xyz/maven/repository/repository/</url>
+      <name>joestr's Maven Repository</name>
+      <url>https://mvn-repo.joestr.xyz/repository/repository/</url>
     </snapshotRepository>
   </distributionManagement>
   <properties>
