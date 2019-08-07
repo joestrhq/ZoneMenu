@@ -1,6 +1,6 @@
 # ZoneMenu
 
-![Build Status](https://ci.joestr.xyz/job/ZoneMenu/badge/icon)
+[![Build Status](https://ci.joestr.xyz/job/ZoneMenu/badge/icon)](https://ci.joestr.xyz/job/ZoneMenu/)
 
 **Important**  
 This plugin requires [WorldEdit](https://github.com/sk89q/WorldEdit) and [WorldGuard](https://github.com/sk89q/WorldGuard)!
