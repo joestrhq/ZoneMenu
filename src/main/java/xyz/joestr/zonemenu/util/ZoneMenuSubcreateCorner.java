@@ -21,9 +21,6 @@ public class ZoneMenuSubcreateCorner {
      * ZoneMenuSubcreateCorner} class.
      *
      * @param plugin A {@link org.bukkit.plugin.Plugin plugin}.
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
      */
     public ZoneMenuSubcreateCorner(Plugin plugin) {
 
@@ -40,9 +37,6 @@ public class ZoneMenuSubcreateCorner {
      * @param material Which {@link org.bukkit.Material material} should be
      * used.
      * @param data A {@link java.lang.Byte byte} which represents the data.
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
      */
     @SuppressWarnings("deprecation")
     public void create(Location location, Player player, Material material, byte data) {
@@ -62,9 +56,6 @@ public class ZoneMenuSubcreateCorner {
      *
      * @param location A {@linkplain org.bukkit.Location location}.
      * @param player A {@linkplain Player player} to send the blockchange to.
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
      */
     @SuppressWarnings("deprecation")
     public void reset(Location location, Player player) {

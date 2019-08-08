@@ -264,7 +264,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     }
 
     /**
-     * Calls {@linkplain #getRegions(Player, boolean)} with parameters and
+     * Calls {@linkplain #getRegions(Player, Boolean)} with parameters and
      * returns the first element or {@code null}.
      *
      * @param player A {@link Player player}.

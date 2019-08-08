@@ -27,40 +27,15 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import net.md_5.bungee.api.ChatColor;
 import xyz.joestr.zonemenu.ZoneMenu;
 
-/**
- * Class which handles subcommand "flag" of command "zone".
- *
- * @author joestr
- * @since ${project.version}
- * @version ${project.version}
- */
 public class SubCommandZoneFlag {
 
     ZoneMenu zoneMenuPlugin = null;
 
-    /**
-     * Constrcutor for the {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneFlag
-     * SubCommandZoneFlag} class.
-     *
-     * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
-     */
     public SubCommandZoneFlag(ZoneMenu plugin) {
 
         this.zoneMenuPlugin = plugin;
     }
 
-    /**
-     * Constrcutor for the {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneCreate
-     * SubCommandZoneCreate} class.
-     *
-     * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
-     */
     @SuppressWarnings("unchecked")
     public void process(Player player, String[] arguments) {
 

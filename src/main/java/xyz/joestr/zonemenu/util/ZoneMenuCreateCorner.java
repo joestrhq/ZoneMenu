@@ -37,9 +37,6 @@ public class ZoneMenuCreateCorner {
      * blockchange to.
      * @param glassColor A {@link java.lang.Byte byte} which represents the
      * color of the glass.
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
      */
     @SuppressWarnings("deprecation")
     public void create(Location location, Player player, byte glassColor) {
@@ -102,9 +99,6 @@ public class ZoneMenuCreateCorner {
      *
      * @param location A {@linkplain org.bukkit.Location location}.
      * @param player A {@linkplain Player player} to send the blockchange to.
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
      */
     @SuppressWarnings({"deprecation"})
     public void reset(Location location, Player player) {

@@ -7,40 +7,15 @@ import org.bukkit.entity.Player;
 
 import xyz.joestr.zonemenu.ZoneMenu;
 
-/**
- * Class which handles subcommand "cancel" of command "zone".
- *
- * @author joestr
- * @since ${project.version}
- * @version ${project.version}
- */
 public class SubCommandZoneCancel {
 
     ZoneMenu zoneMenuPlugin = null;
 
-    /**
-     * Constrcutor for the {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneCancel
-     * SubCommandZoneCancel} class.
-     *
-     * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
-     */
     public SubCommandZoneCancel(ZoneMenu zoneMenuPlugin) {
 
         this.zoneMenuPlugin = zoneMenuPlugin;
     }
 
-    /**
-     * Processes.
-     *
-     * @param player A {@link org.bukkit.entity.Player Player}.
-     * @param arguments An array of {@link java.lang.String String}s.
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
-     */
     public void process(Player player, String[] arguments) {
 
         // If arguments' length does not equals 1 ...

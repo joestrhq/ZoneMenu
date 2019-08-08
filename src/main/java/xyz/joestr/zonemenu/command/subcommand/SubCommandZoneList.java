@@ -9,40 +9,15 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import xyz.joestr.zonemenu.ZoneMenu;
 
-/**
- * Class which handles subcommand "list" of command "zone".
- *
- * @author joestr
- * @since ${project.version}
- * @version ${project.version}
- */
 public class SubCommandZoneList {
 
     ZoneMenu zoneMenuPlugin = null;
 
-    /**
-     * Constrcutor for the {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneList
-     * SubCommandZoneList} class.
-     *
-     * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
-     */
     public SubCommandZoneList(ZoneMenu plugin) {
 
         this.zoneMenuPlugin = plugin;
     }
 
-    /**
-     * Processes.
-     *
-     * @param player A {@link org.bukkit.entity.Player Player}.
-     * @param arguments An array of {@link java.lang.String String}s.
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
-     */
     public void process(Player player, String[] args) {
 
         // If arguments' length does not equals 1 ...

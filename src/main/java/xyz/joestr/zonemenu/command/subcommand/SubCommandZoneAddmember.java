@@ -19,40 +19,15 @@ import com.sk89q.worldguard.protection.util.DomainInputResolver.UserLocatorPolic
 
 import xyz.joestr.zonemenu.ZoneMenu;
 
-/**
- * Class which handles subcommand "addmember" of command "zone".
- *
- * @author joestr
- * @since ${project.version}
- * @version ${project.version}
- */
 public class SubCommandZoneAddmember {
 
     ZoneMenu zoneMenuPlugin = null;
 
-    /**
-     * Constrcutor for the {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneAddmember
-     * SubCommandZoneAddmember} class.
-     *
-     * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
-     */
     public SubCommandZoneAddmember(ZoneMenu zoneMenuPlugin) {
 
         this.zoneMenuPlugin = zoneMenuPlugin;
     }
 
-    /**
-     * Processes.
-     *
-     * @param player A {@link org.bukkit.entity.Player Player}.
-     * @param arguments An array of {@link java.lang.String String}s.
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
-     */
     @SuppressWarnings("deprecation")
     public void process(Player player, String[] arguments) {
 

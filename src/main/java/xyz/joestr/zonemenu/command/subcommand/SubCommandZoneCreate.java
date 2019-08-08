@@ -22,40 +22,15 @@ import xyz.joestr.zonemenu.util.ZoneMenuPlayer;
 import xyz.joestr.zonemenu.util.ZoneMenuSignType;
 import xyz.joestr.zonemenu.util.ZoneMenuToolType;
 
-/**
- * Class which handles subcommand "create" of command "zone".
- *
- * @author joestr
- * @since ${project.version}
- * @version ${project.version}
- */
 public class SubCommandZoneCreate {
 
     ZoneMenu zoneMenuPlugin = null;
 
-    /**
-     * Constrcutor for the {@link xyz.joestr.zonemenu.command.subcommand.SubCommandZoneCreate
-     * SubCommandZoneCreate} class.
-     *
-     * @param zoneMenuPlugin A {@link xyz.joestr.zonemenu.ZoneMenu ZoneMenu}.
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
-     */
     public SubCommandZoneCreate(ZoneMenu zoneMenuPlugin) {
 
         this.zoneMenuPlugin = zoneMenuPlugin;
     }
 
-    /**
-     * Processes.
-     *
-     * @param player A {@link org.bukkit.entity.Player Player}.
-     * @param arguments An array of {@link java.lang.String String}s.
-     * @author joestr
-     * @since ${project.version}
-     * @version ${project.version}
-     */
     public void process(Player player, String[] arguments) {
 
         // If arguments' length does not equals 1 ...

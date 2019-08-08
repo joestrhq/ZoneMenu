@@ -31,9 +31,6 @@ public class YMLDelegate {
     /**
      * Create a new YMLDelegate instace
      *
-     * @author joestr
-     * @since build_1
-     * @version build_7_pre_2
      * @param plugin {@linkplain Plugin} Instace of a plugin
      * @param configurationSection {@linkplain String} Name of the configuration
      * section
@@ -49,9 +46,6 @@ public class YMLDelegate {
     /**
      * Get the name of the file.
      *
-     * @author joestr
-     * @since build_1
-     * @version build_7_pre_2
      * @return {@linkplain String} Name of the file.
      */
     public String getFileName() {
@@ -62,10 +56,7 @@ public class YMLDelegate {
     /**
      * Get the configuration section as a map.
      *
-     * @author joestr
-     * @since build_1
-     * @version build_7_pre_2
-     * @return {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map
+     * @return {@linkplain Map}&lt;{@linkplain String}, {@linkplain Object}&gt; Map
      * with entries
      */
     public Map<String, Object> getMap() {
@@ -76,10 +67,7 @@ public class YMLDelegate {
     /**
      * Set the configuration section with a map.
      *
-     * @author joestr
-     * @since build_1
-     * @version build_7_pre_2
-     * @param map {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map
+     * @param map {@linkplain Map}&lt;{@linkplain String}, {@linkplain Object}&gt; Map
      * with entries
      */
     public void setMap(Map<String, Object> map) {
@@ -90,10 +78,7 @@ public class YMLDelegate {
     /**
      * Get the configuration section as a map.
      *
-     * @author joestr
-     * @since build_1
-     * @version build_7_pre_2
-     * @return {@linkplain Map}<{@linkplain String}, {@linkplain Onject}> Map
+     * @return {@linkplain Map}&lt;{@linkplain String}, {@linkplain Object}&gt; Map
      * with entries
      * @deprecated Use {@linkplain #getMap()} instead.
      */
@@ -104,10 +89,7 @@ public class YMLDelegate {
     /**
      * Set the configuration section with a map.
      *
-     * @author joestr
-     * @since build_1
-     * @version build_7_pre_2
-     * @param map {@linkplain Map}<{@linkplain String}, {@linkplain Object}> Map
+     * @param map {@linkplain Map}&lt;{@linkplain String}, {@linkplain Object}&gt; Map
      * with entries
      * @deprecated Use {@linkplain #setMap(Map)} instead.
      */
@@ -117,10 +99,6 @@ public class YMLDelegate {
 
     /**
      * Load the file, get the configuration section and put it into a map.
-     *
-     * @author joestr
-     * @since build_1
-     * @version build_7_pre_2
      */
     public void Load() {
 
@@ -137,10 +115,6 @@ public class YMLDelegate {
 
     /**
      * Save the map to the file.
-     *
-     * @author joestr
-     * @since build_1
-     * @version build_7_pre_2
      */
     public void Save() {
 
@@ -161,10 +135,6 @@ public class YMLDelegate {
 
     /**
      * Reset the file with the ressource file.
-     *
-     * @author joestr
-     * @since build_1
-     * @version build_7_pre_2
      */
     public void Reset() {
 
@@ -181,9 +151,6 @@ public class YMLDelegate {
 
     /**
      * Create a new file.
-     *
-     * @author joestr
-     * @since version_1
      */
     public void Create() {
 
@@ -199,9 +166,6 @@ public class YMLDelegate {
     /**
      * Check for existing file.
      *
-     * @author joestr
-     * @since build_1
-     * @version build_7_pre_2
      * @return {@linkplain Boolean} If the file exists or not.
      */
     public boolean Exist() {
@@ -235,9 +199,6 @@ public class YMLDelegate {
     /**
      * Check if loaded file contains the same entries as the ressource file.
      *
-     * @author joestr
-     * @since build_1
-     * @version build_7_pre_2
      * @return {@linkplain Boolean} If the was successful or not.
      */
     public boolean Check() {
@@ -274,8 +235,6 @@ public class YMLDelegate {
      * Check if loaded file contains the same entries as the ressource file and
      * if not add the missing entries to the map.
      *
-     * @since build_1
-     * @version build_7_pre_2
      * @return {@linkplain Boolean} If an entry was added.
      */
     public boolean EntryCheck() {
