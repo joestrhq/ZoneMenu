@@ -220,12 +220,17 @@
                             <artifactSet>
                                 <includes>
                                     <include>me.lucko:commodore</include>
+                                    <include>com.vdurmont:semver4j</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
                                 <relocation>
                                     <pattern>me.lucko.commodore</pattern>
                                     <shadedPattern>xyz.joestr.zonemenu.me.lucko.commodore</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.vdurmont.semver4j</pattern>
+                                    <shadedPattern>xyz.joestr.zonemenu.com.vdurmont.semver4j</shadedPattern>
                                 </relocation>
                             </relocations>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
