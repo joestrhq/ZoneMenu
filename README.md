@@ -20,6 +20,7 @@ Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for
 */zone flag \<Zone\> \<Flag\> \<Flagvalue\>* - Change flags of a zone.  
 */zone info \<Zone\>* - Get information about a zone.  
 */zone delete \<Zone\>* - Delete a zone.  
+*/zone update* - Check for an update
 
 **Permissions (since build_5)**  
 */zone* - zonemenu.\*
