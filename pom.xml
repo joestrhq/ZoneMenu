@@ -84,6 +84,7 @@
         </notifiers>
     </ciManagement>
     
+    <!--
     <distributionManagement>
         <repository>
             <id>joestr-repository</id>
@@ -97,8 +98,20 @@
             <url>https://mvn-repo.joestr.xyz/repository/repository/</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
-        <!--<downloadUrl></downloadUrl>-->
-        <!--<status></status>-->
+    </distributionManagement>
+    -->
+    
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <name>Sonatype Central Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <name>Sonatype Central Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
     
     <issueManagement>
@@ -255,6 +268,20 @@
 					</execution>
 				</executions>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
