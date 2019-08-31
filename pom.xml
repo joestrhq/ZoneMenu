@@ -121,9 +121,9 @@
     
     <repositories>
         <repository>
-            <id>joestr-repository</id>
-            <name>joestr's Maven Repository</name>
-            <url>https://mvn-repo.joestr.xyz/repository/repository/</url>
+            <id>joestr-proxy-maven-repository</id>
+            <name>Proxied maven repository of joestr.</name>
+            <url>https://mvn-repo.joestr.xyz/repository/proxy/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -180,9 +180,9 @@
     
     <pluginRepositories>
         <pluginRepository>
-            <id>joestr-repository</id>
-            <name>joestr's Maven Repository</name>
-            <url>https://mvn-repo.joestr.xyz/repository/repository/</url>
+            <id>joestr-proxy-maven-repository</id>
+            <name>Proxied maven repository of joestr.</name>
+            <url>https://mvn-repo.joestr.xyz/repository/proxy/</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
