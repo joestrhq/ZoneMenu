@@ -104,8 +104,7 @@
     
     <repositories>
         <repository>
-            <id>public</id>
-            <name>Maven repository containing snapshots/releases from various authors.</name>
+            <id>maven-repository-public</id>
             <url>https://mvn-repo.joestr.xyz/repository/public/</url>
             <releases>
                 <enabled>true</enabled>
@@ -163,8 +162,7 @@
     
     <pluginRepositories>
         <pluginRepository>
-            <id>public</id>
-            <name>Maven repository containing snapshots/releases from various authors.</name>
+            <id>maven-repository-public</id>
             <url>https://mvn-repo.joestr.xyz/repository/public/</url>
             <releases>
                 <enabled>true</enabled>
