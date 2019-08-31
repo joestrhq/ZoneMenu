@@ -84,23 +84,6 @@
         </notifiers>
     </ciManagement>
     
-    <!--
-    <distributionManagement>
-        <repository>
-            <id>joestr-repository</id>
-            <name>joestr's Maven Repository</name>
-            <url>https://mvn-repo.joestr.xyz/repository/repository/</url>
-            <uniqueVersion>false</uniqueVersion>
-        </repository>
-        <snapshotRepository>
-            <id>joestr-repository</id>
-            <name>joestr's Maven Repository</name>
-            <url>https://mvn-repo.joestr.xyz/repository/repository/</url>
-            <uniqueVersion>false</uniqueVersion>
-        </snapshotRepository>
-    </distributionManagement>
-    -->
-    
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -122,7 +105,7 @@
     <repositories>
         <repository>
             <id>joestr-proxy-maven-repository</id>
-            <name>Proxied maven repository of joestr.</name>
+            <name>Proxied Maven repository of joestr.</name>
             <url>https://mvn-repo.joestr.xyz/repository/proxy/</url>
             <releases>
                 <enabled>true</enabled>
@@ -181,7 +164,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>joestr-proxy-maven-repository</id>
-            <name>Proxied maven repository of joestr.</name>
+            <name>Proxied Maven repository of joestr.</name>
             <url>https://mvn-repo.joestr.xyz/repository/proxy/</url>
             <releases>
                 <enabled>true</enabled>
