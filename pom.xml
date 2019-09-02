@@ -104,14 +104,24 @@
     
     <repositories>
         <repository>
-            <id>maven-repository-public</id>
-            <url>https://mvn-repo.joestr.xyz/repository/public/</url>
+            <id>release-repo</id>
+            <url>https://mvn-repo.joestr.xyz/repository/releases/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
             <releases>
                 <enabled>true</enabled>
             </releases>
+        </repository>
+        <repository>
+            <id>snapshot-repo</id>
+            <url>https://mvn-repo.joestr.xyz/repository/snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </repository>
     </repositories>
     
@@ -162,14 +172,24 @@
     
     <pluginRepositories>
         <pluginRepository>
-            <id>maven-repository-public</id>
-            <url>https://mvn-repo.joestr.xyz/repository/public/</url>
+            <id>release-repo</id>
+            <url>https://mvn-repo.joestr.xyz/repository/releases/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
             <releases>
                 <enabled>true</enabled>
             </releases>
+        </pluginRepository>
+        <pluginRepository>
+            <id>snapshot-repo</id>
+            <url>https://mvn-repo.joestr.xyz/repository/snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
         </pluginRepository>
     </pluginRepositories>
     
