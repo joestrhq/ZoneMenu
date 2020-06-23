@@ -1,7 +1,7 @@
 # ZoneMenu
 
-[![Build Status](https://ci.joestr.xyz/job/ZoneMenu/badge/icon)](https://s.joestr.xyz/zmci)
-[![Test status](https://img.shields.io/jenkins/tests/https/ci.joestr.xyz/ZoneMenu?compact_message&failed_label=failed&passed_label=passed&skipped_label=skipped)](https://s.joestr.xyz/zmci)
+[![Build Status](https://ci.joestr.xyz/job/ZoneMenu/badge/icon)](https://ci.joestr.at/job/ZoneMenu/)
+[![Test status](https://img.shields.io/jenkins/tests/https/ci.joestr.xyz/ZoneMenu?compact_message&failed_label=failed&passed_label=passed&skipped_label=skipped)](https://ci.joestr.at/job/ZoneMenu/)
 
 **Important**  
 This plugin requires [WorldEdit](https://github.com/sk89q/WorldEdit) and [WorldGuard](https://github.com/sk89q/WorldGuard)!
