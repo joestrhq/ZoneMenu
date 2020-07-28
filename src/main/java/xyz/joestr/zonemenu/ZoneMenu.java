@@ -28,7 +28,6 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -48,7 +47,7 @@ import xyz.joestr.zonemenu.util.YMLDelegate;
 import xyz.joestr.zonemenu.util.ZoneMenuCreateCorner;
 import xyz.joestr.zonemenu.util.ZoneMenuPlayer;
 import xyz.joestr.zonemenu.util.ZoneMenuSubcreateCorner;
-import xyz.joestr.zonemenu.util.Metrics;
+import xyz.joestr.zonemenu.util.MetricsLite;
 
 /**
  * The main class of this plugin.
@@ -83,7 +82,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     // Updater
     public Updater updater;
     
-    public Properties appProperties;
+    public Properties appProperties = new Properties();
 
     /**
      * Plugin starts.
@@ -92,7 +91,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     public void onEnable() {
         
         // bStats' plugin metrics
-        Metrics metrics = new Metrics(this);
+        MetricsLite metrics = new MetricsLite(this, 4437);
 
         try {
             this.appProperties.load(new FileInputStream(getClass().getResource("app.properties").toString()));
