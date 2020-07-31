@@ -17,13 +17,13 @@ import org.bukkit.command.TabExecutor;
 public class CommandZoneAddmember implements TabExecutor {
 
 	@Override
-	public List<String> onTabComplete(CommandSender cs, Command cmnd, String string, String[] strings) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+		return List.of();
 	}
 
 	@Override
-	public boolean onCommand(CommandSender cs, Command cmnd, String string, String[] strings) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		return false;
 	}
 	
 }
