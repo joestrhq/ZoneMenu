@@ -94,7 +94,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
         MetricsLite metrics = new MetricsLite(this, 4437);
 
         try {
-            this.appProperties.load(new FileInputStream(getClass().getResource("app.properties").toString()));
+            this.appProperties.load(getClass().getResource("app.properties").openStream());
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ZoneMenu.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
