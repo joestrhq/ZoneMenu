@@ -1,0 +1,16 @@
+prefix: '{"text":"[","color":"dark_gray"},{"text":"ZM","color":"dark_green"},{"text":"]","color":"dark_gray"}'
+generic:
+  not_a_player: '{"text":"This command can only be used by players!","color":"red"}'
+commands:
+  zone:
+    header: ''
+    message_find: ''
+    message_create: ''
+    message_subcreate: ''
+    message_list: ''
+    message_cancel: ''
+    message_addmember: ''
+    message_removemember: ''
+    message_flag: ''
+    message_info: ''
+    message_delete: ''

@@ -1,7 +1,6 @@
 # ZoneMenu
 
-[![Build Status](https://ci.joestr.xyz/job/ZoneMenu/badge/icon)](https://ci.joestr.at/job/ZoneMenu/)
-[![Test status](https://img.shields.io/jenkins/tests/https/ci.joestr.xyz/ZoneMenu?compact_message&failed_label=failed&passed_label=passed&skipped_label=skipped)](https://ci.joestr.at/job/ZoneMenu/)
+[![Build status](https://ci.joestr.at/job/github.com_joestr/job/ZoneMenu-develop/badge/icon)](https://ci.joestr.at/job/github.com_joestr/ZoneMenu-master/)
 
 **Important**  
 This plugin requires [WorldEdit](https://github.com/sk89q/WorldEdit) and [WorldGuard](https://github.com/sk89q/WorldGuard)!
@@ -160,4 +159,4 @@ Wiki is located [here](https://github.com/joestr/ZoneMenu/wiki).
 The bugtracker is located [here](https://github.com/joestr/ZoneMenu/issues).
 
 **Builds**  
-Builds are available [here](https://ci.joestr.xyz/job/ZoneMenu/).
+Builds are available [here](https://ci.joestr.at/job/github.com_joestr/job/ZoneMenu-develop/).
