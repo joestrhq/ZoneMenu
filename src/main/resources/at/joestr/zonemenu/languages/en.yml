@@ -14,3 +14,8 @@ commands:
     message_flag: '{"text":"» "},{"text":"Modify a flag of a zone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-flag "},"hoverEvent":{"action":"show_text","contents":"/zone-flag <zone> <flag> <flag-value>"}}'
     message_info: '{"text":"» "},{"text":"Get information about a zone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-info "},"hoverEvent":{"action":"show_text","contents":"/zone-info <zone>"}}'
     message_delete: '{"text":"» "},{"text":"Delete a zone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-delete "},"hoverEvent":{"action":"show_text","contents":"/zone-delete <zone>"}}'
+  zone-find:
+    message: '{"text":"Use the stick to look for a free place by ","color":"aqua"},{"text":"left-","color":"gray"},{"text":" and ","color":"aqua"},{"text":"right-click","color":"gray"},{"text":".","color":"aqua"}'
+  zone-create:
+    sign: '{"text":"Use the stick to sign the","color":"aqua"},{"text":" first","color":"dark_purple"},{"text":" point by","color":"aqua"},{"text":" left-","color":"gray"},{"text":" and the","color":"aqua"},{"text":" second","color":"light_purple"},{"text":" point by","color":"aqua"},{"text":" right-click","color":"gray"},{"text":".","color":"aqua"}'
+    not_signed: '{"text":"Zone not signed.","color":"red"}'
