@@ -19,3 +19,4 @@ commands:
   zone-create:
     sign: '{"text":"Use the stick to sign the","color":"aqua"},{"text":" first","color":"dark_purple"},{"text":" point by","color":"aqua"},{"text":" left-","color":"gray"},{"text":" and the","color":"aqua"},{"text":" second","color":"light_purple"},{"text":" point by","color":"aqua"},{"text":" right-click","color":"gray"},{"text":".","color":"aqua"}'
     not_signed: '{"text":"Zone not signed.","color":"red"}'
+    width_length_limit: '{"text":"Zone must be at least ","color":"red"},{"text":"?length.min?x?width.min?","color":"gray"},{"text":" blocks and can be ","color":"red"},{"text":"?length.max?x?width.max?","color":"gray"},{"text":" at maximum.","color":"red"}'
