@@ -156,7 +156,7 @@ public class SubCommandZoneAddmember {
                         + ((String) zoneMenuPlugin.configDelegate.getMap().get("zone_addmember_not_existing"))
                             .replace("{0}", arguments[2])));
                 }
-            });
+            }, null);
             // --- end ---
         });
     }
