@@ -1,0 +1,22 @@
+prefix: '{"text":"[","color":"dark_gray"},{"text":"ZM","color":"dark_green"},{"text":"]","color":"dark_gray"}'
+generic:
+  not_a_player: '{"text":"This command can only be used by players!","color":"red"}'
+commands:
+  zone:
+    header: '{"text":"What are you going to do? ","color":"gray"}'
+    message_find: '{"text":"» "},{"text":"Look for a free place","color":"gray","clickEvent":{"action":"run_command","value":"/zone-find"},"hoverEvent":{"action":"show_text","contents":"/zone-find"}}'
+    message_create: '{"text":"» "},{"text":"Create a new zone","color":"gray","clickEvent":{"action":"run_command","value":"/zone-create"},"hoverEvent":{"action":"show_text","contents":"/zone-create"}}'
+    message_subcreate: '{"text":"» "},{"text":"Create a new subzone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-subcreate"},"hoverEvent":{"action":"show_text","contents":"/zone-subcreate <zone>"}}'
+    message_list: '{"text":"» "},{"text":"List all yout zones","color":"gray","clickEvent":{"action":"run_command","value":"/zone-list"},"hoverEvent":{"action":"show_text","contents":"/zone-list"}}'
+    message_cancel: '{"text":"» "},{"text":"Cancel creation","color":"gray","clickEvent":{"action":"run_command","value":"/zone-cancel"},"hoverEvent":{"action":"show_text","contents":"/zone-cancel <zone>"}}'
+    message_addmember: '{"text":"» "},{"text":"Add a player to your zone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-addmember "},"hoverEvent":{"action":"show_text","contents":"/zone-addmember <zone> <player>"}}'
+    message_removemember: '{"text":"» "},{"text":"Remove a player from a zone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-removemember "},"hoverEvent":{"action":"show_text","contents":"/zone-removemember <zone> <player>"}}'
+    message_flag: '{"text":"» "},{"text":"Modify a flag of a zone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-flag "},"hoverEvent":{"action":"show_text","contents":"/zone-flag <zone> <flag> <flag-value>"}}'
+    message_info: '{"text":"» "},{"text":"Get information about a zone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-info "},"hoverEvent":{"action":"show_text","contents":"/zone-info <zone>"}}'
+    message_delete: '{"text":"» "},{"text":"Delete a zone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-delete "},"hoverEvent":{"action":"show_text","contents":"/zone-delete <zone>"}}'
+  zone-find:
+    message: '{"text":"Use the stick to look for a free place by ","color":"aqua"},{"text":"left-","color":"gray"},{"text":" and ","color":"aqua"},{"text":"right-click","color":"gray"},{"text":".","color":"aqua"}'
+  zone-create:
+    sign: '{"text":"Use the stick to sign the","color":"aqua"},{"text":" first","color":"dark_purple"},{"text":" point by","color":"aqua"},{"text":" left-","color":"gray"},{"text":" and the","color":"aqua"},{"text":" second","color":"light_purple"},{"text":" point by","color":"aqua"},{"text":" right-click","color":"gray"},{"text":".","color":"aqua"}'
+    not_signed: '{"text":"Zone not signed.","color":"red"}'
+    width_length_limit: '{"text":"Zone must be at least ","color":"red"},{"text":"?length.min?x?width.min?","color":"gray"},{"text":" blocks and can be ","color":"red"},{"text":"?length.max?x?width.max?","color":"gray"},{"text":" at maximum.","color":"red"}'
