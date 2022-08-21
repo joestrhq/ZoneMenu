@@ -10,9 +10,9 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
     
-  <groupId>xyz.joestr</groupId>
+  <groupId>at.joestr</groupId>
   <artifactId>zonemenu</artifactId>
-  <version>0.1.9-SNAPSHOT</version>
+  <version>0.1.10-SNAPSHOT</version>
     
   <name>ZoneMenu</name>
   <description>Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)</description>
@@ -20,15 +20,15 @@
   <inceptionYear>2017</inceptionYear>
     
   <organization>
-    <name>joestr</name>
+    <name>joestr.at</name>
     <url>https://www.joestr.at</url>
   </organization>
     
   <licenses>
     <license>
-      <name>X11 license</name>
+      <name>MIT license</name>
       <distribution>repo</distribution>
-      <url>https://github.com/joestr/ZoneMenu/blob/master/LICENSE</url>
+      <url>https://github.com/joestrhq/ZoneMenu/blob/master/LICENSE</url>
       <!--<comments></comments>-->
     </license>
   </licenses>
@@ -37,7 +37,7 @@
     <developer>
       <id>joestr</id>
       <name>Joel Strasser</name>
-      <email>strasser999@gmail.com</email>
+      <email>joelstrasser1@gmail.com</email>
       <roles>
         <role>developer</role>
       </roles>
@@ -47,23 +47,10 @@
     </developer>
   </developers>
     
-  <contributors>
-    <contributor>
-      <name>Joel Strasser</name>
-      <email>strasser999@gmail.com</email>
-      <roles>
-        <role>developer</role>
-      </roles>
-      <url>https://www.joestr.priv.at</url>
-      <organization>joestr.at</organization>
-      <organizationUrl>https://www.joestr.at</organizationUrl>
-    </contributor>
-  </contributors>
-    
   <scm>
-    <url>https://github.com/joestr/ZoneMenu/</url>
-    <connection>scm:git:https://github.com/joestr/ZoneMenu.git</connection>
-    <developerConnection>scm:git:https://github.com/joestr/ZoneMenu.git</developerConnection>
+    <url>https://github.com/joestrhq/ZoneMenu/</url>
+    <connection>scm:git:https://github.com/joestrhq/ZoneMenu.git</connection>
+    <developerConnection>scm:git:https://github.com/joestrhq/ZoneMenu.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
     
@@ -78,7 +65,7 @@
         <sendOnError>true</sendOnError>
         <sendOnFailure>true</sendOnFailure>
         <configuration>
-          <address>strasser999@gmail.com</address>
+          <address>joelstrasser1@gmail.com</address>
         </configuration>
       </notifier>
     </notifiers>
@@ -86,25 +73,31 @@
     
   <issueManagement>
     <system>github</system>
-    <url>https://github.com/joestr/ZoneMenu/issues</url>
+    <url>https://github.com/joestrhq/ZoneMenu/issues</url>
   </issueManagement>
     
   <repositories>
     <repository>
-      <id>release-repo</id>
+      <id>joestrhq-public-releases-repo</id>
+      <name>joestrhq's public repo for releases</name>
       <url>https://mvn-repo.joestr.at/repository/releases/</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
       <releases>
         <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>fail</checksumPolicy>
       </releases>
     </repository>
     <repository>
-      <id>snapshot-repo</id>
+      <id>joestrhq-public-snapshots-repo</id>
+      <name>joestrhq's public repo for snapshots</name>
       <url>https://mvn-repo.joestr.at/repository/snapshots/</url>
       <snapshots>
         <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>fail</checksumPolicy>
       </snapshots>
       <releases>
         <enabled>false</enabled>
@@ -182,6 +175,33 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.3.1</version>
+        <configuration>
+          <doclint>none</doclint>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>3.0.0-M1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <version>3.2.1</version>
         <executions>
@@ -215,13 +235,56 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.0</version>
+        <artifactId>maven-jarsigner-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>sign</id>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>verify</id>
+            <goals>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <archiveDirectory>${project.build.directory}</archiveDirectory>
+          <includes>
+            <include>*.jar</include>
+          </includes>
+        </configuration>
+      </plugin>
+      <!--<plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.6</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>-->
+    </plugins>
+  </build>
+  
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>3.1.2</version>
+        <configuration>
+          <configLocation>google_checks.xml</configLocation>
         </configuration>
       </plugin>
     </plugins>
-  </build>
+  </reporting>
 </project>

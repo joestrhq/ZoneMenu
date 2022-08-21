@@ -53,7 +53,7 @@ config:
   zone_removemember_unknownplayer: "&7{0} &cis not a member at zone &7{1}."
   zone_removemember: "&7{0} &ais no longer a member at zone &7{1}."
   zone_flag_not_found: "&cFlag &7{0} &cdoes not exist."
-  zone_flag_changed: "&aFlag &7{0} &aat zone &7{1} &achanged to &7{2}&a."
+  zone_flag_changed: "&aFlag &7{0} &aat zone &7{1} &achanged to from &7{2} &ato &7{3}&a."
   zone_info_id: "&bName: &7{id}"
   zone_info_priority: "&bPriority: &7"
   zone_info_parent: "&bParent: &7"
