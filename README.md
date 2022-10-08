@@ -1,7 +1,5 @@
 # ZoneMenu
 
-[![Build status](https://ci.joestr.at/job/github.com_joestr/job/ZoneMenu-develop/badge/icon)](https://ci.joestr.at/job/github.com_joestr/ZoneMenu-master/)
-
 **Important**  
 This plugin requires [WorldEdit](https://github.com/sk89q/WorldEdit) and [WorldGuard](https://github.com/sk89q/WorldGuard)!
 
