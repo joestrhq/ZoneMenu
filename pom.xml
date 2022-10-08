@@ -12,7 +12,7 @@
     
   <groupId>at.joestr</groupId>
   <artifactId>zonemenu</artifactId>
-  <version>0.1.10-SNAPSHOT</version>
+  <version>0.2.0-SNAPSHOT</version>
     
   <name>ZoneMenu</name>
   <description>Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)</description>
@@ -29,7 +29,6 @@
       <name>MIT license</name>
       <distribution>repo</distribution>
       <url>https://github.com/joestrhq/ZoneMenu/blob/master/LICENSE</url>
-      <!--<comments></comments>-->
     </license>
   </licenses>
     
@@ -55,8 +54,8 @@
   </scm>
     
   <ciManagement>
-    <url>https://ci.joestr.at/job/github.com_joestr/ZoneMenu-develop/</url>
-    <system>jenkins</system>
+    <url>https://ci.joestr.at/</url>
+    <system>gocd</system>
     <notifiers>
       <notifier>
         <type>mail</type>
@@ -107,11 +106,6 @@
     
   <dependencies>
     <dependency>
-      <groupId>org.apache.xmlbeans</groupId>
-      <artifactId>xmlbeans</artifactId>
-      <version>5.1.1</version>
-    </dependency>
-    <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
       <version>1.19.2-R0.1-SNAPSHOT</version>
@@ -145,20 +139,26 @@
     
   <pluginRepositories>
     <pluginRepository>
-      <id>release-repo</id>
+      <id>joestrhq-public-releases-repo</id>
+      <name>joestrhq's public repo for releases</name>
       <url>https://mvn-repo.joestr.at/repository/releases/</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
       <releases>
         <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>fail</checksumPolicy>
       </releases>
     </pluginRepository>
     <pluginRepository>
-      <id>snapshot-repo</id>
+      <id>joestrhq-public-snapshots-repo</id>
+      <name>joestrhq's public repo for snapshots</name>
       <url>https://mvn-repo.joestr.at/repository/snapshots/</url>
       <snapshots>
         <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>fail</checksumPolicy>
       </snapshots>
       <releases>
         <enabled>false</enabled>
@@ -225,11 +225,11 @@
               <relocations>
                 <relocation>
                   <pattern>me.lucko.commodore</pattern>
-                  <shadedPattern>xyz.joestr.zonemenu.thirdparty.me.lucko.commodore</shadedPattern>
+                  <shadedPattern>at.joestr.zonemenu.thirdparty.me.lucko.commodore</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>com.vdurmont.semver4j</pattern>
-                  <shadedPattern>xyz.joestr.zonemenu.thirdparty.com.vdurmont.semver4j</shadedPattern>
+                  <shadedPattern>at.joestr.zonemenu.thirdparty.com.vdurmont.semver4j</shadedPattern>
                 </relocation>
               </relocations>
               <shadedArtifactAttached>true</shadedArtifactAttached>
@@ -238,45 +238,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jarsigner-plugin</artifactId>
-        <version>3.0.0</version>
-        <executions>
-          <execution>
-            <id>sign</id>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>verify</id>
-            <goals>
-              <goal>verify</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <archiveDirectory>${project.build.directory}</archiveDirectory>
-          <includes>
-            <include>*.jar</include>
-          </includes>
-        </configuration>
-      </plugin>
-      <!--<plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.6</version>
-        <executions>
-          <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>-->
     </plugins>
   </build>
   
