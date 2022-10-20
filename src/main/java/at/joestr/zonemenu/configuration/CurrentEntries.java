@@ -9,7 +9,9 @@ package at.joestr.zonemenu.configuration;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -36,6 +38,7 @@ public enum CurrentEntries {
   CONF_UPDATER_POMPROPERTIESFILE("updater.pomPropertiesFile"),
   CONF_UPDATER_CLASSIFIER("updater.classifier"),
   // Languages
+  LANG_VERSION("version"),
   LANG_PREFIX("prefix"),
   LANG_GEN_NOT_A_PLAYER("generic.not_a_player"),
   LANG_GEN_WAIT_MESSAGE("generic.wait_message"),
@@ -97,11 +100,18 @@ public enum CurrentEntries {
   LANG_EVT_SIGN_SECOND("events.sign.second"),
   LANG_EVT_SIGN_AREA("events.sign.area"),
   // Permissions
-  PERM_CMD_CARTJETS("cartjets.commands.cartjets"),
-  PERM_CMD_CARTJETS_SETUPWIZARD("cartjets.commands.cartjets-setupwizard"),
-  PERM_CMD_CARTJETS_LIST("cartjets.commands.cartjets-list"),
-  PERM_CMD_CARTJETS_DELETE("cartjets.commands.cartjets-delete"),
-  PERM_CMD_CARTJETS_UPDATE("cartjets.commands.cartjets-update");
+  PERM_CMD_ZONE("zonemenu.commands.zone"),
+  PERM_CMD_ZONE_FIND("zonemenu.commands.zone-find"),
+  PERM_CMD_ZONE_CREATE("zonemenu.commands.zone-create"),
+  PERM_CMD_ZONE_SUBCREATE("zonemenu.commands.zone-subcreate"),
+  PERM_CMD_ZONE_CANCEL("zonemenu.commands.zone-cancel"),
+  PERM_CMD_ZONE_ADDMEMBER("zonemenu.commands.zone-addmember"),
+  PERM_CMD_ZONE_REMOVEMEMBER("zonemenu.commands.zone-removemember"),
+  PERM_CMD_ZONE_FLAG("zonemenu.commands.zone-flag"),
+  PERM_CMD_ZONE_INFO("zonemenu.commands.zone-info"),
+  PERM_CMD_ZONE_DELETE("zonemenu.commands.zone-delete"),
+  PERM_CMD_ZONE_SELECT("zonemenu.commands.zone-select"),
+  PERM_CMD_ZONE_UPDATE("zonemenu.commands.zone-update");
 
   private final String text;
 
@@ -125,64 +135,28 @@ public enum CurrentEntries {
     throw new NullPointerException(MessageFormat.format("The text {0} is not in this Enum!", text));
   }
 
-  public static CurrentEntries[] getGlobalEntries() {
-    return new CurrentEntries[]{
-      CONF_VERSION
-    };
-  }
-
-  public static CurrentEntries[] getConfigurationEntries() {
-    return new CurrentEntries[]{
+  public static List<CurrentEntries> getGlobalEntries() {
+    return List.of(
       CONF_VERSION,
-      CONF_JDBCURI,
-      CONF_MAXSPEED,
-      CONF_VECTORMULTIPLIER,
-      CONF_TASKREPEATINGDELAYINTICKS,
-      CONF_JENKINSUPDATER_ENABLED,
-      CONF_JENKINSUPDATER_DOWNLOADTOPLUGINUPDATEFOLDER,
-      CONF_JENKINSUPDATER_TARGETURL,
-      CONF_JENKINSUPDATER_POMPROPERTIESFILE,
-      CONF_JENKINSUPDATER_CLASSIFIER
-    };
+      LANG_VERSION
+    );
   }
 
-  public static CurrentEntries[] getLanguageEntries() {
-    return new CurrentEntries[]{
-      LANG_PREFIX,
-      LANG_GEN_NOT_A_PLAYER,
-      LANG_CMD_CARTJETS_X_MSG_SETUPWIZARD,
-      LANG_CMD_CARTJETS_X_MSG_DELETE,
-      LANG_CMD_CARTJETS_X_MSG_LIST,
-      LANG_CMD_CARTJETS_X_MSG_UPDATE,
-      LANG_CMD_CARTJETS_SETUPWIZARD_BUTTON_INSTRUCTION,
-      LANG_CMD_CARTJETS_SETUPWIZARD_BUTTON_SUCCESS,
-      LANG_CMD_CARTJETS_SETUPWIZARD_BUTTON_OVERLAPPING,
-      LANG_CMD_CARTJETS_SETUPWIZARD_RAIL_INSTRUCTION,
-      LANG_CMD_CARTJETS_SETUPWIZARD_RAIL_SUCCESS,
-      LANG_CMD_CARTJETS_SETUPWIZARD_NAME_ANVIL_GUI_TEXT,
-      LANG_CMD_CARTJETS_SETUPWIZARD_NAME_PLACEHOLDER,
-      LANG_CMD_CARTJETS_SETUPWIZARD_NAME_DUPLICATE,
-      LANG_CMD_CARTJETS_SETUPWIZARD_NAME_SUCCESS,
-      LANG_CMD_CARTJETS_SETUPWIZARD_CANCEL,
-      LANG_CMD_CARTJETS_DELETE_NON_EXISTING,
-      LANG_CMD_CARTJETS_DELETE_SUCCESS,
-      LANG_CMD_CARTJETS_LIST_MESSAGE,
-      LANG_CMD_CARTJETS_UPDATE_OFF,
-      LANG_CMD_CARTJETS_UPDATE_ASYNCSTART,
-      LANG_CMD_CARTJETS_UPDATE_ERROR,
-      LANG_CMD_CARTJETS_UPDATE_UPTODATE,
-      LANG_CMD_CARTJETS_UPDATE_AVAILABLE,
-      LANG_CMD_CARTJETS_UPDATE_DOWNLOADED
-    };
+  public static List<CurrentEntries> getConfigurationEntries() {
+    return List.of(CurrentEntries.values()).stream()
+      .filter(x -> x.name().startsWith("CONF"))
+      .collect(Collectors.toList());
   }
 
-  public static CurrentEntries[] getPermissionEntries() {
-    return new CurrentEntries[]{
-      PERM_CMD_CARTJETS,
-      PERM_CMD_CARTJETS_SETUPWIZARD,
-      PERM_CMD_CARTJETS_LIST,
-      PERM_CMD_CARTJETS_DELETE,
-      PERM_CMD_CARTJETS_UPDATE
-    };
+  public static List<CurrentEntries> getLanguageEntries() {
+    return List.of(CurrentEntries.values()).stream()
+      .filter(x -> x.name().startsWith("LANG"))
+      .collect(Collectors.toList());
+  }
+
+  public static List<CurrentEntries> getPermissionEntries() {
+    return List.of(CurrentEntries.values()).stream()
+      .filter(x -> x.name().startsWith("PERM"))
+      .collect(Collectors.toList());
   }
 }

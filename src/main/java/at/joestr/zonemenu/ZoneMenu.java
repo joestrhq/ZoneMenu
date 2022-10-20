@@ -1,5 +1,7 @@
 package at.joestr.zonemenu;
 
+import at.joestr.javacommon.configuration.AppConfiguration;
+import at.joestr.javacommon.configuration.LanguageConfiguration;
 import at.joestr.zonemenu.command.CommandZone;
 import at.joestr.zonemenu.event.playerinteract.CreatePlayerInteract;
 import at.joestr.zonemenu.event.playerinteract.FindPlayerInteract;
@@ -8,7 +10,6 @@ import at.joestr.zonemenu.listener.PlayerChangedWorld;
 import at.joestr.zonemenu.listener.PlayerMove;
 import at.joestr.zonemenu.listener.PlayerQuit;
 import at.joestr.zonemenu.tabcomplete.TabCompleteZone;
-import at.joestr.zonemenu.util.MetricsLite;
 import at.joestr.zonemenu.util.Updater;
 import at.joestr.zonemenu.util.YMLDelegate;
 import at.joestr.zonemenu.util.ZoneMenuCreateCorner;
@@ -25,11 +26,14 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
@@ -38,6 +42,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
@@ -66,10 +71,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
   public ZoneMenuSubcreateCorner zoneMenuSubcreateCorner = null;
 
-  // WorldEdit
   public WorldEditPlugin worldEditPlugin;
-
-  // WorldGuard
   public WorldGuardPlugin worldGuardPlugin;
 
   // Map which contains players an their ZoneMenuPlayers
@@ -80,12 +82,16 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
   public Properties appProperties = new Properties();
 
-  /** Plugin starts. */
+  /**
+   * Plugin starts.
+   */
   @Override
   public void onEnable() {
 
-    // bStats' plugin metrics
-    MetricsLite metrics = new MetricsLite(this, 4437);
+    Metrics metrics = new Metrics(this, 4437);
+
+    this.loadAppConfiguration();
+    this.loadLanguageConfiguration();
 
     try {
       this.appProperties.load(getClass().getResource("app.properties").openStream());
@@ -103,35 +109,35 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     // if not create them.
     // Finally load them.
     ymlDelegates.stream()
-        .map(
-            (yd) -> {
-              if (!yd.Exist()) {
+      .map(
+        (yd) -> {
+          if (!yd.Exist()) {
 
-                yd.Create();
-              }
-              return yd;
-            })
-        .forEachOrdered(
-            (yd) -> {
-              yd.Load();
-            });
+            yd.Create();
+          }
+          return yd;
+        })
+      .forEachOrdered(
+        (yd) -> {
+          yd.Load();
+        });
 
     // Check the delegaes for their entries.
     // If they lack some entries,
     // add the missing ones and save the file.
     ymlDelegates.stream()
-        .filter((yd) -> (!yd.EntryCheck()))
-        .forEachOrdered(
-            (yd) -> {
-              yd.Save();
-            });
+      .filter((yd) -> (!yd.EntryCheck()))
+      .forEachOrdered(
+        (yd) -> {
+          yd.Save();
+        });
 
-    this.updater =
-        new Updater(
-            this.appProperties.getProperty(
-                "updater.uri", "https://repo.joestr.xyz/unconfigured.properties"),
-            this.appProperties.getProperty("updater.version", "0.1.0-SNAPSHOT"),
-            ((Boolean) configDelegate.getMap().get("update_release_only")));
+    this.updater
+      = new Updater(
+        this.appProperties.getProperty(
+          "updater.uri", "https://repo.joestr.xyz/unconfigured.properties"),
+        this.appProperties.getProperty("updater.version", "0.1.0-SNAPSHOT"),
+        ((Boolean) configDelegate.getMap().get("update_release_only")));
 
     this.zoneMenuCreateCorner = new ZoneMenuCreateCorner(this);
     this.zoneMenuSubcreateCorner = new ZoneMenuSubcreateCorner(this);
@@ -154,7 +160,9 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     this.worldGuardPlugin = this.getWorldGuardPlugin();
   }
 
-  /** Plugin ends. */
+  /**
+   * Plugin ends.
+   */
   @Override
   public void onDisable() {
 
@@ -192,7 +200,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     if ((plugin == null) || (!(plugin instanceof WorldGuardPlugin))) {
 
       this.getLogger()
-          .log(Level.SEVERE, "[ZoneMenu] WorldGuard not initialized. Disabling plugin.");
+        .log(Level.SEVERE, "[ZoneMenu] WorldGuard not initialized. Disabling plugin.");
       this.getServer().getPluginManager().disablePlugin(this);
 
       return null;
@@ -202,7 +210,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
   }
 
   /**
-   * Calls {@link ChatColor#translateAlternateColorCodes(char, String)} with the parameters {@code
+   * Calls {@link ChatColor#translateAlternateColorCodes(char, String)} with the
+   * parameters {@code
    * alternativeCode} and {@code stringToInspect}.
    *
    * @param alternativeCode The alternative color code {@link char character}.
@@ -251,7 +260,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
   }
 
   /**
-   * Calls {@linkplain #getRegion(Player, boolean)} with second parameter to be {@code true}.
+   * Calls {@linkplain #getRegion(Player, boolean)} with second parameter to be
+   * {@code true}.
    *
    * @param player A {@link Player player}.
    * @return The {@linkplain ProtectedRegion region} of a player.
@@ -262,12 +272,12 @@ public class ZoneMenu extends JavaPlugin implements Listener {
   }
 
   /**
-   * Calls {@linkplain #getRegions(Player, Boolean)} with parameters and returns the first element
-   * or {@code null}.
+   * Calls {@linkplain #getRegions(Player, Boolean)} with parameters and returns
+   * the first element or {@code null}.
    *
    * @param player A {@link Player player}.
-   * @param showMessage A {@link Boolean boolean} flag; {@code true} - if a message should be
-   *     displayed
+   * @param showMessage A {@link Boolean boolean} flag; {@code true} - if a
+   * message should be displayed
    * @return The {@linkplain ProtectedRegion region} of the player.
    */
   public ProtectedRegion getRegion(final Player player, boolean showMessage) {
@@ -284,10 +294,12 @@ public class ZoneMenu extends JavaPlugin implements Listener {
   }
 
   /**
-   * Get a list of players regions an control whether you like to show a message or not.
+   * Get a list of players regions an control whether you like to show a message
+   * or not.
    *
    * @param player A {@link Player player}.
-   * @param showMessage A {@link Boolean boolean} flag; {@code} - if a message should be displayed
+   * @param showMessage A {@link Boolean boolean} flag; {@code} - if a message
+   * should be displayed
    * @return A {@link List list} of {@link ProtectedRegion region}s of a player.
    */
   public List<ProtectedRegion> getRegions(final Player player, final Boolean showMessage) {
@@ -295,8 +307,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     if (showMessage) {
 
       this.sendActionBarToPlayer(
-          player,
-          this.colorCode('&', (String) this.configDelegate.getMap().get("zone_wait_message")));
+        player,
+        this.colorCode('&', (String) this.configDelegate.getMap().get("zone_wait_message")));
     }
 
     List<ProtectedRegion> protectedRegions = new ArrayList<>();
@@ -315,50 +327,52 @@ public class ZoneMenu extends JavaPlugin implements Listener {
   }
 
   /**
-   * Gets all regions belonging to a player in a {@link CompletableFuture} and gives it to a
-   * provided {@link BiConsumer}
+   * Gets all regions belonging to a player in a {@link CompletableFuture} and
+   * gives it to a provided {@link BiConsumer}
    *
    * @param player A {@link Player player}.
-   * @param showMessage A {@link Boolean boolean} flag; {@code true} - if a message should be
-   *     displayed
-   * @param biConsumer A {@linkplain BiConsumer bi-consumer} which takes a {@link List list} of
-   *     {@link ProtectedRegion region}s and a {@link Throwable throwable} object; This bi-consumer
-   *     gets executed when the search request finished.
+   * @param showMessage A {@link Boolean boolean} flag; {@code true} - if a
+   * message should be displayed
+   * @param biConsumer A {@linkplain BiConsumer bi-consumer} which takes a
+   * {@link List list} of {@link ProtectedRegion region}s and a
+   * {@link Throwable throwable} object; This bi-consumer gets executed when the
+   * search request finished.
    */
   public void futuristicRegionProcessing(
-      final Player player,
-      final boolean showMessage,
-      BiConsumer<List<ProtectedRegion>, Throwable> biConsumer) {
+    final Player player,
+    final boolean showMessage,
+    BiConsumer<List<ProtectedRegion>, Throwable> biConsumer) {
 
     if (showMessage) {
 
       this.sendActionBarToPlayer(
-          player, this.colorCode('&', (String) this.configDelegate.getMap().get("wait_message")));
+        player, this.colorCode('&', (String) this.configDelegate.getMap().get("wait_message")));
     }
 
     // ProfileCache pc = WorldGuard.getInstance().getProfileCache();
     // ProfileService ps = WorldGuard.getInstance().getProfileService();
     CompletableFuture.supplyAsync(
-            () -> {
-              RegionManager regionManager =
-                  WorldGuard.getInstance()
-                      .getPlatform()
-                      .getRegionContainer()
-                      .get(BukkitAdapter.adapt(player.getWorld()));
+      () -> {
+        RegionManager regionManager
+        = WorldGuard.getInstance()
+          .getPlatform()
+          .getRegionContainer()
+          .get(BukkitAdapter.adapt(player.getWorld()));
 
-              List<ProtectedRegion> protectedRegions = new ArrayList<>();
+        List<ProtectedRegion> protectedRegions = new ArrayList<>();
 
-              for (String string : regionManager.getRegions().keySet()) {
+        for (String string : regionManager.getRegions().keySet()) {
 
-                if (regionManager.getRegion(string).isOwner(worldGuardPlugin.wrapPlayer(player))) {
-                  protectedRegions.add(regionManager.getRegions().get(string));
-                }
-              }
+          if (regionManager.getRegion(string).isOwner(worldGuardPlugin.wrapPlayer(player))) {
+            protectedRegions.add(regionManager.getRegions().get(string));
+          }
+        }
 
-              return protectedRegions;
-            })
-        .whenComplete(biConsumer);
+        return protectedRegions;
+      })
+      .whenComplete(biConsumer);
   }
+
   ;
 
   /**
@@ -377,8 +391,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     // Get the custom player here.
     ZoneMenuPlayer zoneMenuPlayer = this.zoneMenuPlayers.get(player);
 
-    LocalSession session =
-        WorldEdit.getInstance().getSessionManager().get(BukkitAdapter.adapt(player));
+    LocalSession session
+      = WorldEdit.getInstance().getSessionManager().get(BukkitAdapter.adapt(player));
 
     com.sk89q.worldedit.world.World weWorld = BukkitAdapter.adapt(player.getWorld());
 
@@ -400,7 +414,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
   }
 
   /**
-   * Returns the WorldEdit selection of a player as a {@link ProtectedRegion region}.
+   * Returns the WorldEdit selection of a player as a
+   * {@link ProtectedRegion region}.
    *
    * @param player A {@link Player player}.
    * @return The WorldEdit selection as a region.
@@ -409,8 +424,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
     Region selectedRegion = null;
 
-    LocalSession session =
-        WorldEdit.getInstance().getSessionManager().get(BukkitAdapter.adapt(player));
+    LocalSession session
+      = WorldEdit.getInstance().getSessionManager().get(BukkitAdapter.adapt(player));
 
     com.sk89q.worldedit.world.World weWorld = BukkitAdapter.adapt(player.getWorld());
 
@@ -421,5 +436,33 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     }
 
     return selectedRegion;
+  }
+
+  private void loadAppConfiguration() {
+    InputStream bundledConfig = this.getClass().getResourceAsStream("config.yml");
+    File externalConfig = new File(this.getDataFolder(), "config.yml");
+
+    try {
+      AppConfiguration.getInstance(externalConfig, bundledConfig);
+    } catch (IOException ex) {
+      this.getLogger().log(Level.SEVERE, "Error whilst intialising the plugin configuration!", ex);
+      this.getServer().getPluginManager().disablePlugin(this);
+    }
+  }
+
+  private void loadLanguageConfiguration() {
+    Map<String, InputStream> bundledLanguages = new HashMap<>();
+    bundledLanguages.put("en.yml", this.getClass().getResourceAsStream("languages/en.yml"));
+    bundledLanguages.put("de.yml", this.getClass().getResourceAsStream("languages/de.yml"));
+    File externalLanguagesFolder = new File(this.getDataFolder(), "languages");
+
+    try {
+      LanguageConfiguration.getInstance(
+        externalLanguagesFolder, bundledLanguages, new Locale("en"));
+    } catch (IOException ex) {
+      this.getLogger()
+        .log(Level.SEVERE, "Error whilst intialising the language configuration!", ex);
+      this.getServer().getPluginManager().disablePlugin(this);
+    }
   }
 }

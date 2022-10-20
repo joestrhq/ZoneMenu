@@ -108,7 +108,19 @@
     <dependency>
       <groupId>at.joestr.javacommon</groupId>
       <artifactId>configuration</artifactId>
-      <version>0.1.0-SNAPSHOT</version>
+      <version>0.2.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>at.joestr.javacommon</groupId>
+      <artifactId>spigotutils</artifactId>
+      <version>0.2.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>at.joestr.javacommon</groupId>
+      <artifactId>updater</artifactId>
+      <version>0.2.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -140,6 +152,12 @@
       <artifactId>semver4j</artifactId>
       <version>2.2.0</version>
       <type>jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.bstats</groupId>
+      <artifactId>bstats-bukkit</artifactId>
+      <version>3.0.0</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
     
@@ -227,6 +245,9 @@
                   <include>me.lucko:commodore</include>
                   <include>com.vdurmont:semver4j</include>
                   <include>at.joestr.javacommon:configuration</include>
+                  <include>at.joestr.javacommon:spigotutils</include>
+                  <include>at.joestr.javacommon:updater</include>
+                  <include>org.bstats:*</include>
                 </includes>
               </artifactSet>
               <relocations>
@@ -239,8 +260,12 @@
                   <shadedPattern>at.joestr.zonemenu.thirdparty.com.vdurmont.semver4j</shadedPattern>
                 </relocation>
                 <relocation>
-                  <pattern>at.joestr.javacommon.configuration</pattern>
-                  <shadedPattern>at.joestr.zonemenu.thirdparty.at.joestr.javacommon.configuration</shadedPattern>
+                  <pattern>at.joestr.javacommon</pattern>
+                  <shadedPattern>at.joestr.zonemenu.thirdparty.at.joestr.javacommon</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.bstats</pattern>
+                  <shadedPattern>at.joestr.zonemenu.thirdparty.org.bstats</shadedPattern>
                 </relocation>
               </relocations>
               <shadedArtifactAttached>true</shadedArtifactAttached>
