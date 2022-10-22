@@ -9,9 +9,7 @@ import at.joestr.zonemenu.event.playerinteract.SubcreatePlayerInteract;
 import at.joestr.zonemenu.listener.PlayerChangedWorld;
 import at.joestr.zonemenu.listener.PlayerMove;
 import at.joestr.zonemenu.listener.PlayerQuit;
-import at.joestr.zonemenu.tabcomplete.TabCompleteZone;
 import at.joestr.zonemenu.util.Updater;
-import at.joestr.zonemenu.util.YMLDelegate;
 import at.joestr.zonemenu.util.ZoneMenuCreateCorner;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
 import at.joestr.zonemenu.util.ZoneMenuSubcreateCorner;
@@ -45,6 +43,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
@@ -57,15 +56,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @version ${project.version}
  */
 public class ZoneMenu extends JavaPlugin implements Listener {
-
-  // This represents the config file
-  public YMLDelegate configDelegate = new YMLDelegate(this, "config", "config.yml");
-
-  // This files contains the entries for the region IDs
-  public YMLDelegate idDelegate = new YMLDelegate(this, "id", "id.yml");
-
-  // This list contains the two delegates above (for iterating)
-  public List<YMLDelegate> ymlDelegates = new ArrayList<>();
 
   public ZoneMenuCreateCorner zoneMenuCreateCorner = null;
 
@@ -81,6 +71,8 @@ public class ZoneMenu extends JavaPlugin implements Listener {
   public Updater updater;
 
   public Properties appProperties = new Properties();
+
+  private Map<String, TabExecutor> commandMap = new HashMap<>();
 
   /**
    * Plugin starts.
@@ -101,51 +93,12 @@ public class ZoneMenu extends JavaPlugin implements Listener {
       Logger.getLogger(ZoneMenu.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    // Add the delegates to the list
-    ymlDelegates.add(configDelegate);
-    ymlDelegates.add(idDelegate);
-
-    // Check the delegates for existence,
-    // if not create them.
-    // Finally load them.
-    ymlDelegates.stream()
-      .map(
-        (yd) -> {
-          if (!yd.Exist()) {
-
-            yd.Create();
-          }
-          return yd;
-        })
-      .forEachOrdered(
-        (yd) -> {
-          yd.Load();
-        });
-
-    // Check the delegaes for their entries.
-    // If they lack some entries,
-    // add the missing ones and save the file.
-    ymlDelegates.stream()
-      .filter((yd) -> (!yd.EntryCheck()))
-      .forEachOrdered(
-        (yd) -> {
-          yd.Save();
-        });
-
-    this.updater
-      = new Updater(
-        this.appProperties.getProperty(
-          "updater.uri", "https://repo.joestr.xyz/unconfigured.properties"),
-        this.appProperties.getProperty("updater.version", "0.1.0-SNAPSHOT"),
-        ((Boolean) configDelegate.getMap().get("update_release_only")));
-
     this.zoneMenuCreateCorner = new ZoneMenuCreateCorner(this);
     this.zoneMenuSubcreateCorner = new ZoneMenuSubcreateCorner(this);
 
-    // Register command /zone
-    PluginCommand zoneCommand = this.getCommand("zone");
-    zoneCommand.setExecutor(new CommandZone(this));
-    zoneCommand.setTabCompleter(new TabCompleteZone(this));
+    this.commandMap.put("zone", new CommandZone(this));
+
+    this.registerCommands();
 
     // Register the events
     new FindPlayerInteract(this);
@@ -308,7 +261,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
 
       this.sendActionBarToPlayer(
         player,
-        this.colorCode('&', (String) this.configDelegate.getMap().get("zone_wait_message")));
+        this.colorCode('&', "Please Wait ..."));
     }
 
     List<ProtectedRegion> protectedRegions = new ArrayList<>();
@@ -346,7 +299,7 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     if (showMessage) {
 
       this.sendActionBarToPlayer(
-        player, this.colorCode('&', (String) this.configDelegate.getMap().get("wait_message")));
+        player, this.colorCode('&', "please wait ..."));
     }
 
     // ProfileCache pc = WorldGuard.getInstance().getProfileCache();
@@ -438,6 +391,18 @@ public class ZoneMenu extends JavaPlugin implements Listener {
     return selectedRegion;
   }
 
+  private void registerCommands() {
+    this.commandMap.forEach(
+      (s, e) -> {
+        PluginCommand pluginCommand = getCommand(s);
+        if (pluginCommand == null) {
+          return;
+        }
+        pluginCommand.setExecutor(e);
+        pluginCommand.setTabCompleter(e);
+      });
+  }
+
   private void loadAppConfiguration() {
     InputStream bundledConfig = this.getClass().getResourceAsStream("config.yml");
     File externalConfig = new File(this.getDataFolder(), "config.yml");
@@ -453,7 +418,6 @@ public class ZoneMenu extends JavaPlugin implements Listener {
   private void loadLanguageConfiguration() {
     Map<String, InputStream> bundledLanguages = new HashMap<>();
     bundledLanguages.put("en.yml", this.getClass().getResourceAsStream("languages/en.yml"));
-    bundledLanguages.put("de.yml", this.getClass().getResourceAsStream("languages/de.yml"));
     File externalLanguagesFolder = new File(this.getDataFolder(), "languages");
 
     try {
