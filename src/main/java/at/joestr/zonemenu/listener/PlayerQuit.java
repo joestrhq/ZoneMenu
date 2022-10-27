@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import at.joestr.zonemenu.ZoneMenu;
+import at.joestr.zonemenu.ZoneMenuPlugin;
 
 /**
  * Event listener which handles game quits of players
@@ -18,9 +18,9 @@ import at.joestr.zonemenu.ZoneMenu;
  */
 public class PlayerQuit implements Listener {
 
-    private ZoneMenu zoneMenuPlugin;
+    private ZoneMenuPlugin zoneMenuPlugin;
 
-    public PlayerQuit(ZoneMenu zonemenu) {
+    public PlayerQuit(ZoneMenuPlugin zonemenu) {
 
         this.zoneMenuPlugin = zonemenu;
         this.zoneMenuPlugin.getServer().getPluginManager().registerEvents(this, this.zoneMenuPlugin);

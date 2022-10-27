@@ -18,16 +18,16 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion.CircularInheritan
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import at.joestr.zonemenu.ZoneMenu;
+import at.joestr.zonemenu.ZoneMenuPlugin;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
 import at.joestr.zonemenu.util.ZoneMenuSignType;
 import at.joestr.zonemenu.util.ZoneMenuToolType;
 
 public class SubCommandZoneSubcreate {
 
-    ZoneMenu zoneMenuPlugin = null;
+    ZoneMenuPlugin zoneMenuPlugin = null;
 
-    public SubCommandZoneSubcreate(ZoneMenu plugin) {
+    public SubCommandZoneSubcreate(ZoneMenuPlugin plugin) {
 
         this.zoneMenuPlugin = plugin;
     }

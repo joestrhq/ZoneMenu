@@ -2,13 +2,13 @@ package at.joestr.zonemenu.command.subcommand;
 
 import org.bukkit.entity.Player;
 
-import at.joestr.zonemenu.ZoneMenu;
+import at.joestr.zonemenu.ZoneMenuPlugin;
 
 public class SubCommandZoneUpdate {
 
-    ZoneMenu zoneMenuPlugin = null;
+    ZoneMenuPlugin zoneMenuPlugin = null;
 
-    public SubCommandZoneUpdate(ZoneMenu zoneMenuPlugin) {
+    public SubCommandZoneUpdate(ZoneMenuPlugin zoneMenuPlugin) {
 
         this.zoneMenuPlugin = zoneMenuPlugin;
     }

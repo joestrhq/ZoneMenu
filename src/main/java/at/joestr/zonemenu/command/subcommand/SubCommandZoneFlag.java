@@ -23,7 +23,7 @@
 //
 package at.joestr.zonemenu.command.subcommand;
 
-import at.joestr.zonemenu.ZoneMenu;
+import at.joestr.zonemenu.ZoneMenuPlugin;
 import com.sk89q.worldedit.util.Location;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.BooleanFlag;
@@ -51,9 +51,9 @@ import org.bukkit.entity.Player;
 
 public class SubCommandZoneFlag {
 
-  ZoneMenu zoneMenuPlugin = null;
+  ZoneMenuPlugin zoneMenuPlugin = null;
 
-  public SubCommandZoneFlag(ZoneMenu plugin) {
+  public SubCommandZoneFlag(ZoneMenuPlugin plugin) {
 
     this.zoneMenuPlugin = plugin;
   }

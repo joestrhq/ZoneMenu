@@ -3,7 +3,7 @@ package at.joestr.zonemenu.event.playerinteract;
 import at.joestr.javacommon.configuration.LanguageConfiguration;
 import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
-import at.joestr.zonemenu.ZoneMenu;
+import at.joestr.zonemenu.ZoneMenuPlugin;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
 import at.joestr.zonemenu.util.ZoneMenuToolType;
@@ -33,10 +33,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
  */
 public class FindPlayerInteract implements Listener {
 
-  private ZoneMenu zoneMenuPlugin;
+  private ZoneMenuPlugin zoneMenuPlugin;
   private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
-  public FindPlayerInteract(ZoneMenu zonemenu) {
+  public FindPlayerInteract(ZoneMenuPlugin zonemenu) {
 
     this.zoneMenuPlugin = zonemenu;
     this.zoneMenuPlugin.getServer().getPluginManager().registerEvents(this, this.zoneMenuPlugin);

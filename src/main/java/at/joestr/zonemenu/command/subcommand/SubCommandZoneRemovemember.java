@@ -8,13 +8,13 @@ import org.bukkit.entity.Player;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
-import at.joestr.zonemenu.ZoneMenu;
+import at.joestr.zonemenu.ZoneMenuPlugin;
 
 public class SubCommandZoneRemovemember {
 
-    ZoneMenu plugin = null;
+    ZoneMenuPlugin plugin = null;
 
-    public SubCommandZoneRemovemember(ZoneMenu plugin) {
+    public SubCommandZoneRemovemember(ZoneMenuPlugin plugin) {
         this.plugin = plugin;
     }
 
