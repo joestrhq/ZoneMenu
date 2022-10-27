@@ -18,16 +18,16 @@ import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import at.joestr.zonemenu.ZoneMenu;
+import at.joestr.zonemenu.ZoneMenuPlugin;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
 import at.joestr.zonemenu.util.ZoneMenuSignType;
 import at.joestr.zonemenu.util.ZoneMenuToolType;
 
 public class SubCommandZoneExpand {
 
-    ZoneMenu plugin = null;
+    ZoneMenuPlugin plugin = null;
 
-    public SubCommandZoneExpand(ZoneMenu plugin) {
+    public SubCommandZoneExpand(ZoneMenuPlugin plugin) {
         this.plugin = plugin;
     }
 

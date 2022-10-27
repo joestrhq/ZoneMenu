@@ -9,15 +9,15 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import at.joestr.zonemenu.ZoneMenu;
+import at.joestr.zonemenu.ZoneMenuPlugin;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
 import at.joestr.zonemenu.util.ZoneMenuToolType;
 
 public class SubCommandZoneFind {
 
-    ZoneMenu zoneMenuPlugin = null;
+    ZoneMenuPlugin zoneMenuPlugin = null;
 
-    public SubCommandZoneFind(ZoneMenu plugin) {
+    public SubCommandZoneFind(ZoneMenuPlugin plugin) {
         this.zoneMenuPlugin = plugin;
     }
 

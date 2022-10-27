@@ -14,13 +14,13 @@ import org.bukkit.entity.Player;
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
-import at.joestr.zonemenu.ZoneMenu;
+import at.joestr.zonemenu.ZoneMenuPlugin;
 
 public class SubCommandZoneSelect {
 
-    ZoneMenu zoneMenuPlugin = null;
+    ZoneMenuPlugin zoneMenuPlugin = null;
 
-    public SubCommandZoneSelect(ZoneMenu zoneMenuPlugin) {
+    public SubCommandZoneSelect(ZoneMenuPlugin zoneMenuPlugin) {
         this.zoneMenuPlugin = zoneMenuPlugin;
     }
 

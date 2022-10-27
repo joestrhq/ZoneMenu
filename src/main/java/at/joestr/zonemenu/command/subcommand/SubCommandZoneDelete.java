@@ -11,13 +11,13 @@ import org.bukkit.entity.Player;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 
-import at.joestr.zonemenu.ZoneMenu;
+import at.joestr.zonemenu.ZoneMenuPlugin;
 
 public class SubCommandZoneDelete {
 
-    ZoneMenu zoneMenuPlugin = null;
+    ZoneMenuPlugin zoneMenuPlugin = null;
 
-    public SubCommandZoneDelete(ZoneMenu zoneMenuPlugin) {
+    public SubCommandZoneDelete(ZoneMenuPlugin zoneMenuPlugin) {
 
         this.zoneMenuPlugin = zoneMenuPlugin;
     }

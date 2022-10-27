@@ -7,7 +7,7 @@ package at.joestr.zonemenu.listener;
 
 import at.joestr.javacommon.configuration.LanguageConfiguration;
 import at.joestr.javacommon.spigotutils.MessageHelper;
-import at.joestr.zonemenu.ZoneMenu;
+import at.joestr.zonemenu.ZoneMenuPlugin;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuToolType;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -31,10 +31,10 @@ import org.bukkit.event.player.PlayerMoveEvent;
  */
 public class PlayerMove implements Listener {
 
-  private ZoneMenu zoneMenuPlugin;
+  private ZoneMenuPlugin zoneMenuPlugin;
   private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
-  public PlayerMove(ZoneMenu zonemenu) {
+  public PlayerMove(ZoneMenuPlugin zonemenu) {
 
     this.zoneMenuPlugin = zonemenu;
     this.zoneMenuPlugin.getServer().getPluginManager().registerEvents(this, this.zoneMenuPlugin);

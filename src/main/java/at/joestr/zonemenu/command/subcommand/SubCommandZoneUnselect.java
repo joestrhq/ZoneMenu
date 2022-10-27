@@ -7,13 +7,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.entity.Player;
 
-import at.joestr.zonemenu.ZoneMenu;
+import at.joestr.zonemenu.ZoneMenuPlugin;
 
 public class SubCommandZoneUnselect {
 
-    ZoneMenu zoneMenuPlugin = null;
+    ZoneMenuPlugin zoneMenuPlugin = null;
 
-    public SubCommandZoneUnselect(ZoneMenu zoneMenuPlugin) {
+    public SubCommandZoneUnselect(ZoneMenuPlugin zoneMenuPlugin) {
         this.zoneMenuPlugin = zoneMenuPlugin;
     }
 
