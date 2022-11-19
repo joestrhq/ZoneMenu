@@ -5,6 +5,7 @@ import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.ZoneMenuPlugin;
 import at.joestr.zonemenu.configuration.CurrentEntries;
+import at.joestr.zonemenu.util.ZoneMenuManager;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
 import at.joestr.zonemenu.util.ZoneMenuSignType;
 import at.joestr.zonemenu.util.ZoneMenuToolType;
@@ -48,17 +49,17 @@ public class SubcreatePlayerInteract implements Listener {
     Player player = event.getPlayer();
 
     // If the player is not in the map ...
-    if (!this.zoneMenuPlugin.zoneMenuPlayers.containsKey(player)) {
+    if (!ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
 
       // ... do not proceed.
       return;
     }
 
-    ZoneMenuPlayer zoneMenuPlayer = this.zoneMenuPlugin.zoneMenuPlayers.get(player);
+    ZoneMenuPlayer zoneMenuPlayer = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player);
 
     if ((player.getInventory().getItemInMainHand().getType() != Material.STICK)
-      || (this.zoneMenuPlugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN)
-      || (this.zoneMenuPlugin.zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.SUBZONE)) {
+      || (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN)
+      || (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.SUBZONE)) {
 
       return;
     }
@@ -80,21 +81,21 @@ public class SubcreatePlayerInteract implements Listener {
       event.setCancelled(true);
 
       // Reset corner
-      this.zoneMenuPlugin.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner1(), player);
+      ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner1(), player);
 
       // Set the 1st corner
       zoneMenuPlayer.setSubcreateCorner1(event.getClickedBlock().getLocation());
 
       // Create new corner
-      this.zoneMenuPlugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner1(), player, Material.GLOWSTONE,
+      ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner1(), player, Material.GLOWSTONE,
         (byte) 0);
 
       // If all needed variables are set
       if ((zoneMenuPlayer.getSubcreateWorld() != null) && (zoneMenuPlayer.getSubcreateCorner1() != null)
         && (zoneMenuPlayer.getSubcreateCorner2() != null)) {
         // Reset beacons and create new ones
-        this.zoneMenuPlugin.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner2(), player);
-        this.zoneMenuPlugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner2(), player,
+        ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner2(), player);
+        ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner2(), player,
           Material.SEA_LANTERN, (byte) 0);
 
         // Grab some values to work with
@@ -130,8 +131,8 @@ public class SubcreatePlayerInteract implements Listener {
           .rawString();
 
         String areaValue = Integer.toString(
-          this.zoneMenuPlugin.getPlayerSelection(player).getLength()
-          * this.zoneMenuPlugin.getPlayerSelection(player).getWidth());
+          ZoneMenuManager.getInstance().getPlayerSelection(player).getLength()
+          * ZoneMenuManager.getInstance().getPlayerSelection(player).getWidth());
 
         String signArea = new MessageHelper(languageResolverFunction)
           .path(CurrentEntries.LANG_EVT_SIGN_AREA.toString())
@@ -150,7 +151,7 @@ public class SubcreatePlayerInteract implements Listener {
       }
 
       // Send actiobar message to the player
-      zoneMenuPlugin.sendActionBarToPlayer(player, this.zoneMenuPlugin.colorCode('&', sign1));
+      //zoneMenuPlugin.sendActionBarToPlayer(player, this.zoneMenuPlugin.colorCode('&', sign1));
     }
 
     if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -166,21 +167,21 @@ public class SubcreatePlayerInteract implements Listener {
       event.setCancelled(true);
 
       // Reset corner
-      this.zoneMenuPlugin.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner2(), player);
+      ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner2(), player);
 
       // Set the 2nd corner
       zoneMenuPlayer.setSubcreateCorner2(event.getClickedBlock().getLocation());
 
       // Create the corner
-      this.zoneMenuPlugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner2(), player,
+      ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner2(), player,
         Material.SEA_LANTERN, (byte) 0);
 
       // If all needed variables are set
       if ((zoneMenuPlayer.getSubcreateWorld() != null) && (zoneMenuPlayer.getSubcreateCorner1() != null)
         && (zoneMenuPlayer.getSubcreateCorner2() != null)) {
         // Reset beacons and create new ones
-        this.zoneMenuPlugin.zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner1(), player);
-        this.zoneMenuPlugin.zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner1(), player,
+        ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner1(), player);
+        ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner1(), player,
           Material.GLOWSTONE, (byte) 0);
 
         // Grab some values to work with
@@ -216,8 +217,8 @@ public class SubcreatePlayerInteract implements Listener {
           .rawString();
 
         String areaValue = Integer.toString(
-          this.zoneMenuPlugin.getPlayerSelection(player).getLength()
-          * this.zoneMenuPlugin.getPlayerSelection(player).getWidth());
+          ZoneMenuManager.getInstance().getPlayerSelection(player).getLength()
+          * ZoneMenuManager.getInstance().getPlayerSelection(player).getWidth());
 
         String signArea = new MessageHelper(languageResolverFunction)
           .path(CurrentEntries.LANG_EVT_SIGN_AREA.toString())
@@ -236,7 +237,7 @@ public class SubcreatePlayerInteract implements Listener {
       }
 
       // Send actiobar message to the player
-      zoneMenuPlugin.sendActionBarToPlayer(player, this.zoneMenuPlugin.colorCode('&', sign1));
+      //zoneMenuPlugin.sendActionBarToPlayer(player, this.zoneMenuPlugin.colorCode('&', sign1));
     }
   }
 }
