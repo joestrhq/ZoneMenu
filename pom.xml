@@ -108,19 +108,19 @@
     <dependency>
       <groupId>at.joestr.javacommon</groupId>
       <artifactId>configuration</artifactId>
-      <version>0.2.0-SNAPSHOT</version>
+      <version>0.3.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>at.joestr.javacommon</groupId>
       <artifactId>spigotutils</artifactId>
-      <version>0.2.0-SNAPSHOT</version>
+      <version>0.3.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>at.joestr.javacommon</groupId>
       <artifactId>updater</artifactId>
-      <version>0.2.0-SNAPSHOT</version>
+      <version>0.3.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
