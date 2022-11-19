@@ -5,6 +5,7 @@ import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.ZoneMenuPlugin;
 import at.joestr.zonemenu.configuration.CurrentEntries;
+import at.joestr.zonemenu.util.ZoneMenuManager;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
 import at.joestr.zonemenu.util.ZoneMenuToolType;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -49,18 +50,18 @@ public class FindPlayerInteract implements Listener {
     Player player = event.getPlayer();
 
     // If the player is not in the map ...
-    if (!this.zoneMenuPlugin.zoneMenuPlayers.containsKey(player)) {
+    if (!ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
 
       // .. do not proceed.
       return;
     }
 
     // Grab the ZoneMenuPlayer
-    ZoneMenuPlayer zoneMenuPlayer = this.zoneMenuPlugin.zoneMenuPlayers.get(player);
+    ZoneMenuPlayer zoneMenuPlayer = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player);
 
     // Using a stick? ToolType correct?
     if ((player.getInventory().getItemInMainHand().getType() != Material.STICK)
-      || (this.zoneMenuPlugin.zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.FIND)) {
+      || (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.FIND)) {
 
       return;
     }
@@ -115,7 +116,7 @@ public class FindPlayerInteract implements Listener {
       }
 
       // Send player a actionbar message
-      this.zoneMenuPlugin.sendActionBarToPlayer(player, this.zoneMenuPlugin.colorCode('&', textToShow));
+      //this.zoneMenuPlugin.sendActionBarToPlayer(player, this.zoneMenuPlugin.colorCode('&', textToShow));
     }
   }
 }
