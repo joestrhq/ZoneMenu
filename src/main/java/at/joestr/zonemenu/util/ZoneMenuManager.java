@@ -57,7 +57,7 @@ public class ZoneMenuManager {
   private static ZoneMenuManager INSTANCE;
 
   public ZoneMenuCreateCorner zoneMenuCreateCorner = null;
-  private ZoneMenuSubcreateCorner zoneMenuSubcreateCorner = null;
+  public ZoneMenuSubcreateCorner zoneMenuSubcreateCorner = null;
   private Plugin plugin;
   public Map<Player, ZoneMenuPlayer> zoneMenuPlayers = new HashMap<>();
 
