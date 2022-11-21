@@ -3,6 +3,17 @@ package at.joestr.zonemenu;
 import at.joestr.javacommon.configuration.AppConfiguration;
 import at.joestr.javacommon.configuration.LanguageConfiguration;
 import at.joestr.zonemenu.command.CommandZone;
+import at.joestr.zonemenu.command.CommandZoneAddmember;
+import at.joestr.zonemenu.command.CommandZoneCancel;
+import at.joestr.zonemenu.command.CommandZoneCreate;
+import at.joestr.zonemenu.command.CommandZoneDelete;
+import at.joestr.zonemenu.command.CommandZoneFind;
+import at.joestr.zonemenu.command.CommandZoneFlag;
+import at.joestr.zonemenu.command.CommandZoneInfo;
+import at.joestr.zonemenu.command.CommandZoneRemovemember;
+import at.joestr.zonemenu.command.CommandZoneSelect;
+import at.joestr.zonemenu.command.CommandZoneSubcreate;
+import at.joestr.zonemenu.command.CommandZoneUpdate;
 import at.joestr.zonemenu.event.playerinteract.CreatePlayerInteract;
 import at.joestr.zonemenu.event.playerinteract.FindPlayerInteract;
 import at.joestr.zonemenu.event.playerinteract.SubcreatePlayerInteract;
@@ -26,20 +37,13 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/**
- * The main class of this plugin.
- *
- * @author Joel Strasser (joestr)
- * @version ${project.version}
- */
 public class ZoneMenuPlugin extends JavaPlugin implements Listener {
 
-  private final Logger LOGGER = Logger.getLogger(ZoneMenuPlugin.class.getName());
+  private final Logger LOG = Logger.getLogger(ZoneMenuPlugin.class.getName());
 
   public WorldEditPlugin worldEditPlugin;
   public WorldGuardPlugin worldGuardPlugin;
 
-  // Map which contains players an their ZoneMenuPlayers
   private Map<String, TabExecutor> commandMap = new HashMap<>();
 
   @Override
@@ -50,14 +54,24 @@ public class ZoneMenuPlugin extends JavaPlugin implements Listener {
     try {
       ZoneMenuManager.getInstance(this);
     } catch (Exception ex) {
-      LOGGER.log(Level.SEVERE, null, ex);
+      LOG.log(Level.SEVERE, null, ex);
     }
 
     this.loadAppConfiguration();
     this.loadLanguageConfiguration();
 
     this.commandMap.put("zone", new CommandZone(this));
-
+    this.commandMap.put("zone-find", new CommandZoneFind());
+    this.commandMap.put("zone-create", new CommandZoneCreate());
+    this.commandMap.put("zone-subcreate", new CommandZoneSubcreate());
+    this.commandMap.put("zone-cancel", new CommandZoneCancel());
+    this.commandMap.put("zone-addmember", new CommandZoneAddmember());
+    this.commandMap.put("zone-removemember", new CommandZoneRemovemember());
+    this.commandMap.put("zone-flag", new CommandZoneFlag());
+    this.commandMap.put("zone-info", new CommandZoneInfo());
+    this.commandMap.put("zone-delete", new CommandZoneDelete());
+    this.commandMap.put("zone-select", new CommandZoneSelect());
+    this.commandMap.put("zone-update", new CommandZoneUpdate());
     this.registerCommands();
 
     new FindPlayerInteract(this);
