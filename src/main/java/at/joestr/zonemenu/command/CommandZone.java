@@ -51,6 +51,14 @@ public class CommandZone implements TabExecutor {
         .send();
     }
 
+    if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_CREATE.toString())) {
+      new MessageHelper(languageResolverFunction)
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_CREATE.toString())
+        .receiver(sender)
+        .send();
+    }
+
     if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_SUBCREATE.toString())) {
       new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
