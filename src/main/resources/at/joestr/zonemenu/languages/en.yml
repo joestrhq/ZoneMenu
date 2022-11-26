@@ -43,7 +43,7 @@ commands:
   zone-addmember:
     player_does_not_exist: '[""%prefix,{"text":"%playername","color":"gray"},{"text":" does not exist.","color":"red"}]'
     already_member: '[""%prefix,{"text":"%playername","color":"gray"},{"text":" is already a member at zone","color":"red"},{"text":" %zonename","color":"gray"},{"text":".","color":"red"}]'
-    addmember: '[""%prefix,{"text":"%playername","color":"gray"},{"text":" is now a member of zone ","color":"green"},{"text":"%zonename","color":"gray"},{"text":".","color":"green"}]'
+    success: '[""%prefix,{"text":"%playername","color":"gray"},{"text":" is now a member of zone ","color":"green"},{"text":"%zonename","color":"gray"},{"text":".","color":"green"}]'
   zone-removemember:
     unknownplayer: '[""%prefix,{"text":"%playername","color":"gray"},{"text":" is not a member at zone ","color":"red"},{"text":"%zonename","color":"gray"},{"text":".","color":"red"}]'
     removemember: '[""%prefix,{"text":"%playername","color":"gray"},{"text":" is no longer a member at zone ","color":"green"},{"text":"%zonename","color":"gray"},{"text":".","color":"green"}]'

@@ -14,7 +14,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- *
  * @author Joel
  */
 public enum CurrentEntries {
@@ -72,7 +71,7 @@ public enum CurrentEntries {
   LANG_CMD_ZONE_CANCEL_NOT_RUNNING("commands.zone-cancel.not_running"),
   LANG_CMD_ZONE_CANCEL_CANCEL("commands.zone-cancel.cancel"),
   LANG_CMD_ZONE_LIST_LIST("commands.zone-list.list"),
-  LANG_CMD_ZONE_ADDMEMBER_PLAYER_DOES_NOT_EXIST("commands.zone-addmember.not_a_member"),
+  LANG_CMD_ZONE_ADDMEMBER_PLAYER_DOES_NOT_EXIST("commands.zone-addmember.player_does_not_exist"),
   LANG_CMD_ZONE_ADDMEMBER_ALREADY_MEMBER("commands.zone-addmember.already_member"),
   LANG_CMD_ZONE_ADDMEMBER_SUCCESS("commands.zone-addmember.success"),
   LANG_CMD_ZONE_REMOVEMEMBER_NOT_A_MEMBER("commands.zone-removemember.not_a_member"),
@@ -127,10 +126,10 @@ public enum CurrentEntries {
   }
 
   public static CurrentEntries find(String text) {
-    Optional<CurrentEntries> result = Arrays.asList(values())
-      .stream()
-      .filter(cE -> cE.toString().equalsIgnoreCase(text))
-      .findFirst();
+    Optional<CurrentEntries> result =
+        Arrays.asList(values()).stream()
+            .filter(cE -> cE.toString().equalsIgnoreCase(text))
+            .findFirst();
     if (result.isPresent()) {
       return result.get();
     }
@@ -138,27 +137,24 @@ public enum CurrentEntries {
   }
 
   public static List<CurrentEntries> getGlobalEntries() {
-    return List.of(
-      CONF_VERSION,
-      LANG_VERSION
-    );
+    return List.of(CONF_VERSION, LANG_VERSION);
   }
 
   public static List<CurrentEntries> getConfigurationEntries() {
     return List.of(CurrentEntries.values()).stream()
-      .filter(x -> x.name().startsWith("CONF"))
-      .collect(Collectors.toList());
+        .filter(x -> x.name().startsWith("CONF"))
+        .collect(Collectors.toList());
   }
 
   public static List<CurrentEntries> getLanguageEntries() {
     return List.of(CurrentEntries.values()).stream()
-      .filter(x -> x.name().startsWith("LANG"))
-      .collect(Collectors.toList());
+        .filter(x -> x.name().startsWith("LANG"))
+        .collect(Collectors.toList());
   }
 
   public static List<CurrentEntries> getPermissionEntries() {
     return List.of(CurrentEntries.values()).stream()
-      .filter(x -> x.name().startsWith("PERM"))
-      .collect(Collectors.toList());
+        .filter(x -> x.name().startsWith("PERM"))
+        .collect(Collectors.toList());
   }
 }
