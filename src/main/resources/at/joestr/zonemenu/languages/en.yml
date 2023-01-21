@@ -1,4 +1,4 @@
-prefix: ',{"text":"[","color":"dark_gray"},{"text":"ZM","color":"dark_green"},{"text":"]","color":"dark_gray"}'
+prefix: ',{"text":"[","color":"dark_gray"},{"text":"ZM","color":"dark_green"},{"text":"]","color":"dark_gray"},{"text":" "}'
 generic:
   not_a_player: '[""%prefix,{"text":"This command can only be used by players!","color":"red"}]'
   wait_message: '[""%prefix,{"text":"Please wait ...","color":"aqua"}]'
@@ -11,7 +11,7 @@ commands:
     message_create: '[""%prefix,{"text":"» "},{"text":"Create a new zone","color":"gray","clickEvent":{"action":"run_command","value":"/zone-create"},"hoverEvent":{"action":"show_text","contents":"/zone-create"}}]'
     message_subcreate: '[""%prefix,{"text":"» "},{"text":"Create a new subzone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-subcreate"},"hoverEvent":{"action":"show_text","contents":"/zone-subcreate <zone>"}}]'
     message_list: '[""%prefix,{"text":"» "},{"text":"List all yout zones","color":"gray","clickEvent":{"action":"run_command","value":"/zone-list"},"hoverEvent":{"action":"show_text","contents":"/zone-list"}}]'
-    message_cancel: '[""%prefix,{"text":"» "},{"text":"Cancel creation","color":"gray","clickEvent":{"action":"run_command","value":"/zone-cancel"},"hoverEvent":{"action":"show_text","contents":"/zone-cancel <zone>"}}]'
+    message_cancel: '[""%prefix,{"text":"» "},{"text":"Cancel creation","color":"gray","clickEvent":{"action":"run_command","value":"/zone-cancel"},"hoverEvent":{"action":"show_text","contents":"/zone-cancel"}}]'
     message_addmember: '[""%prefix,{"text":"» "},{"text":"Add a player to your zone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-addmember "},"hoverEvent":{"action":"show_text","contents":"/zone-addmember <zone> <player>"}}]'
     message_removemember: '[""%prefix,{"text":"» "},{"text":"Remove a player from a zone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-removemember "},"hoverEvent":{"action":"show_text","contents":"/zone-removemember <zone> <player>"}}]'
     message_flag: '[""%prefix,{"text":"» "},{"text":"Modify a flag of a zone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-flag "},"hoverEvent":{"action":"show_text","contents":"/zone-flag <zone> <flag> <flag-value>"}}]'
@@ -36,8 +36,8 @@ commands:
     circular: '["",{"text":"There was a circular inheritance exception.","color":"red"}]'
     created: '[""%prefix,{"text":"Sub zone","color":"green"},{"text":" %zonename","color":"gray"},{"text":" created.","color":"green"}]'
   zone-cancel:
-    not_running: '[""%prefix,{"text":"This command can only be used by players!","color":"red"}]'
-    cancel: '[""%prefix,{"text":"Subzone ","color":"green"},{"text":"%zonename","color":"gray"},{"text":" created.","color":"green"}]'
+    not_running: '[""%prefix,{"text":"No zone creation is running!","color":"red"}]'
+    cancel: '[""%prefix,{"text":"Zone creation canelled.","color":"green"}]'
   zone-list:
     list: '[""%prefix,{"text":"List of all your zones: ","color":"aqua"},{"text":"%list","color":"gray"}]'
   zone-addmember:
