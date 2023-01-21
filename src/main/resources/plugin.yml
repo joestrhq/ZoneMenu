@@ -4,7 +4,7 @@ api-version: 1.19
 description: ZoneMenu enhances the usage of WorldGuard for players.
 author: joestr
 website: https://projects.joestr.at/zonemenu/
-main: at.joestr.zonemenu.ZoneMenu
+main: at.joestr.zonemenu.ZoneMenuPlugin
 database: false
 depend: [WorldEdit, WorldGuard]
 
