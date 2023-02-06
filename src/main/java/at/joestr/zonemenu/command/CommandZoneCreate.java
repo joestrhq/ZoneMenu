@@ -6,6 +6,9 @@
 package at.joestr.zonemenu.command;
 
 import at.joestr.javacommon.configuration.AppConfiguration;
+import at.joestr.javacommon.configuration.LanguageConfiguration;
+import at.joestr.javacommon.configuration.LocaleHelper;
+import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
@@ -21,6 +24,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Material;
@@ -38,8 +42,15 @@ public class CommandZoneCreate implements TabExecutor {
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-    if (sender instanceof Player) {
-      // TODO: send message
+    if (!(sender instanceof Player)) {
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(Locale.ENGLISH)
+        .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
+      return true;
     }
 
     if (args.length != 0) {
@@ -67,15 +78,19 @@ public class CommandZoneCreate implements TabExecutor {
         player.getInventory().addItem(new ItemStack[]{new ItemStack(Material.STICK, 1)});
       }
 
-      // TODO: send message
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_CMD_ZONE_CREATE_SIGN.toString())
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
       return true;
     }
 
-    if (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == null) {
-      // TODO: send message
-      return true;
-    }
-
+    //if (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == null) {
+    //  return true;
+    //}
     final Region selectedRegion = selectedRegion_;
 
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
@@ -86,15 +101,11 @@ public class CommandZoneCreate implements TabExecutor {
       }
 
       if (!ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
-
-        //do not proceed
         return;
       }
 
       if (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN
         || ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.ZONE) {
-
-        //do not proceed.
         return;
       }
 
@@ -107,9 +118,13 @@ public class CommandZoneCreate implements TabExecutor {
       boolean widthOk = selectedRegion.getWidth() >= minWidth && selectedRegion.getWidth() <= maxWidth;
 
       if (!lengthOk || !widthOk) {
-
-        // do not proceed.
-        // TODO: send message
+        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_CREATE_WIDTH_LENGTH_LIMIT.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
         return;
       }
 
@@ -131,57 +146,49 @@ public class CommandZoneCreate implements TabExecutor {
 
       if (zoneArea + selectionArea
         > AppConfiguration.getInstance().getInt(CurrentEntries.CONF_AREA_MAX_CLAIMABLE.toString())) {
-
-        // ... do not proceed.
-        // Send the player a message.
-        /*player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-          ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
-          + ((String) this.zoneMenuPlugin.configDelegate.getMap()
-            .get("zone_create_area_max_claimable_over")).replace("{area}", "" + zoneArea)
-            .replace("{count}", "" + zoneCounter)));*/
+        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_CREATE_AREA_OVER.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
         return;
       }
 
-      // If the number of claimed zones exceeds the limit ...
       if (zoneCounter > AppConfiguration.getInstance().getInt(CurrentEntries.CONF_HAVE_MAX.toString())) {
-
-        // ... do not proceed.
-        // Send the player a message.
-        /*player.sendMessage(this.zoneMenuPlugin.colorCode('&', ((String) this.zoneMenuPlugin.configDelegate
-          .getMap().get("prefix"))
-          + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_create_have_over_equal"))
-            .replace("{count}", "" + zoneCounter).replace("{zone_create_have_max}",
-            "" + this.zoneMenuPlugin.configDelegate.getMap().get("zone_create_have_max"))));*/
+        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_CREATE_HAVE_OVER_EQUAL.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
         return;
       }
 
-      // If the selected area is smaller than the specified value ...
       if (selectionArea < AppConfiguration.getInstance().getInt(CurrentEntries.CONF_AREA_MIN.toString())) {
-
-        // ... do not proceed.
-        // Send the player a message.
-        /*player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-          ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
-          + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_create_area_under"))
-            .replace("{0}", this.zoneMenuPlugin.configDelegate.getMap()
-              .get("zone_create_area_min").toString())));*/
+        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_CREATE_AREA_UNDER.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
         return;
       }
 
-      // If the selected area is larger than the specified value ...
       if (selectionArea > AppConfiguration.getInstance().getInt(CurrentEntries.CONF_AREA_MAX.toString())) {
-
-        // ... do not proceed.
-        // Send the player a message.
-        /*player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-          ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
-          + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_create_area_over"))
-            .replace("{0}", (String) this.zoneMenuPlugin.configDelegate.getMap()
-              .get("zone_create_area_max"))));*/
+        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_CREATE_AREA_OVER.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
         return;
       }
 
-      // Create a new WorldGuard region
       ProtectedCuboidRegion protectedCuboidRegion = new ProtectedCuboidRegion(
         (AppConfiguration.getInstance().getString(CurrentEntries.CONF_ZONE_ID.toString()))
           .replace("{creator}", player.getName()).replace("{count}", "" + zoneCounter++),
@@ -190,15 +197,14 @@ public class CommandZoneCreate implements TabExecutor {
       LocalPlayer wrapedPlayer = ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapPlayer(player);
       RegionManager regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()));
 
-      // If region overlaps with unowned regions ...
       if (regionContainer.overlapsUnownedRegion(protectedCuboidRegion, wrapedPlayer)) {
-
-        // ... do not proceed.
-        // Send the player a message.
-        /*player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-          ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
-          + ((String) this.zoneMenuPlugin.configDelegate.getMap()
-            .get("zone_create_overlaps_unowned"))));*/
+        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_CREATE_OVERLAPS_UNOWNED.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
         return;
       }
 
@@ -243,14 +249,16 @@ public class CommandZoneCreate implements TabExecutor {
         .get(BukkitAdapter.adapt(player.getWorld()))
         .addRegion(protectedCuboidRegion);
 
-      // Clear up player
       ZoneMenuManager.getInstance().clearUpZoneMenuPlayer(player);
 
-      // Send player a message
-      /*player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("prefix"))
-        + ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_create")).replace("{0}",
-          protectedCuboidRegion.getId())));*/
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_CMD_ZONE_CREATE_CREATED.toString())
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .modify((s) -> s.replace("%zonename", protectedCuboidRegion.getId()))
+        .showPrefix(true)
+        .receiver(player)
+        .send();
     });
 
     return true;
