@@ -5,12 +5,16 @@
  */
 package at.joestr.zonemenu.command;
 
+import at.joestr.javacommon.configuration.LanguageConfiguration;
+import at.joestr.javacommon.spigotutils.MessageHelper;
+import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RemovalStrategy;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import java.util.List;
+import java.util.Locale;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -25,7 +29,14 @@ public class CommandZoneDelete implements TabExecutor {
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (sender instanceof Player) {
-      // TODO: send message
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(Locale.ENGLISH)
+        .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
+      return true;
     }
 
     if (args.length != 1) {
@@ -35,48 +46,37 @@ public class CommandZoneDelete implements TabExecutor {
     String zoneName = args[0];
     Player player = (Player) sender;
 
-    if (!ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
-
-      // TODO: send message
-      return true;
-    }
-
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
-
-      // Initialise region
       ProtectedRegion protectedRegion = null;
 
-      // If the list is empty ...
       if (t.isEmpty()) {
-
-        // ... send the player a message.
-        //player.sendMessage(this.zoneMenuPlugin.colorCode('&', (String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone")));
+        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          .locale(Locale.ENGLISH)
+          .path(CurrentEntries.LANG_GEN_NO_ZONE.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(sender)
+          .send();
         return;
       }
 
-      // Loop through all regions ...
       for (ProtectedRegion protectedRegion_ : t) {
-
-        // ... and if the region ID equals the second argument (<Zone>) ...
         if (protectedRegion_.getId().equalsIgnoreCase(zoneName)) {
-
-          // ... set the found region.
           protectedRegion = protectedRegion_;
         }
       }
 
-      // If region equals null ...
       if (protectedRegion == null) {
-
-        // ... no region with this ID was not found.
-        // Send the player a message.
-        /*player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-          ((String) this.zoneMenuPlugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
-            arguments[1])));*/
+        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          .locale(Locale.ENGLISH)
+          .path(CurrentEntries.LANG_GEN_NOT_EXISTING_ZONE.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(sender)
+          .send();
         return;
       }
 
-      // Remove the region from worlds region manager
       WorldGuard
         .getInstance()
         .getPlatform()
@@ -87,9 +87,13 @@ public class CommandZoneDelete implements TabExecutor {
           RemovalStrategy.REMOVE_CHILDREN
         );
 
-      // Send a message to the player
-      /*player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-        ((String) zoneMenuPlugin.configDelegate.getMap().get("zone_delete")).replace("{0}", arguments[1])));*/
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(Locale.ENGLISH)
+        .path(CurrentEntries.LANG_CMD_ZONE_DELETE_SUCCESS.toString())
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
     });
 
     return true;
