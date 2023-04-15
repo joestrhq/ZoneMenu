@@ -5,10 +5,14 @@
  */
 package at.joestr.zonemenu.command;
 
+import at.joestr.javacommon.configuration.LanguageConfiguration;
+import at.joestr.javacommon.spigotutils.MessageHelper;
+import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -26,7 +30,13 @@ public class CommandZoneUnselect implements TabExecutor {
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (sender instanceof Player) {
-      // TODO: send message
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(Locale.ENGLISH)
+        .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
     }
 
     if (args.length != 1) {
