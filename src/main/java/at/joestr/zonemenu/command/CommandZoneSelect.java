@@ -5,6 +5,9 @@
  */
 package at.joestr.zonemenu.command;
 
+import at.joestr.javacommon.configuration.LanguageConfiguration;
+import at.joestr.javacommon.spigotutils.MessageHelper;
+import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
@@ -12,6 +15,7 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.selector.CuboidRegionSelector;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -29,8 +33,15 @@ public class CommandZoneSelect implements TabExecutor {
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-    if (sender instanceof Player) {
-      // TODO: send message
+    if (!(sender instanceof Player)) {
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(Locale.ENGLISH)
+        .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
+      return true;
     }
 
     if (args.length != 1) {
@@ -48,30 +59,33 @@ public class CommandZoneSelect implements TabExecutor {
 
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
-      // Initialise new region
       ProtectedRegion protectedregion = null;
 
       if (t.isEmpty()) {
-
-        /*player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-          (String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone")));*/
+        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          .locale(Locale.ENGLISH)
+          .path(CurrentEntries.LANG_GEN_NO_ZONE.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(sender)
+          .send();
         return;
       }
 
       for (ProtectedRegion pr : t) {
-
         if (pr.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(args[1])) {
-
           protectedregion = pr;
         }
       }
 
-      // Check if region in invalid
       if (protectedregion == null) {
-
-        /*player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-          ((String) this.zoneMenuPlugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
-            args[1])));*/
+        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          .locale(Locale.ENGLISH)
+          .path(CurrentEntries.LANG_GEN_NOT_EXISTING_ZONE.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(sender)
+          .send();
         return;
       }
 
@@ -101,11 +115,13 @@ public class CommandZoneSelect implements TabExecutor {
 
       session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
-      /*player.sendMessage(this.zoneMenuPlugin.colorCode(
-        '&',
-        ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_select")).replace("{0}", args[1]))
-      );*/
-      return;
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(Locale.ENGLISH)
+        .path(CurrentEntries.LANG_CMD_ZONE_SELECT_SUCCESS.toString())
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
     });
 
     return true;
