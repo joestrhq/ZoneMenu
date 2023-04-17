@@ -68,6 +68,7 @@ public enum CurrentEntries {
   LANG_CMD_ZONE_SUBCREATE_SIGN("commands.zone-subcreate.sign"),
   LANG_CMD_ZONE_SUBCREATE_NOT_IN_ZONE("commands.zone-subcreate.not_in_zone"),
   LANG_CMD_ZONE_SUBCREATE_CIRCULAR("commands.zone-subcreate.circular"),
+  LANG_CMD_ZONE_SUBCREATE_CREATED("command.zone-subcreate.created"),
   LANG_CMD_ZONE_CANCEL_NOT_RUNNING("commands.zone-cancel.not_running"),
   LANG_CMD_ZONE_CANCEL_CANCEL("commands.zone-cancel.cancel"),
   LANG_CMD_ZONE_LIST_LIST("commands.zone-list.list"),
@@ -126,10 +127,10 @@ public enum CurrentEntries {
   }
 
   public static CurrentEntries find(String text) {
-    Optional<CurrentEntries> result =
-        Arrays.asList(values()).stream()
-            .filter(cE -> cE.toString().equalsIgnoreCase(text))
-            .findFirst();
+    Optional<CurrentEntries> result
+      = Arrays.asList(values()).stream()
+        .filter(cE -> cE.toString().equalsIgnoreCase(text))
+        .findFirst();
     if (result.isPresent()) {
       return result.get();
     }
@@ -142,19 +143,19 @@ public enum CurrentEntries {
 
   public static List<CurrentEntries> getConfigurationEntries() {
     return List.of(CurrentEntries.values()).stream()
-        .filter(x -> x.name().startsWith("CONF"))
-        .collect(Collectors.toList());
+      .filter(x -> x.name().startsWith("CONF"))
+      .collect(Collectors.toList());
   }
 
   public static List<CurrentEntries> getLanguageEntries() {
     return List.of(CurrentEntries.values()).stream()
-        .filter(x -> x.name().startsWith("LANG"))
-        .collect(Collectors.toList());
+      .filter(x -> x.name().startsWith("LANG"))
+      .collect(Collectors.toList());
   }
 
   public static List<CurrentEntries> getPermissionEntries() {
     return List.of(CurrentEntries.values()).stream()
-        .filter(x -> x.name().startsWith("PERM"))
-        .collect(Collectors.toList());
+      .filter(x -> x.name().startsWith("PERM"))
+      .collect(Collectors.toList());
   }
 }
