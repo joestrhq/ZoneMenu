@@ -29,6 +29,7 @@ public class CommandZone implements TabExecutor {
         .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
         .receiver(sender)
         .send();
+      return true;
     }
 
     Player player = (Player) sender;

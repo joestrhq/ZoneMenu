@@ -29,7 +29,7 @@ public class CommandZoneUnselect implements TabExecutor {
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-    if (sender instanceof Player) {
+    if (!(sender instanceof Player)) {
       new MessageHelper(LanguageConfiguration.getInstance().getResolver())
         .locale(Locale.ENGLISH)
         .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
@@ -37,6 +37,7 @@ public class CommandZoneUnselect implements TabExecutor {
         .showPrefix(true)
         .receiver(sender)
         .send();
+      return true;
     }
 
     if (args.length != 1) {
