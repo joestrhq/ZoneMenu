@@ -6,6 +6,7 @@
 package at.joestr.zonemenu.command;
 
 import at.joestr.javacommon.configuration.LanguageConfiguration;
+import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
@@ -51,7 +52,7 @@ public class CommandZoneDelete implements TabExecutor {
 
       if (t.isEmpty()) {
         new MessageHelper(LanguageConfiguration.getInstance().getResolver())
-          .locale(Locale.ENGLISH)
+          .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_GEN_NO_ZONE.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
           .showPrefix(true)
