@@ -5,7 +5,11 @@
  */
 package at.joestr.zonemenu.command;
 
+import at.joestr.javacommon.configuration.LanguageConfiguration;
+import at.joestr.javacommon.configuration.LocaleHelper;
+import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.javacommon.spigotutils.SpigotUtils;
+import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.BooleanFlag;
@@ -23,7 +27,9 @@ import com.sk89q.worldguard.protection.flags.StringFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 import org.bukkit.GameMode;
 import org.bukkit.WeatherType;
@@ -43,8 +49,15 @@ public class CommandZoneFlag implements TabExecutor {
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-    if (sender instanceof Player) {
-      // TODO: send message
+    if (!(sender instanceof Player)) {
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(Locale.ENGLISH)
+        .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
+      return true;
     }
 
     List<String> parsedArgs = SpigotUtils.parseSingelQuotedArguments(args);
@@ -58,52 +71,39 @@ public class CommandZoneFlag implements TabExecutor {
     String flagValue = parsedArgs.get(2);
     Player player = (Player) sender;
 
-    if (!ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
-
-      // TODO: send message
-      return true;
-    }
-
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
-
       if (t.isEmpty()) {
-
-        /*player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-          (String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone")));*/
+        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_GEN_NO_ZONE.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(sender)
+          .send();
         return;
       }
 
-      // Initialise new region
-      ProtectedRegion protectedRegion = null;
+      final ArrayList<ProtectedRegion> protectedRegions = new ArrayList<>();
 
-      // Loop through all regions ...
       for (ProtectedRegion protectedRegion_ : t) {
-
-        // ... and if the region ID equals the second argument (<Zone>) ...
         if (protectedRegion_.getId().equalsIgnoreCase(zoneName)) {
-
-          // ... set the found region.
-          protectedRegion = protectedRegion_;
+          protectedRegions.add(protectedRegion_);
           break;
         }
       }
 
-      // If region equals null ...
-      if (protectedRegion == null) {
-
-        // ... no region with this ID was not found.
-        // Send the player a message.
-        /*player.sendMessage(
-                          this.zoneMenuPlugin.colorCode(
-                              '&',
-                              ((String)
-                                      this.zoneMenuPlugin
-                                          .configDelegate
-                                          .getMap()
-                                          .get("not_exisiting_zone"))
-                                  .replace("{0}", arguments[1])));*/
+      if (protectedRegions.isEmpty()) {
+        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_GEN_NOT_EXISTING_ZONE.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(sender)
+          .send();
         return;
       }
+
+      ProtectedRegion protectedRegion = protectedRegions.get(0);
 
       Flag<?> matchedFlag
         = Flags.fuzzyMatchFlag(
@@ -128,15 +128,9 @@ public class CommandZoneFlag implements TabExecutor {
           = previousFlag != null ? previousFlag.toString() : "";
 
         try {
-
-          // If the flag argument equals "null" ...
           if (flagValue.equalsIgnoreCase("null")) {
-
-            // ... unset the flag.
             protectedRegion.setFlag(stateFlag_, null);
           } else {
-
-            // If not set the flag with the parsed input.
             protectedRegion.setFlag(
               stateFlag_,
               stateFlag_.parseInput(
@@ -146,20 +140,22 @@ public class CommandZoneFlag implements TabExecutor {
                       player))
                   .setInput(flagValue)
                   .setObject("region", protectedRegion)
-                  .build()));
+                  .build()
+              )
+            );
           }
 
-          // Send the player a message.
-          /*player.sendMessage(
-            this.zoneMenuPlugin.colorCode(
-              '&',
-              ((String) zoneMenuPlugin.configDelegate
-                .getMap()
-                .get("zone_flag_changed"))
-                .replace("{0}", matchedFlag.getName())
-                .replace("{1}", protectedRegion.getId())
-                .replace("{2}", previousFlagValue)
-                .replace("{3}", flagArguments)));*/
+          new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+            .locale(LocaleHelper.resolve(player.getLocale()))
+            .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+            .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+            .showPrefix(true)
+            .receiver(sender)
+            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%zonename", protectedRegion.getId()))
+            .modify(s -> s.replace("%oldvalue", previousFlagValue))
+            .modify(s -> s.replace("%newvalue", flagValue))
+            .send();
         } catch (InvalidFlagFormat exception) {
 
           // If there was an exception while parsing the flag send a message to the
