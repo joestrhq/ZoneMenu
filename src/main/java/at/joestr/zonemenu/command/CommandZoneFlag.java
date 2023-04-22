@@ -157,43 +157,26 @@ public class CommandZoneFlag implements TabExecutor {
             .modify(s -> s.replace("%newvalue", flagValue))
             .send();
         } catch (InvalidFlagFormat exception) {
-
-          // If there was an exception while parsing the flag send a message to the
-          // player.
-          /*player.sendMessage(
-            ChatColor.RED
-            + "/zone flag "
-            + arguments[1]
-            + " "
-            + arguments[2]
-            + " <null|allow|deny|none>");*/
+          return;
         }
 
         return;
       }
 
-      // TODO: Better comments
-      // If the matched flag is a SetFlag (with unknown type)
       if (matchedFlag instanceof SetFlag<?>) {
-
-        // If the matched flag is the deny spawn flag ...
         if (Flags.DENY_SPAWN
           .getName()
           .equalsIgnoreCase(((SetFlag<?>) matchedFlag).getName())) {
 
-          // ... we can say that this flag accepts entity types
           SetFlag<EntityType> setFlag_ = (SetFlag<EntityType>) matchedFlag;
           EntityType previousFlag = (EntityType) protectedRegion.getFlag(matchedFlag);
           String previousFlagValue
             = previousFlag != null ? previousFlag.toString() : "";
 
           try {
-
             if (flagValue.equalsIgnoreCase("null")) {
-
               protectedRegion.setFlag(setFlag_, null);
             } else {
-
               protectedRegion.setFlag(
                 setFlag_,
                 setFlag_.parseInput(
@@ -206,31 +189,24 @@ public class CommandZoneFlag implements TabExecutor {
                     .build()));
             }
 
-            /*player.sendMessage(
-              this.zoneMenuPlugin.colorCode(
-                '&',
-                ((String) zoneMenuPlugin.configDelegate
-                  .getMap()
-                  .get("zone_flag_changed"))
-                  .replace("{0}", matchedFlag.getName())
-                  .replace("{1}", protectedRegion.getId())
-                  .replace("{2}", previousFlagValue)
-                  .replace("{3}", flagArguments)));*/
+            new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+              .locale(LocaleHelper.resolve(player.getLocale()))
+              .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+              .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+              .showPrefix(true)
+              .receiver(sender)
+              .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+              .modify(s -> s.replace("%zonename", protectedRegion.getId()))
+              .modify(s -> s.replace("%oldvalue", previousFlagValue))
+              .modify(s -> s.replace("%newvalue", flagValue))
+              .send();
           } catch (InvalidFlagFormat e) {
-
-            /*player.sendMessage(
-              ChatColor.RED
-              + "/zone flag "
-              + arguments[1]
-              + " "
-              + arguments[2]
-              + " <null|EntityType[,EntityType ...]>");*/
+            return;
           }
 
           return;
         }
 
-        // We do not know the type of the set flag here.
         Type type
           = ((ParameterizedType) matchedFlag.getClass().getGenericSuperclass())
             .getActualTypeArguments()[0];
@@ -241,9 +217,7 @@ public class CommandZoneFlag implements TabExecutor {
           = previousFlag != null ? previousFlag.toString() : "";
 
         try {
-
           if (flagValue.equalsIgnoreCase("null")) {
-
             protectedRegion.setFlag(setFlag_, null);
           } else {
 
@@ -259,45 +233,32 @@ public class CommandZoneFlag implements TabExecutor {
                   .build()));
           }
 
-          /*player.sendMessage(
-            this.zoneMenuPlugin.colorCode(
-              '&',
-              ((String) zoneMenuPlugin.configDelegate
-                .getMap()
-                .get("zone_flag_changed"))
-                .replace("{0}", matchedFlag.getName())
-                .replace("{1}", protectedRegion.getId())
-                .replace("{2}", previousFlagValue)
-                .replace("{3}", flagArguments)));*/
+          new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+            .locale(LocaleHelper.resolve(player.getLocale()))
+            .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+            .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+            .showPrefix(true)
+            .receiver(sender)
+            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%zonename", protectedRegion.getId()))
+            .modify(s -> s.replace("%oldvalue", previousFlagValue))
+            .modify(s -> s.replace("%newvalue", flagValue))
+            .send();
         } catch (InvalidFlagFormat e) {
-
-          /*player.sendMessage(
-            ChatColor.RED
-            + "/zone flag "
-            + arguments[1]
-            + " "
-            + arguments[2]
-            + " <null|"
-            + type.getTypeName()
-            + "[,"
-            + type.getTypeName()
-            + " ...]>");*/
+          return;
         }
 
         return;
       }
 
       if (matchedFlag instanceof StringFlag) {
-
         StringFlag stringFlag_ = (StringFlag) matchedFlag;
         String previousFlag = (String) protectedRegion.getFlag(matchedFlag);
         String previousFlagValue
           = previousFlag != null ? previousFlag.toString() : "";
 
         try {
-
           if (flagValue.equalsIgnoreCase("null")) {
-
             protectedRegion.setFlag(stringFlag_, null);
           } else {
 
@@ -313,41 +274,32 @@ public class CommandZoneFlag implements TabExecutor {
                   .build()));
           }
 
-          /*player.sendMessage(
-            this.zoneMenuPlugin.colorCode(
-              '&',
-              ((String) this.zoneMenuPlugin.configDelegate
-                .getMap()
-                .get("zone_flag_changed"))
-                .replace("{0}", matchedFlag.getName())
-                .replace("{1}", protectedRegion.getId())
-                .replace("{2}", previousFlagValue)
-                .replace("{3}", flagArguments)));*/
+          new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+            .locale(LocaleHelper.resolve(player.getLocale()))
+            .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+            .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+            .showPrefix(true)
+            .receiver(sender)
+            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%zonename", protectedRegion.getId()))
+            .modify(s -> s.replace("%oldvalue", previousFlagValue))
+            .modify(s -> s.replace("%newvalue", flagValue))
+            .send();
         } catch (InvalidFlagFormat e) {
-
-          /*player.sendMessage(
-            ChatColor.RED
-            + "/zone flag "
-            + arguments[1]
-            + " "
-            + arguments[2]
-            + " <null|String ...>");*/
+          return;
         }
 
         return;
       }
 
       if (matchedFlag instanceof BooleanFlag) {
-
         BooleanFlag booleanFlag_ = (BooleanFlag) matchedFlag;
         Boolean previousFlag = (Boolean) protectedRegion.getFlag(matchedFlag);
         String previousFlagValue
           = previousFlag != null ? previousFlag.toString() : "";
 
         try {
-
           if (flagValue.equalsIgnoreCase("null")) {
-
             protectedRegion.setFlag(booleanFlag_, null);
           } else {
 
@@ -363,44 +315,34 @@ public class CommandZoneFlag implements TabExecutor {
                   .build()));
           }
 
-          /*player.sendMessage(
-            this.zoneMenuPlugin.colorCode(
-              '&',
-              ((String) zoneMenuPlugin.configDelegate
-                .getMap()
-                .get("zone_flag_changed"))
-                .replace("{0}", matchedFlag.getName())
-                .replace("{1}", protectedRegion.getId())
-                .replace("{2}", previousFlagValue)
-                .replace("{3}", flagArguments)));*/
+          new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+            .locale(LocaleHelper.resolve(player.getLocale()))
+            .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+            .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+            .showPrefix(true)
+            .receiver(sender)
+            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%zonename", protectedRegion.getId()))
+            .modify(s -> s.replace("%oldvalue", previousFlagValue))
+            .modify(s -> s.replace("%newvalue", flagValue))
+            .send();
         } catch (InvalidFlagFormat e) {
-
-          /*player.sendMessage(
-            ChatColor.RED
-            + "/zone flag "
-            + arguments[1]
-            + " "
-            + arguments[2]
-            + " <null|true|false>");*/
+          return;
         }
 
         return;
       }
 
       if (matchedFlag instanceof IntegerFlag) {
-
         IntegerFlag integerFlag_ = (IntegerFlag) matchedFlag;
         Integer previousFlag = (Integer) protectedRegion.getFlag(matchedFlag);
         String previousFlagValue
           = previousFlag != null ? previousFlag.toString() : "";
 
         try {
-
           if (flagValue.equalsIgnoreCase("null")) {
-
             protectedRegion.setFlag(integerFlag_, null);
           } else {
-
             protectedRegion.setFlag(
               integerFlag_,
               integerFlag_.parseInput(
@@ -413,41 +355,32 @@ public class CommandZoneFlag implements TabExecutor {
                   .build()));
           }
 
-          /*player.sendMessage(
-            this.zoneMenuPlugin.colorCode(
-              '&',
-              ((String) zoneMenuPlugin.configDelegate
-                .getMap()
-                .get("zone_flag_changed"))
-                .replace("{0}", matchedFlag.getName())
-                .replace("{1}", protectedRegion.getId())
-                .replace("{2}", previousFlagValue)
-                .replace("{3}", flagArguments)));*/
+          new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+            .locale(LocaleHelper.resolve(player.getLocale()))
+            .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+            .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+            .showPrefix(true)
+            .receiver(sender)
+            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%zonename", protectedRegion.getId()))
+            .modify(s -> s.replace("%oldvalue", previousFlagValue))
+            .modify(s -> s.replace("%newvalue", flagValue))
+            .send();
         } catch (InvalidFlagFormat e) {
-
-          /* player.sendMessage(
-            ChatColor.RED
-            + "/zone flag "
-            + arguments[1]
-            + " "
-            + arguments[2]
-            + " <null|Integer>");*/
+          return;
         }
 
         return;
       }
 
       if (matchedFlag instanceof DoubleFlag) {
-
         DoubleFlag doubleFlag_ = (DoubleFlag) matchedFlag;
         Double previousFlag = (Double) protectedRegion.getFlag(matchedFlag);
         String previousFlagValue
           = previousFlag != null ? previousFlag.toString() : "";
 
         try {
-
           if (flagValue.equalsIgnoreCase("null")) {
-
             protectedRegion.setFlag(doubleFlag_, null);
           } else {
 
@@ -463,44 +396,34 @@ public class CommandZoneFlag implements TabExecutor {
                   .build()));
           }
 
-          /*player.sendMessage(
-            this.zoneMenuPlugin.colorCode(
-              '&',
-              ((String) this.zoneMenuPlugin.configDelegate
-                .getMap()
-                .get("zone_flag_changed"))
-                .replace("{0}", matchedFlag.getName())
-                .replace("{1}", protectedRegion.getId())
-                .replace("{2}", previousFlagValue)
-                .replace("{3}", flagArguments)));*/
+          new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+            .locale(LocaleHelper.resolve(player.getLocale()))
+            .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+            .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+            .showPrefix(true)
+            .receiver(sender)
+            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%zonename", protectedRegion.getId()))
+            .modify(s -> s.replace("%oldvalue", previousFlagValue))
+            .modify(s -> s.replace("%newvalue", flagValue))
+            .send();
         } catch (InvalidFlagFormat e) {
-
-          /*player.sendMessage(
-            ChatColor.RED
-            + "/zone flag "
-            + arguments[1]
-            + " "
-            + arguments[2]
-            + " <null|Double>");*/
+          return;
         }
 
         return;
       }
 
       if (matchedFlag instanceof LocationFlag) {
-
         LocationFlag locationFlag_ = (LocationFlag) matchedFlag;
         com.sk89q.worldedit.util.Location previousFlag = (com.sk89q.worldedit.util.Location) protectedRegion.getFlag(matchedFlag);
         String previousFlagValue
           = previousFlag != null ? previousFlag.toString() : "";
 
         try {
-
           if (flagValue.equalsIgnoreCase("null")) {
-
             protectedRegion.setFlag(locationFlag_, null);
           } else {
-
             protectedRegion.setFlag(
               locationFlag_,
               locationFlag_.parseInput(
@@ -513,25 +436,19 @@ public class CommandZoneFlag implements TabExecutor {
                   .build()));
           }
 
-          /*player.sendMessage(
-            this.zoneMenuPlugin.colorCode(
-              '&',
-              ((String) zoneMenuPlugin.configDelegate
-                .getMap()
-                .get("zone_flag_changed"))
-                .replace("{0}", matchedFlag.getName())
-                .replace("{1}", protectedRegion.getId())
-                .replace("{2}", previousFlagValue)
-                .replace("{3}", flagArguments)));*/
+          new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+            .locale(LocaleHelper.resolve(player.getLocale()))
+            .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+            .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+            .showPrefix(true)
+            .receiver(sender)
+            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%zonename", protectedRegion.getId()))
+            .modify(s -> s.replace("%oldvalue", previousFlagValue))
+            .modify(s -> s.replace("%newvalue", flagValue))
+            .send();
         } catch (InvalidFlagFormat e) {
-
-          /*player.sendMessage(
-            ChatColor.RED
-            + "/zone flag "
-            + arguments[1]
-            + " "
-            + arguments[2]
-            + " <null|here|X,Y,Z>");*/
+          return;
         }
 
         return;
@@ -549,12 +466,9 @@ public class CommandZoneFlag implements TabExecutor {
             = previousFlag != null ? previousFlag.toString() : "";
 
           try {
-
             if (flagValue.equalsIgnoreCase("null")) {
-
               protectedRegion.setFlag(enumFlag_, null);
             } else {
-
               protectedRegion.setFlag(
                 enumFlag_,
                 enumFlag_.parseInput(
@@ -567,25 +481,19 @@ public class CommandZoneFlag implements TabExecutor {
                     .build()));
             }
 
-            /*player.sendMessage(
-              zoneMenuPlugin.colorCode(
-                '&',
-                ((String) zoneMenuPlugin.configDelegate
-                  .getMap()
-                  .get("zone_flag_changed"))
-                  .replace("{0}", matchedFlag.getName())
-                  .replace("{1}", protectedRegion.getId())
-                  .replace("{2}", previousFlagValue)
-                  .replace("{3}", flagArguments)));*/
+            new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+              .locale(LocaleHelper.resolve(player.getLocale()))
+              .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+              .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+              .showPrefix(true)
+              .receiver(sender)
+              .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+              .modify(s -> s.replace("%zonename", protectedRegion.getId()))
+              .modify(s -> s.replace("%oldvalue", previousFlagValue))
+              .modify(s -> s.replace("%newvalue", flagValue))
+              .send();
           } catch (InvalidFlagFormat e) {
-
-            /*player.sendMessage(
-              ChatColor.RED
-              + "/zone flag "
-              + arguments[1]
-              + " "
-              + arguments[2]
-              + " <null|GameMode>");*/
+            return;
           }
 
           return;
@@ -602,9 +510,7 @@ public class CommandZoneFlag implements TabExecutor {
             = previousFlag != null ? previousFlag.toString() : "";
 
           try {
-
             if (flagValue.equalsIgnoreCase("null")) {
-
               protectedRegion.setFlag(enumFlag_, null);
             } else {
 
@@ -620,28 +526,20 @@ public class CommandZoneFlag implements TabExecutor {
                     .build()));
             }
 
-            /*player.sendMessage(
-              this.zoneMenuPlugin.colorCode(
-                '&',
-                ((String) zoneMenuPlugin.configDelegate
-                  .getMap()
-                  .get("zone_flag_changed"))
-                  .replace("{0}", matchedFlag.getName())
-                  .replace("{1}", protectedRegion.getId())
-                  .replace("{2}", previousFlagValue)
-                  .replace("{3}", flagArguments)));*/
+            new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+              .locale(LocaleHelper.resolve(player.getLocale()))
+              .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+              .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+              .showPrefix(true)
+              .receiver(sender)
+              .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+              .modify(s -> s.replace("%zonename", protectedRegion.getId()))
+              .modify(s -> s.replace("%oldvalue", previousFlagValue))
+              .modify(s -> s.replace("%newvalue", flagValue))
+              .send();
           } catch (InvalidFlagFormat e) {
-
-            /*player.sendMessage(
-              ChatColor.RED
-              + "/zone flag "
-              + arguments[1]
-              + " "
-              + arguments[2]
-              + " <null|WeatherType>");*/
+            return;
           }
-
-          return;
         }
       }
     });
