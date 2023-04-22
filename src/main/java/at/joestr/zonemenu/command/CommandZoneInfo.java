@@ -5,9 +5,19 @@
  */
 package at.joestr.zonemenu.command;
 
+import at.joestr.javacommon.configuration.LanguageConfiguration;
+import at.joestr.javacommon.configuration.LocaleHelper;
+import at.joestr.javacommon.spigotutils.MessageHelper;
+import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
+import com.sk89q.worldguard.domains.DefaultDomain;
+import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -24,8 +34,15 @@ public class CommandZoneInfo implements TabExecutor {
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-    if (sender instanceof Player) {
-      // TODO: send message
+    if (!(sender instanceof Player)) {
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(Locale.ENGLISH)
+        .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
+      return true;
     }
 
     if (args.length != 1) {
@@ -35,104 +52,140 @@ public class CommandZoneInfo implements TabExecutor {
     String zoneName = args[0];
     Player player = (Player) sender;
 
-    if (!ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
-
-      // TODO: send message
-      return true;
-    }
-
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
-
-      // If the list is empty ...
       if (t.isEmpty()) {
-
-        // ... send the player a message.
-        /*player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("no_zone"))));*/
+        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_GEN_NO_ZONE.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(sender)
+          .send();
         return;
       }
 
-      // Initialise new region with null
-      ProtectedRegion protectedRegion = null;
+      final ArrayList<ProtectedRegion> protectedRegions = new ArrayList<>();
 
-      // Loop through all regions ...
       for (ProtectedRegion protectedRegion_ : t) {
-
-        // ... and if the region ID equals the second argument (<Zone>) ...
         if (protectedRegion_.getId().equalsIgnoreCase(zoneName)) {
-
-          // ... set the found region.
-          protectedRegion = protectedRegion_;
+          protectedRegions.add(protectedRegion_);
+          break;
         }
       }
 
-      // If region equals null ...
-      if (protectedRegion == null) {
-
-        // ... no region with this ID was not found.
-        // Send the player a message.
-        /*player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("not_exisiting_zone")).replace("{0}",
-                        arguments[1])));*/
+      if (protectedRegions.isEmpty()) {
+        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_GEN_NOT_EXISTING_ZONE.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(sender)
+          .send();
         return;
       }
 
-      /*// Grab some infos
-            DefaultDomain domainOwners = protectedRegion.getOwners();
-            DefaultDomain domainMembers = protectedRegion.getMembers();
-            int minimumX = protectedRegion.getMinimumPoint().getBlockX();
-            int minimumZ = protectedRegion.getMinimumPoint().getBlockZ();
-            int maximumX = protectedRegion.getMaximumPoint().getBlockX();
-            int maximumZ = protectedRegion.getMaximumPoint().getBlockZ();
-            int area = (this.zoneMenuPlugin.difference(minimumX, maximumX) + 1)
-                * (this.zoneMenuPlugin.difference(minimumZ, maximumZ) + 1);
+      ProtectedRegion protectedRegion = protectedRegions.get(0);
 
-            // Send infos to the player.
-            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_id")).replace("{id}",
-                    protectedRegion.getId())));
+      // Grab some infos
+      DefaultDomain domainOwners = protectedRegion.getOwners();
+      DefaultDomain domainMembers = protectedRegion.getMembers();
+      int minimumX = protectedRegion.getMinimumPoint().getBlockX();
+      int minimumZ = protectedRegion.getMinimumPoint().getBlockZ();
+      int maximumX = protectedRegion.getMaximumPoint().getBlockX();
+      int maximumZ = protectedRegion.getMaximumPoint().getBlockZ();
+      int area = (ZoneMenuManager.getInstance().difference(minimumX, maximumX) + 1)
+        * (ZoneMenuManager.getInstance().difference(minimumZ, maximumZ) + 1);
 
-            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_priority")
-                + protectedRegion.getPriority()));
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_CMD_ZONE_INFO_ID.toString())
+        .modify(s -> s.replace("%zonename", protectedRegion.getId()))
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
 
-            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_parent")
-                + (protectedRegion.getParent() == null ? "" : protectedRegion.getParent().getId())));
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_CMD_ZONE_INFO_PRIORITY.toString())
+        .modify(s -> s.replace("%zonepriority", Integer.toString(protectedRegion.getPriority())))
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
 
-            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_owners")
-                + domainOwners
-                    .toPlayersString(WorldGuard.getInstance().getProfileCache()).replace("*", "")));
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_CMD_ZONE_INFO_PARENT.toString())
+        .modify(s -> s.replace("%zoneparent", protectedRegion.getParent() == null ? "" : protectedRegion.getParent().getId()))
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
 
-            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                (String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_members")
-                + domainMembers
-                    .toPlayersString(WorldGuard.getInstance().getProfileCache()).replace("*", "")));
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_CMD_ZONE_INFO_OWNERS.toString())
+        .modify(s -> s.replace("%zoneownerslist", domainOwners.toPlayersString().replace("*", "")))
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
 
-            Iterator<Map.Entry<Flag<?>, Object>> iterator = protectedRegion.getFlags().entrySet().iterator();
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_CMD_ZONE_INFO_MEMBERS.toString())
+        .modify(s -> s.replace("%zonememberslist", domainMembers.toPlayersString().replace("*", "")))
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
 
-            while (iterator.hasNext()) {
+      Iterator<Map.Entry<Flag<?>, Object>> iterator = protectedRegion.getFlags().entrySet().iterator();
 
-                Map.Entry<Flag<?>, Object> entry_ = iterator.next();
+      while (iterator.hasNext()) {
 
-                player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                    ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_flag"))
-                        .replace("{0}", entry_.getKey().getName())
-                        .replace("{1}", entry_.getValue().toString())));
-            }
+        Map.Entry<Flag<?>, Object> entry_ = iterator.next();
 
-            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_start"))
-                    .replace("{0}", Integer.toString(minimumX)).replace("{1}", Integer.toString(minimumZ))));
+        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_INFO_FLAG.toString())
+          .modify(s -> s.replace("%flagname", entry_.getKey().toString()))
+          .modify(s -> s.replace("%flagvalue", entry_.getValue().toString()))
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(sender)
+          .send();
+      }
 
-            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_end"))
-                    .replace("{0}", Integer.toString(maximumX)).replace("{1}", Integer.toString(maximumZ))));
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_CMD_ZONE_INFO_START.toString())
+        .modify(s -> s.replace("%xcoord", Integer.toString(minimumX)))
+        .modify(s -> s.replace("%zcoord", Integer.toString(minimumZ)))
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
 
-            player.sendMessage(this.zoneMenuPlugin.colorCode('&',
-                ((String) this.zoneMenuPlugin.configDelegate.getMap().get("zone_info_area")).replace("{0}",
-                    Integer.toString(area))));*/
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_CMD_ZONE_INFO_START.toString())
+        .modify(s -> s.replace("%xcoord", Integer.toString(maximumX)))
+        .modify(s -> s.replace("%zcoord", Integer.toString(maximumZ)))
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
+
+      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_CMD_ZONE_INFO_START.toString())
+        .modify(s -> s.replace("%area", Integer.toString(area)))
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
     });
 
     return true;
