@@ -48,18 +48,6 @@ public class CommandZoneRemovemember implements TabExecutor {
     String zoneName = args[1];
     Player player = (Player) sender;
 
-    if (!ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
-
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
-        .locale(Locale.ENGLISH)
-        .path(CurrentEntries.LANG_GEN_NO_ZONE.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-        .showPrefix(true)
-        .receiver(sender)
-        .send();
-      return true;
-    }
-
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
       ProtectedRegion protectedregion = null;
 

@@ -8,7 +8,6 @@ package at.joestr.zonemenu.command;
 import at.joestr.javacommon.configuration.LanguageConfiguration;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
-import at.joestr.zonemenu.util.ZoneMenuManager;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import java.util.List;
@@ -45,12 +44,6 @@ public class CommandZoneUnselect implements TabExecutor {
     }
 
     Player player = (Player) sender;
-
-    if (!ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
-
-      // TODO: send message
-      return true;
-    }
 
     WorldEdit
       .getInstance()
