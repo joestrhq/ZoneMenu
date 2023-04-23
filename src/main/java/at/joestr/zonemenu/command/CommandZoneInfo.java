@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.logging.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -31,11 +32,12 @@ import org.bukkit.entity.Player;
 public class CommandZoneInfo implements TabExecutor {
 
   private static final Logger LOG = Logger.getLogger(CommandZoneInfo.class.getName());
+  private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (!(sender instanceof Player)) {
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(Locale.ENGLISH)
         .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -45,16 +47,21 @@ public class CommandZoneInfo implements TabExecutor {
       return true;
     }
 
+    Player player = (Player) sender;
+
+    if (!player.hasPermission(CurrentEntries.PERM_CMD_ZONE_INFO.toString())) {
+      return false;
+    }
+
     if (args.length != 1) {
       return false;
     }
 
     String zoneName = args[0];
-    Player player = (Player) sender;
 
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
       if (t.isEmpty()) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_GEN_NO_ZONE.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -74,7 +81,7 @@ public class CommandZoneInfo implements TabExecutor {
       }
 
       if (protectedRegions.isEmpty()) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_GEN_NOT_EXISTING_ZONE.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -96,7 +103,7 @@ public class CommandZoneInfo implements TabExecutor {
       int area = (ZoneMenuManager.getInstance().difference(minimumX, maximumX) + 1)
         * (ZoneMenuManager.getInstance().difference(minimumZ, maximumZ) + 1);
 
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_INFO_ID.toString())
         .modify(s -> s.replace("%zonename", protectedRegion.getId()))
@@ -105,7 +112,7 @@ public class CommandZoneInfo implements TabExecutor {
         .receiver(sender)
         .send();
 
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_INFO_PRIORITY.toString())
         .modify(s -> s.replace("%zonepriority", Integer.toString(protectedRegion.getPriority())))
@@ -114,7 +121,7 @@ public class CommandZoneInfo implements TabExecutor {
         .receiver(sender)
         .send();
 
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_INFO_PARENT.toString())
         .modify(s -> s.replace("%zoneparent", protectedRegion.getParent() == null ? "" : protectedRegion.getParent().getId()))
@@ -123,7 +130,7 @@ public class CommandZoneInfo implements TabExecutor {
         .receiver(sender)
         .send();
 
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_INFO_OWNERS.toString())
         .modify(s -> s.replace("%zoneownerslist", domainOwners.toPlayersString().replace("*", "")))
@@ -132,7 +139,7 @@ public class CommandZoneInfo implements TabExecutor {
         .receiver(sender)
         .send();
 
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_INFO_MEMBERS.toString())
         .modify(s -> s.replace("%zonememberslist", domainMembers.toPlayersString().replace("*", "")))
@@ -147,7 +154,7 @@ public class CommandZoneInfo implements TabExecutor {
 
         Map.Entry<Flag<?>, Object> entry_ = iterator.next();
 
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_CMD_ZONE_INFO_FLAG.toString())
           .modify(s -> s.replace("%flagname", entry_.getKey().toString()))
@@ -158,7 +165,7 @@ public class CommandZoneInfo implements TabExecutor {
           .send();
       }
 
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_INFO_START.toString())
         .modify(s -> s.replace("%xcoord", Integer.toString(minimumX)))
@@ -168,7 +175,7 @@ public class CommandZoneInfo implements TabExecutor {
         .receiver(sender)
         .send();
 
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_INFO_START.toString())
         .modify(s -> s.replace("%xcoord", Integer.toString(maximumX)))
@@ -178,7 +185,7 @@ public class CommandZoneInfo implements TabExecutor {
         .receiver(sender)
         .send();
 
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_INFO_START.toString())
         .modify(s -> s.replace("%area", Integer.toString(area)))

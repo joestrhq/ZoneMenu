@@ -49,6 +49,11 @@ commands:
     permission: zonemenu.commands.zone-flag
     permission-message: '§cYou are lacking permission §fzonemenu.commands.zone-flag§c!'
     usage: '§cSyntax error! Use: §f/<command> <Zone> <Flag> <Flag value>'
+  zone-list:
+    description: List all your zones.
+    permission: zonemenu.commands.zone-list
+    permission-message: '§cYou are lacking permission §fzonemenu.commands.zone-list§c!'
+    usage: '§cSyntax error! Use: §f/<command>'
   zone-info:
     description: Get information about a zone.
     permission: zonemenu.commands.zone-info
@@ -82,6 +87,7 @@ permissions:
       zonemenu.commands.zone-addmember: true
       zonemenu.commands.zone-removemember: true
       zonemenu.commands.zone-flag: true
+      zonemenu.commands.zone-list: true
       zonemenu.commands.zone-info: true
       zonemenu.commands.zone-delete: true
       zonemenu.commands.zone-select: true
@@ -98,6 +104,7 @@ permissions:
       zonemenu.commands.zone-addmember: true
       zonemenu.commands.zone-removemember: true
       zonemenu.commands.zone-flag: true
+      zonemenu.commands.zone-list: true
       zonemenu.commands.zone-info: true
       zonemenu.commands.zone-delete: true
       zonemenu.commands.zone-select: true
@@ -113,6 +120,7 @@ permissions:
       zonemenu.commands.zone-addmember: true
       zonemenu.commands.zone-removemember: true
       zonemenu.commands.zone-flag: true
+      zonemenu.commands.zone-list: true
       zonemenu.commands.zone-info: true
       zonemenu.commands.zone-delete: true
       zonemenu.commands.zone-select: true

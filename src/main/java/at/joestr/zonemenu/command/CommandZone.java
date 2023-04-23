@@ -3,7 +3,6 @@ package at.joestr.zonemenu.command;
 import at.joestr.javacommon.configuration.LanguageConfiguration;
 import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
-import at.joestr.zonemenu.ZoneMenuPlugin;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import java.util.List;
 import java.util.Locale;
@@ -16,9 +15,6 @@ import org.bukkit.entity.Player;
 public class CommandZone implements TabExecutor {
 
   private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
-
-  public CommandZone(ZoneMenuPlugin zonemenu) {
-  }
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
