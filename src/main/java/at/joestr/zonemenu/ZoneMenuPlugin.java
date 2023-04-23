@@ -60,7 +60,7 @@ public class ZoneMenuPlugin extends JavaPlugin implements Listener {
     this.loadAppConfiguration();
     this.loadLanguageConfiguration();
 
-    this.commandMap.put("zone", new CommandZone(this));
+    this.commandMap.put("zone", new CommandZone());
     this.commandMap.put("zone-find", new CommandZoneFind());
     this.commandMap.put("zone-create", new CommandZoneCreate());
     this.commandMap.put("zone-subcreate", new CommandZoneSubcreate());
