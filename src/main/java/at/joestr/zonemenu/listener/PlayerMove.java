@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -67,11 +68,11 @@ public class PlayerMove implements Listener {
       if (regions.isEmpty()) {
         String text = new MessageHelper(languageResolverFunction).path(CurrentEntries.LANG_EVT_FIND_NONE.toString()).rawString();
         ZoneMenuManager.getInstance().zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setColor(BarColor.GREEN);
-        //ZoneMenuManager.getInstance().zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setTitle(this.zoneMenuPlugin.colorCode('&', text));
+        ZoneMenuManager.getInstance().zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setTitle(ChatColor.translateAlternateColorCodes('&', text));
       } else {
         String text = new MessageHelper(languageResolverFunction).path(CurrentEntries.LANG_EVT_FIND_FOUND.toString()).rawString();
         ZoneMenuManager.getInstance().zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setColor(BarColor.RED);
-        //ZoneMenuManager.getInstance().zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setTitle(this.zoneMenuPlugin.colorCode('&', text).replace("%zonenameslist", regions));
+        ZoneMenuManager.getInstance().zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setTitle(ChatColor.translateAlternateColorCodes('&', text).replace("%zonenameslist", regions));
       }
 
       return true;

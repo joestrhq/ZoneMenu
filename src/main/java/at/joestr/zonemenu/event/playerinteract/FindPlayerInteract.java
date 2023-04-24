@@ -38,7 +38,6 @@ public class FindPlayerInteract implements Listener {
   private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
   public FindPlayerInteract(ZoneMenuPlugin zonemenu) {
-
     this.zoneMenuPlugin = zonemenu;
     this.zoneMenuPlugin.getServer().getPluginManager().registerEvents(this, this.zoneMenuPlugin);
   }
@@ -46,41 +45,28 @@ public class FindPlayerInteract implements Listener {
   @EventHandler
   public void onInteract(PlayerInteractEvent event) {
 
-    // Grab player form the event
     Player player = event.getPlayer();
 
-    // If the player is not in the map ...
     if (!ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
-
-      // .. do not proceed.
       return;
     }
 
-    // Grab the ZoneMenuPlayer
     ZoneMenuPlayer zoneMenuPlayer = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player);
 
-    // Using a stick? ToolType correct?
     if ((player.getInventory().getItemInMainHand().getType() != Material.STICK)
       || (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.FIND)) {
-
       return;
     }
 
-    // Check event action
     if ((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
-      // Check if this location is equal to the stored one
       if (event.getClickedBlock().getLocation().equals(zoneMenuPlayer.getFindLocation())) {
         event.setCancelled(true);
         return;
       }
 
-      // Put player an location into a map
       zoneMenuPlayer.setFindLocation(event.getClickedBlock().getLocation());
-
-      // Cancel the event
       event.setCancelled(true);
 
-      // Get regions on clicked location
       ApplicableRegionSet regiononloc = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()))
         .getApplicableRegions(
           BlockVector3.at(
@@ -98,12 +84,13 @@ public class FindPlayerInteract implements Listener {
       String textToShow = "";
 
       if (foundRegions.isEmpty()) {
-        textToShow = new MessageHelper(languageResolverFunction)
+        new MessageHelper(languageResolverFunction)
           .path(CurrentEntries.LANG_EVT_FIND_NONE.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
-          .string();
+          .receiver(player)
+          .send();
       } else {
-        textToShow = new MessageHelper(languageResolverFunction)
+        new MessageHelper(languageResolverFunction)
           .path(CurrentEntries.LANG_EVT_FIND_FOUND.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
           .modify((message) -> {
@@ -112,11 +99,9 @@ public class FindPlayerInteract implements Listener {
               foundRegions.stream().collect(Collectors.joining(", "))
             );
           })
-          .string();
+          .receiver(player)
+          .send();
       }
-
-      // Send player a actionbar message
-      //this.zoneMenuPlugin.sendActionBarToPlayer(player, this.zoneMenuPlugin.colorCode('&', textToShow));
     }
   }
 }

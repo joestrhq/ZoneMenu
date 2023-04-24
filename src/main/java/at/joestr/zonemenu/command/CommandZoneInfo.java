@@ -49,10 +49,6 @@ public class CommandZoneInfo implements TabExecutor {
 
     Player player = (Player) sender;
 
-    if (!player.hasPermission(CurrentEntries.PERM_CMD_ZONE_INFO.toString())) {
-      return false;
-    }
-
     if (args.length != 1) {
       return false;
     }

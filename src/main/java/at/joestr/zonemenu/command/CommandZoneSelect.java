@@ -48,14 +48,8 @@ public class CommandZoneSelect implements TabExecutor {
       return false;
     }
 
-    String zoneName = args[0];
+    String targetZoneName = args[0];
     Player player = (Player) sender;
-
-    if (!ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
-
-      // TODO: send message
-      return true;
-    }
 
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
@@ -73,7 +67,7 @@ public class CommandZoneSelect implements TabExecutor {
       }
 
       for (ProtectedRegion pr : t) {
-        if (pr.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(args[1])) {
+        if (pr.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(targetZoneName)) {
           protectedregion = pr;
         }
       }
@@ -118,6 +112,7 @@ public class CommandZoneSelect implements TabExecutor {
       new MessageHelper(LanguageConfiguration.getInstance().getResolver())
         .locale(Locale.ENGLISH)
         .path(CurrentEntries.LANG_CMD_ZONE_SELECT_SUCCESS.toString())
+        .modify(s -> s.replace("%zonename", targetZoneName))
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
         .showPrefix(true)
         .receiver(sender)

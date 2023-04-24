@@ -65,14 +65,11 @@ public class CommandZoneList implements TabExecutor {
       Iterator<ProtectedRegion> iterator = t.iterator();
 
       while (iterator.hasNext()) {
-
         ProtectedRegion protectedRegion_ = iterator.next();
 
         if (iterator.hasNext()) {
-
           sregionString.append(protectedRegion_.getId()).append(", ");
         } else {
-
           sregionString.append(protectedRegion_.getId());
         }
       }
