@@ -26,12 +26,12 @@ public class CommandZoneCancel implements TabExecutor {
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (!(sender instanceof Player)) {
       new MessageHelper(LanguageConfiguration.getInstance().getResolver())
-          .locale(Locale.ENGLISH)
-          .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
-          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-          .showPrefix(true)
-          .receiver(sender)
-          .send();
+        .locale(Locale.ENGLISH)
+        .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
       return true;
     }
 
@@ -43,23 +43,23 @@ public class CommandZoneCancel implements TabExecutor {
 
     if (!ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
       new MessageHelper(LanguageConfiguration.getInstance().getResolver())
-          .locale(LocaleHelper.resolve(player.getLocale()))
-          .path(CurrentEntries.LANG_CMD_ZONE_CANCEL_NOT_RUNNING.toString())
-          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-          .showPrefix(true)
-          .receiver(player)
-          .send();
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_CMD_ZONE_CANCEL_NOT_RUNNING.toString())
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(player)
+        .send();
       return true;
     }
 
     if (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == null) {
       new MessageHelper(LanguageConfiguration.getInstance().getResolver())
-          .locale(LocaleHelper.resolve(player.getLocale()))
-          .path(CurrentEntries.LANG_CMD_ZONE_CANCEL_NOT_RUNNING.toString())
-          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-          .showPrefix(true)
-          .receiver(player)
-          .send();
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_CMD_ZONE_CANCEL_NOT_RUNNING.toString())
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(player)
+        .send();
       return true;
     }
 
@@ -67,19 +67,18 @@ public class CommandZoneCancel implements TabExecutor {
     ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(null);
 
     new MessageHelper(LanguageConfiguration.getInstance().getResolver())
-        .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_CANCEL_CANCEL.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-        .showPrefix(true)
-        .receiver(player)
-        .send();
+      .locale(LocaleHelper.resolve(player.getLocale()))
+      .path(CurrentEntries.LANG_CMD_ZONE_CANCEL_CANCEL.toString())
+      .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+      .showPrefix(true)
+      .receiver(player)
+      .send();
 
     return true;
   }
 
   @Override
-  public List<String> onTabComplete(
-      CommandSender sender, Command command, String label, String[] args) {
+  public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
     return List.of();
   }
 }

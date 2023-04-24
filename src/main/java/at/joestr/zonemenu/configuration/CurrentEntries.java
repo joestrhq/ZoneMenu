@@ -75,6 +75,9 @@ public enum CurrentEntries {
   LANG_CMD_ZONE_ADDMEMBER_PLAYER_DOES_NOT_EXIST("commands.zone-addmember.player_does_not_exist"),
   LANG_CMD_ZONE_ADDMEMBER_ALREADY_MEMBER("commands.zone-addmember.already_member"),
   LANG_CMD_ZONE_ADDMEMBER_SUCCESS("commands.zone-addmember.success"),
+  /**
+   * Placeholders: %zonename, %playername
+   */
   LANG_CMD_ZONE_REMOVEMEMBER_NOT_A_MEMBER("commands.zone-removemember.not_a_member"),
   LANG_CMD_ZONE_REMOVEMEMBER_SUCCESS("commands.zone-removemember.success"),
   LANG_CMD_ZONE_FLAG_NOT_FOUND("commands.zone-flag.not_found"),
@@ -90,6 +93,7 @@ public enum CurrentEntries {
   LANG_CMD_ZONE_INFO_AREA("commands.zone-info.area"),
   LANG_CMD_ZONE_DELETE_SUCCESS("commands.zone-delete.success"),
   LANG_CMD_ZONE_SELECT_SUCCESS("commands.zone-select.success"),
+  LANG_CMD_ZONE_UNSELECT_SUCCESS("commands.zone-unselect.success"),
   LANG_CMD_ZONE_UPDATE_OFF("commands.zone-update.off"),
   LANG_CMD_ZONE_UPDATE_ASYNCSTART("commands.zone-update.asyncstart"),
   LANG_CMD_ZONE_UPDATE_ERROR("commands.zone-update.error"),
@@ -113,6 +117,7 @@ public enum CurrentEntries {
   PERM_CMD_ZONE_INFO("zonemenu.commands.zone-info"),
   PERM_CMD_ZONE_DELETE("zonemenu.commands.zone-delete"),
   PERM_CMD_ZONE_SELECT("zonemenu.commands.zone-select"),
+  PERM_CMD_ZONE_UNSELECT("zonemenu.commands.zone-unselect"),
   PERM_CMD_ZONE_UPDATE("zonemenu.commands.zone-update");
 
   private final String text;

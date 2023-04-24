@@ -159,6 +159,13 @@
       <version>3.0.0</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.12.0</version>
+      <scope>compile</scope>
+      <type>jar</type>
+    </dependency>
   </dependencies>
     
   <pluginRepositories>
@@ -247,6 +254,7 @@
                   <include>at.joestr.javacommon:configuration</include>
                   <include>at.joestr.javacommon:spigotutils</include>
                   <include>at.joestr.javacommon:updater</include>
+                  <include>org.apache.commons:commons-lang3</include>
                   <include>org.bstats:*</include>
                 </includes>
               </artifactSet>
@@ -262,6 +270,10 @@
                 <relocation>
                   <pattern>at.joestr.javacommon</pattern>
                   <shadedPattern>at.joestr.zonemenu.thirdparty.at.joestr.javacommon</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.apache.commons</pattern>
+                  <shadedPattern>at.joestr.zonemenu.thirdparty.org.apache.commons</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>org.bstats</pattern>

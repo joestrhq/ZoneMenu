@@ -15,6 +15,8 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.selector.CuboidRegionSelector;
 import java.util.Locale;
 import java.util.function.BiFunction;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -44,21 +46,13 @@ public class CreatePlayerInteract implements Listener {
 
   @EventHandler
   public void onInteract(PlayerInteractEvent event) {
-
-    // Grab player from the event
     Player player = event.getPlayer();
-
-    // If the player is not in the map ...
     if (!ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
-
-      // ... do not proceed.
       return;
     }
 
-    // Grab the ZoneMenuPlayer
     ZoneMenuPlayer zoneMenuPlayer = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player);
 
-    // Using a stick? ToolType and SignType correct?
     if ((player.getInventory().getItemInMainHand().getType() != Material.STICK)
       || (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN)
       || (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.ZONE)) {
@@ -66,37 +60,22 @@ public class CreatePlayerInteract implements Listener {
       return;
     }
 
-    // Initiliaze message
     String sign1 = "";
 
-    // Check if event action is left-click
     if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-      // Check if locations are the same
       if (event.getClickedBlock().getLocation().equals(zoneMenuPlayer.getCreateCorner1())) {
         event.setCancelled(true);
         return;
       }
 
-      // Put players world and location into maps
-      // Cancel the event
       event.setCancelled(true);
-
-      // Set the world
       zoneMenuPlayer.setCreateWorld(event.getClickedBlock().getLocation().getWorld());
-
-      // Reset old beacon
       ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner1(), player);
-
-      // set the 1st corner
       zoneMenuPlayer.setCreateCorner1(event.getClickedBlock().getLocation());
-
-      // Create new beacon
       ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner1(), player, (byte) 10);
 
-      // If all needed variables are set
       if ((zoneMenuPlayer.getCreateWorld() != null) && (zoneMenuPlayer.getCreateCorner1() != null)
         && (zoneMenuPlayer.getCreateCorner2() != null)) {
-        // Reset beacons and create new ones
         ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner2(), player);
         ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner2(), player, (byte) 2);
 
@@ -112,15 +91,12 @@ public class CreatePlayerInteract implements Listener {
         zoneMenuPlayer.setCreateCorner4(loc);
         ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(loc, player, (byte) 0);
 
-        // Grab some values to work with
         World playerworld = zoneMenuPlayer.getCreateWorld();
         Location playerpos1 = zoneMenuPlayer.getCreateCorner1().clone();
         playerpos1.setY(0);
         Location playerpos2 = zoneMenuPlayer.getCreateCorner2().clone();
         playerpos2.setY(255);
 
-        // Make a worldedit selection
-        // Make a worldedit selection
         LocalSession session
           = WorldEdit
             .getInstance()
@@ -141,62 +117,50 @@ public class CreatePlayerInteract implements Listener {
 
         session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
-        String signFirst = new MessageHelper(languageResolverFunction)
-          .path(CurrentEntries.LANG_EVT_SIGN_FIRST.toString())
+        new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
-          .rawString();
+          .path(CurrentEntries.LANG_EVT_SIGN_FIRST.toString())
+          .receiver(player)
+          .send();
 
         String areaValue = Integer.toString(
           ZoneMenuManager.getInstance().getPlayerSelection(player).getLength()
           * ZoneMenuManager.getInstance().getPlayerSelection(player).getWidth());
 
-        String signArea = new MessageHelper(languageResolverFunction)
-          .path(CurrentEntries.LANG_EVT_SIGN_AREA.toString())
-          .locale(LocaleHelper.resolve(player.getLocale()))
-          .modify((message) -> message.replace("%area", areaValue))
-          .string();
-
-        sign1 = signFirst + signArea;
+        try {
+          new MessageHelper(languageResolverFunction)
+            .path(CurrentEntries.LANG_EVT_SIGN_AREA.toString())
+            .locale(LocaleHelper.resolve(player.getLocale()))
+            .modify((message) -> message.replace("%area", areaValue))
+            .receiver(player)
+            .sendActionBar();
+        } catch (Exception ex) {
+          Logger.getLogger(CreatePlayerInteract.class.getName()).log(Level.SEVERE, null, ex);
+        }
       } else {
-        String signFirst = new MessageHelper(languageResolverFunction)
+        new MessageHelper(languageResolverFunction)
           .path(CurrentEntries.LANG_EVT_SIGN_FIRST.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
-          .rawString();
-
-        sign1 = signFirst;
+          .receiver(player)
+          .send();
       }
-
-      // Send actiobar message to the player
-      //zoneMenuPlugin.sendActionBarToPlayer(player, ZoneMenuManager.getInstance().colorCode('&', sign1));
     }
 
     if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-      // Check if locations are the same
       if (event.getClickedBlock().getLocation().equals(zoneMenuPlayer.getCreateCorner2())) {
         event.setCancelled(true);
         return;
       }
 
-      // Put players world and location into maps
-      // Cancel the event
       event.setCancelled(true);
 
-      // Set the world
       zoneMenuPlayer.setCreateWorld(event.getClickedBlock().getLocation().getWorld());
-
-      // Reset old beacon
       ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner2(), player);
-
-      // Set the 2nd corner
       zoneMenuPlayer.setCreateCorner2(event.getClickedBlock().getLocation());
-
-      // Create new beacon
       ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner2(), player, (byte) 2);
 
-      // If all needed variables are set
       if ((zoneMenuPlayer.getCreateWorld() != null) && (zoneMenuPlayer.getCreateCorner1() != null)
         && (zoneMenuPlayer.getCreateCorner2() != null)) {
-        // Reset beacons and create new ones
         ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner1(), player);
         ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner1(), player, (byte) 10);
 
@@ -212,14 +176,12 @@ public class CreatePlayerInteract implements Listener {
         zoneMenuPlayer.setCreateCorner4(loc);
         ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(loc, player, (byte) 0);
 
-        // Grab some values to work with
         World playerworld = zoneMenuPlayer.getCreateWorld();
         Location playerpos1 = zoneMenuPlayer.getCreateCorner1().clone();
         playerpos1.setY(0);
         Location playerpos2 = zoneMenuPlayer.getCreateCorner2().clone();
         playerpos2.setY(255);
 
-        // Make a worldedit selection
         LocalSession session
           = WorldEdit
             .getInstance()
@@ -240,33 +202,33 @@ public class CreatePlayerInteract implements Listener {
 
         session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
-        String signSecond = new MessageHelper(languageResolverFunction)
+        new MessageHelper(languageResolverFunction)
           .path(CurrentEntries.LANG_EVT_SIGN_SECOND.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
-          .rawString();
+          .receiver(player)
+          .send();
 
         String areaValue = Integer.toString(
           ZoneMenuManager.getInstance().getPlayerSelection(player).getLength()
           * ZoneMenuManager.getInstance().getPlayerSelection(player).getWidth());
 
-        String signArea = new MessageHelper(languageResolverFunction)
-          .path(CurrentEntries.LANG_EVT_SIGN_AREA.toString())
-          .locale(LocaleHelper.resolve(player.getLocale()))
-          .modify((message) -> message.replace("%area", areaValue))
-          .string();
-
-        sign1 = signSecond + signArea;
+        try {
+          new MessageHelper(languageResolverFunction)
+            .path(CurrentEntries.LANG_EVT_SIGN_AREA.toString())
+            .locale(LocaleHelper.resolve(player.getLocale()))
+            .modify((message) -> message.replace("%area", areaValue))
+            .receiver(player)
+            .sendActionBar();
+        } catch (Exception ex) {
+          Logger.getLogger(CreatePlayerInteract.class.getName()).log(Level.SEVERE, null, ex);
+        }
       } else {
-        String signSecond = new MessageHelper(languageResolverFunction)
+        new MessageHelper(languageResolverFunction)
           .path(CurrentEntries.LANG_EVT_SIGN_SECOND.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
-          .rawString();
-
-        sign1 = signSecond;
+          .receiver(player)
+          .send();
       }
-
-      // Send actiobar message to the player
-      //zoneMenuPlugin.sendActionBarToPlayer(player, ZoneMenuManager.getInstance().colorCode('&', sign1));
     }
   }
 }

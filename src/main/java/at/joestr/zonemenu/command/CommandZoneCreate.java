@@ -254,8 +254,8 @@ public class CommandZoneCreate implements TabExecutor {
       new MessageHelper(LanguageConfiguration.getInstance().getResolver())
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_CREATE_CREATED.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
         .modify((s) -> s.replace("%zonename", protectedCuboidRegion.getId()))
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
         .showPrefix(true)
         .receiver(player)
         .send();

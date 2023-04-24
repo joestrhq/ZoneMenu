@@ -27,9 +27,9 @@ import at.joestr.javacommon.configuration.LanguageConfiguration;
 import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -40,11 +40,7 @@ import org.bukkit.entity.Player;
  */
 public class CommandZoneUpdate implements TabExecutor {
 
-  @Override
-  public List<String> onTabComplete(
-    CommandSender sender, Command command, String alias, String[] args) {
-    return Collections.emptyList();
-  }
+  private static final Logger LOG = Logger.getLogger(CommandZoneUnselect.class.getName());
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -72,5 +68,10 @@ public class CommandZoneUpdate implements TabExecutor {
       .send();
 
     return true;
+  }
+
+  @Override
+  public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    return List.of();
   }
 }

@@ -63,7 +63,9 @@ commands:
   zone-delete:
     deleted: '[""%prefix,{"text":"Zone ","color":"red"},{"text":"%zonename","color":"gray"},{"text":" deleted.","color":"red"}]'
   zone-select:
-    selected: '[""%prefix,{"text":"Zone ","color":"green"},{"text":"%zonename","color":"gray"},{"text":" selected.","color":"green"}]'
+    success: '[""%prefix,{"text":"Zone ","color":"green"},{"text":"%zonename","color":"gray"},{"text":" selected.","color":"green"}]'
+  zone-unselect:
+    success: '[""%prefix,{"text":"Zone unselected.","color":"green"}]'
   zone-update:
     false: '[""%prefix,{"text":"Updates are turned off!","color":"red"}]'
     asyncstart: '[""%prefix,{"text":"Checking for updates ...","color":"aqua"}]'

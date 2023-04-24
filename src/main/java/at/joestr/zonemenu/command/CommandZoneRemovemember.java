@@ -46,6 +46,7 @@ public class CommandZoneRemovemember implements TabExecutor {
     }
 
     String zoneName = args[1];
+    String targetPlayerName = args[2];
     Player player = (Player) sender;
 
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
@@ -72,6 +73,7 @@ public class CommandZoneRemovemember implements TabExecutor {
         new MessageHelper(LanguageConfiguration.getInstance().getResolver())
           .locale(Locale.ENGLISH)
           .path(CurrentEntries.LANG_GEN_NOT_EXISTING_ZONE.toString())
+          .modify(s -> s.replace("%zonename", zoneName))
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
           .showPrefix(true)
           .receiver(sender)
@@ -82,11 +84,13 @@ public class CommandZoneRemovemember implements TabExecutor {
       DefaultDomain domainmembers = protectedregion.getMembers();
 
       if (!domainmembers.contains(
-        ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapOfflinePlayer(Bukkit.getServer().getOfflinePlayer(args[2])))) {
+        ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapOfflinePlayer(Bukkit.getServer().getOfflinePlayer(targetPlayerName)))) {
 
         new MessageHelper(LanguageConfiguration.getInstance().getResolver())
           .locale(Locale.ENGLISH)
           .path(CurrentEntries.LANG_CMD_ZONE_REMOVEMEMBER_NOT_A_MEMBER.toString())
+          .modify(s -> s.replace("%playername", targetPlayerName))
+          .modify(s -> s.replace("%zonename", zoneName))
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
           .showPrefix(true)
           .receiver(sender)
@@ -95,12 +99,14 @@ public class CommandZoneRemovemember implements TabExecutor {
       }
 
       domainmembers.removePlayer(
-        ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapOfflinePlayer(Bukkit.getServer().getOfflinePlayer(args[2])));
+        ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapOfflinePlayer(Bukkit.getServer().getOfflinePlayer(targetPlayerName)));
       protectedregion.setMembers(domainmembers);
 
       new MessageHelper(LanguageConfiguration.getInstance().getResolver())
         .locale(Locale.ENGLISH)
         .path(CurrentEntries.LANG_CMD_ZONE_REMOVEMEMBER_SUCCESS.toString())
+        .modify(s -> s.replace("%playername", targetPlayerName))
+        .modify(s -> s.replace("%zonename", zoneName))
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
         .showPrefix(true)
         .receiver(sender)

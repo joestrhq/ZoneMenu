@@ -6,6 +6,7 @@
 package at.joestr.zonemenu.command;
 
 import at.joestr.javacommon.configuration.LanguageConfiguration;
+import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import com.sk89q.worldedit.WorldEdit;
@@ -51,6 +52,14 @@ public class CommandZoneUnselect implements TabExecutor {
       .get(BukkitAdapter.adapt(player))
       .getRegionSelector(BukkitAdapter.adapt(player.getWorld()))
       .clear();
+
+    new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      .locale(LocaleHelper.resolve(player.getLocale()))
+      .path(CurrentEntries.LANG_CMD_ZONE_UNSELECT_SUCCESS.toString())
+      .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+      .showPrefix(true)
+      .receiver(sender)
+      .send();
 
     return true;
   }
