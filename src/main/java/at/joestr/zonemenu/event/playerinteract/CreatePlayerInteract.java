@@ -56,11 +56,8 @@ public class CreatePlayerInteract implements Listener {
     if ((player.getInventory().getItemInMainHand().getType() != Material.STICK)
       || (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN)
       || (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.ZONE)) {
-
       return;
     }
-
-    String sign1 = "";
 
     if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
       if (event.getClickedBlock().getLocation().equals(zoneMenuPlayer.getCreateCorner1())) {
@@ -93,9 +90,9 @@ public class CreatePlayerInteract implements Listener {
 
         World playerworld = zoneMenuPlayer.getCreateWorld();
         Location playerpos1 = zoneMenuPlayer.getCreateCorner1().clone();
-        playerpos1.setY(0);
+        playerpos1.setY(playerworld.getMinHeight());
         Location playerpos2 = zoneMenuPlayer.getCreateCorner2().clone();
-        playerpos2.setY(255);
+        playerpos2.setY(playerworld.getMaxHeight());
 
         LocalSession session
           = WorldEdit
@@ -178,9 +175,9 @@ public class CreatePlayerInteract implements Listener {
 
         World playerworld = zoneMenuPlayer.getCreateWorld();
         Location playerpos1 = zoneMenuPlayer.getCreateCorner1().clone();
-        playerpos1.setY(0);
+        playerpos1.setY(playerworld.getMinHeight());
         Location playerpos2 = zoneMenuPlayer.getCreateCorner2().clone();
-        playerpos2.setY(255);
+        playerpos2.setY(playerworld.getMaxHeight());
 
         LocalSession session
           = WorldEdit
