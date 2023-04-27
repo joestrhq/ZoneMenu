@@ -12,6 +12,7 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,12 +54,17 @@ public class FindPlayerInteract implements Listener {
 
     ZoneMenuPlayer zoneMenuPlayer = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player);
 
-    if ((player.getInventory().getItemInMainHand().getType() != Material.STICK)
-      || (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.FIND)) {
+    boolean hasStickInMainHand = player.getInventory().getItemInMainHand().getType() == Material.STICK;
+    boolean isToolTypeFind = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == ZoneMenuToolType.FIND;
+
+    if (!(hasStickInMainHand && isToolTypeFind)) {
       return;
     }
 
-    if ((event.getAction() == Action.LEFT_CLICK_BLOCK) || (event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+    boolean isLeftClickBlock = event.getAction() == Action.LEFT_CLICK_BLOCK;
+    boolean isRightClickBlock = event.getAction() == Action.RIGHT_CLICK_BLOCK;
+
+    if (isLeftClickBlock || isRightClickBlock) {
       if (event.getClickedBlock().getLocation().equals(zoneMenuPlayer.getFindLocation())) {
         event.setCancelled(true);
         return;
@@ -67,8 +73,12 @@ public class FindPlayerInteract implements Listener {
       zoneMenuPlayer.setFindLocation(event.getClickedBlock().getLocation());
       event.setCancelled(true);
 
-      ApplicableRegionSet regiononloc = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()))
-        .getApplicableRegions(
+      RegionManager worldRegionManager
+        = WorldGuard.getInstance().getPlatform().getRegionContainer()
+          .get(BukkitAdapter.adapt(player.getWorld()));
+
+      ApplicableRegionSet regiononloc
+        = worldRegionManager.getApplicableRegions(
           BlockVector3.at(
             event.getClickedBlock().getLocation().getBlockX(),
             event.getClickedBlock().getLocation().getBlockY(),
@@ -81,8 +91,6 @@ public class FindPlayerInteract implements Listener {
         foundRegions.add(region.getId().replace("+", "#").replace("-", "."));
       }
 
-      String textToShow = "";
-
       if (foundRegions.isEmpty()) {
         new MessageHelper(languageResolverFunction)
           .path(CurrentEntries.LANG_EVT_FIND_NONE.toString())
@@ -90,15 +98,13 @@ public class FindPlayerInteract implements Listener {
           .receiver(player)
           .send();
       } else {
+        String foundRegionsString = foundRegions.stream().collect(
+          Collectors.joining(", ")
+        );
         new MessageHelper(languageResolverFunction)
           .path(CurrentEntries.LANG_EVT_FIND_FOUND.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
-          .modify((message) -> {
-            return message.replace(
-              "%zonenameslist",
-              foundRegions.stream().collect(Collectors.joining(", "))
-            );
-          })
+          .modify((s) -> s.replace("%zonenameslist", foundRegionsString))
           .receiver(player)
           .send();
       }

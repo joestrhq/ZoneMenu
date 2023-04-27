@@ -55,13 +55,13 @@ public class SubcreatePlayerInteract implements Listener {
 
     ZoneMenuPlayer zoneMenuPlayer = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player);
 
-    if ((player.getInventory().getItemInMainHand().getType() != Material.STICK)
-      || (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN)
-      || (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.SUBZONE)) {
+    boolean hasStickInMainHand = player.getInventory().getItemInMainHand().getType() == Material.STICK;
+    boolean isToolTypeSign = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == ZoneMenuToolType.SIGN;
+    boolean isSignTypeSubZone = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getSignType() == ZoneMenuSignType.SUBZONE;
+
+    if (!(hasStickInMainHand && isToolTypeSign && isSignTypeSubZone)) {
       return;
     }
-
-    String sign1 = "";
 
     if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
 
@@ -70,19 +70,37 @@ public class SubcreatePlayerInteract implements Listener {
         return;
       }
 
-      zoneMenuPlayer.setSubcreateWorld(event.getClickedBlock().getLocation().getWorld());
       event.setCancelled(true);
-      ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner1(), player);
+
+      zoneMenuPlayer.setSubcreateWorld(event.getClickedBlock().getLocation().getWorld());
+      ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.reset(
+        zoneMenuPlayer.getSubcreateCorner1(),
+        player
+      );
       zoneMenuPlayer.setSubcreateCorner1(event.getClickedBlock().getLocation());
-      ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner1(), player, Material.GLOWSTONE,
-        (byte) 0);
+      ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.create(
+        zoneMenuPlayer.getSubcreateCorner1(),
+        player,
+        Material.GLOWSTONE,
+        (byte) 0
+      );
 
-      if ((zoneMenuPlayer.getSubcreateWorld() != null) && (zoneMenuPlayer.getSubcreateCorner1() != null)
-        && (zoneMenuPlayer.getSubcreateCorner2() != null)) {
+      boolean subcreateWorldIsPresent = zoneMenuPlayer.getSubcreateWorld() != null;
+      boolean isSubcreateCorner1Present = zoneMenuPlayer.getSubcreateCorner1() != null;
+      boolean isSubcreateCorner2Present = zoneMenuPlayer.getSubcreateCorner2() != null;
 
-        ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner2(), player);
-        ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner2(), player,
-          Material.SEA_LANTERN, (byte) 0);
+      if (subcreateWorldIsPresent && isSubcreateCorner1Present && isSubcreateCorner2Present) {
+
+        ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.reset(
+          zoneMenuPlayer.getSubcreateCorner2(),
+          player
+        );
+        ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.create(
+          zoneMenuPlayer.getSubcreateCorner2(),
+          player,
+          Material.SEA_LANTERN,
+          (byte) 0
+        );
 
         World playerworld = zoneMenuPlayer.getSubcreateWorld();
         Location playerpos1 = zoneMenuPlayer.getSubcreateCorner1().clone();
