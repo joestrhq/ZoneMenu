@@ -47,15 +47,18 @@ public class CreatePlayerInteract implements Listener {
   @EventHandler
   public void onInteract(PlayerInteractEvent event) {
     Player player = event.getPlayer();
+
     if (!ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
       return;
     }
 
     ZoneMenuPlayer zoneMenuPlayer = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player);
 
-    if ((player.getInventory().getItemInMainHand().getType() != Material.STICK)
-      || (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN)
-      || (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.ZONE)) {
+    boolean hasStickInMainHand = player.getInventory().getItemInMainHand().getType() == Material.STICK;
+    boolean isToolTypeSign = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == ZoneMenuToolType.SIGN;
+    boolean isSignTypeZone = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getSignType() == ZoneMenuSignType.ZONE;
+
+    if (!(hasStickInMainHand && isToolTypeSign && isSignTypeZone)) {
       return;
     }
 
@@ -66,13 +69,17 @@ public class CreatePlayerInteract implements Listener {
       }
 
       event.setCancelled(true);
+
       zoneMenuPlayer.setCreateWorld(event.getClickedBlock().getLocation().getWorld());
       ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner1(), player);
       zoneMenuPlayer.setCreateCorner1(event.getClickedBlock().getLocation());
       ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner1(), player, (byte) 10);
 
-      if ((zoneMenuPlayer.getCreateWorld() != null) && (zoneMenuPlayer.getCreateCorner1() != null)
-        && (zoneMenuPlayer.getCreateCorner2() != null)) {
+      boolean createWorldIsPresent = zoneMenuPlayer.getCreateWorld() != null;
+      boolean createCorner1IsPresent = zoneMenuPlayer.getCreateCorner1() != null;
+      boolean createCorner2IsPresent = zoneMenuPlayer.getCreateCorner2() != null;
+
+      if (createWorldIsPresent && createCorner1IsPresent && createCorner2IsPresent) {
         ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner2(), player);
         ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner2(), player, (byte) 2);
 
@@ -126,8 +133,8 @@ public class CreatePlayerInteract implements Listener {
 
         try {
           new MessageHelper(languageResolverFunction)
-            .path(CurrentEntries.LANG_EVT_SIGN_AREA.toString())
             .locale(LocaleHelper.resolve(player.getLocale()))
+            .path(CurrentEntries.LANG_EVT_SIGN_AREA.toString())
             .modify((message) -> message.replace("%area", areaValue))
             .receiver(player)
             .sendActionBar();
@@ -136,8 +143,8 @@ public class CreatePlayerInteract implements Listener {
         }
       } else {
         new MessageHelper(languageResolverFunction)
-          .path(CurrentEntries.LANG_EVT_SIGN_FIRST.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_EVT_SIGN_FIRST.toString())
           .receiver(player)
           .send();
       }
@@ -156,8 +163,11 @@ public class CreatePlayerInteract implements Listener {
       zoneMenuPlayer.setCreateCorner2(event.getClickedBlock().getLocation());
       ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner2(), player, (byte) 2);
 
-      if ((zoneMenuPlayer.getCreateWorld() != null) && (zoneMenuPlayer.getCreateCorner1() != null)
-        && (zoneMenuPlayer.getCreateCorner2() != null)) {
+      boolean createWorldIsPresent = zoneMenuPlayer.getCreateWorld() != null;
+      boolean createCorner1IsPresent = zoneMenuPlayer.getCreateCorner1() != null;
+      boolean createCorner2IsPresent = zoneMenuPlayer.getCreateCorner2() != null;
+
+      if (createWorldIsPresent && createCorner1IsPresent && createCorner2IsPresent) {
         ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner1(), player);
         ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner1(), player, (byte) 10);
 
@@ -200,8 +210,8 @@ public class CreatePlayerInteract implements Listener {
         session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
         new MessageHelper(languageResolverFunction)
-          .path(CurrentEntries.LANG_EVT_SIGN_SECOND.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_EVT_SIGN_SECOND.toString())
           .receiver(player)
           .send();
 
@@ -211,8 +221,8 @@ public class CreatePlayerInteract implements Listener {
 
         try {
           new MessageHelper(languageResolverFunction)
-            .path(CurrentEntries.LANG_EVT_SIGN_AREA.toString())
             .locale(LocaleHelper.resolve(player.getLocale()))
+            .path(CurrentEntries.LANG_EVT_SIGN_AREA.toString())
             .modify((message) -> message.replace("%area", areaValue))
             .receiver(player)
             .sendActionBar();
@@ -221,8 +231,8 @@ public class CreatePlayerInteract implements Listener {
         }
       } else {
         new MessageHelper(languageResolverFunction)
-          .path(CurrentEntries.LANG_EVT_SIGN_SECOND.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_EVT_SIGN_SECOND.toString())
           .receiver(player)
           .send();
       }

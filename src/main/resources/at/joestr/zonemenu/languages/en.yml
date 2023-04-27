@@ -79,5 +79,5 @@ events:
     none: '[""%prefix,{"text":"No zone found!","color":"red"}]'
   sign:
     first: '[""%prefix,{"text":"First","color":"yellow"},{"text":" position marked","color":"aqua"}]'
-    second: '[""%prefix,{"text":"First","color":"purple"},{"text":" position marked","color":"aqua"}]'
+    second: '[""%prefix,{"text":"Second","color":"purple"},{"text":" position marked","color":"aqua"}]'
     area: '[""%prefix,{"text":"Area: ","color":"aqua"},{"text":"%area","color":"gray"}]'
