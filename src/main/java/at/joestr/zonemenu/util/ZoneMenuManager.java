@@ -46,10 +46,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-/**
- *
- * @author joestr
- */
 public class ZoneMenuManager {
 
   private final Logger LOGGER = Logger.getLogger(ZoneMenuManager.class.getName());

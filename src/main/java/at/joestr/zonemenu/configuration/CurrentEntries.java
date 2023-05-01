@@ -1,9 +1,25 @@
 //
-// Private License
+// MIT License
 //
-// Copyright (c) 2019-2020 Joel Strasser <strasser999@gmail.com>
+// Copyright (c) 2017-2023 Joel Strasser <joelstrasser1@gmail.com>
 //
-// Only the copyright holder is allowed to use this software.
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
 //
 package at.joestr.zonemenu.configuration;
 
@@ -13,9 +29,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * @author Joel
- */
 public enum CurrentEntries {
 
   // Configuration entries
@@ -56,7 +69,8 @@ public enum CurrentEntries {
   LANG_CMD_ZONE_X_MSG_DELETE("commands.zone.message_delete"),
   LANG_CMD_ZONE_X_MSG_SELECT("commands.zone.message_select"),
   LANG_CMD_ZONE_X_MSG_UPDATE("commands.zone.message_update"),
-  LANG_CMD_ZONE_FIND_MESSAGE("commands.zone-find.message"),
+  LANG_CMD_ZONE_FIND_TOGGLED_ON("commands.zone-find.toggled_on"),
+  LANG_CMD_ZONE_FIND_TOGGLED_OFF("commands.zone-find.toggled_off"),
   LANG_CMD_ZONE_CREATE_SIGN("commands.zone-create.sign"),
   LANG_CMD_ZONE_CREATE_NOT_SIGNED("commands.zone-create.not_signed"),
   LANG_CMD_ZONE_CREATE_WIDTH_LENGTH_LIMIT("commands.zone-create.width_length_limit"),
@@ -104,6 +118,9 @@ public enum CurrentEntries {
   LANG_EVT_FIND_NONE("events.find.none"),
   LANG_EVT_SIGN_FIRST("events.sign.first"),
   LANG_EVT_SIGN_SECOND("events.sign.second"),
+  /**
+   * Placeholders: %area
+   */
   LANG_EVT_SIGN_AREA("events.sign.area"),
   // Permissions
   PERM_CMD_ZONE("zonemenu.commands.zone"),
