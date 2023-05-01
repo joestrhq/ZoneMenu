@@ -20,7 +20,8 @@ commands:
     message_select: '[""%prefix,{"text":"» "},{"text":"Select a zone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-delete "},"hoverEvent":{"action":"show_text","contents":"/zone-select <zone>"}}]'
     message_update: '[""%prefix,{"text":"» "},{"text":"Update the plugin","color":"gray","clickEvent":{"action":"run_command","value":"/zone-update "},"hoverEvent":{"action":"show_text","contents":"/zone-select"}}]'
   zone-find:
-    message: '[""%prefix,{"text":"Use the stick to look for a free place by ","color":"aqua"},{"text":"left-","color":"gray"},{"text":" and ","color":"aqua"},{"text":"right-click","color":"gray"},{"text":".","color":"aqua"}]'
+    toggled_on: '[""%prefix,{"text":"Use the stick to look for a free place by ","color":"aqua"},{"text":"left-","color":"gray"},{"text":" and ","color":"aqua"},{"text":"right-click","color":"gray"},{"text":".","color":"aqua"}]'
+    toggled_off: '[""%prefix,{"text":"Find mode tuned off!", "color":"aqua"}}]]'
   zone-create:
     sign: '[""%prefix,{"text":"Use the stick to sign the","color":"aqua"},{"text":" first","color":"dark_purple"},{"text":" point by","color":"aqua"},{"text":" left-","color":"gray"},{"text":" and the","color":"aqua"},{"text":" second","color":"light_purple"},{"text":" point by","color":"aqua"},{"text":" right-click","color":"gray"},{"text":".","color":"aqua"}]'
     not_signed: '[""%prefix,{"text":"Zone not signed.","color":"red"}]'
@@ -78,6 +79,6 @@ events:
     found: '[""%prefix,{"text":"Zone(s) found: ","color":"green"},{"text":"%zonenameslist","color":"gray"}]'
     none: '[""%prefix,{"text":"No zone found!","color":"red"}]'
   sign:
-    first: '[""%prefix,{"text":"First","color":"yellow"},{"text":" position marked","color":"aqua"}]'
-    second: '[""%prefix,{"text":"Second","color":"purple"},{"text":" position marked","color":"aqua"}]'
+    first: '[""%prefix,{"text":"First","color":"dark_purple"},{"text":" position marked","color":"aqua"}]'
+    second: '[""%prefix,{"text":"Second","color":"light_purple"},{"text":" position marked","color":"aqua"}]'
     area: '[""%prefix,{"text":"Area: ","color":"aqua"},{"text":"%area","color":"gray"}]'
