@@ -64,7 +64,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class ZoneMenuPlugin extends JavaPlugin implements Listener {
 
-  private final Logger LOG = Logger.getLogger(ZoneMenuPlugin.class.getName());
+  private static final Logger LOG = Logger.getLogger(ZoneMenuPlugin.class.getName());
 
   public WorldEditPlugin worldEditPlugin;
   public WorldGuardPlugin worldGuardPlugin;
@@ -115,13 +115,13 @@ public class ZoneMenuPlugin extends JavaPlugin implements Listener {
 
   private void registerCommands() {
     this.commandMap.forEach(
-      (s, e) -> {
-        PluginCommand pluginCommand = getCommand(s);
+      (command, tabExecutor) -> {
+        PluginCommand pluginCommand = getCommand(command);
         if (pluginCommand == null) {
           return;
         }
-        pluginCommand.setExecutor(e);
-        pluginCommand.setTabCompleter(e);
+        pluginCommand.setExecutor(tabExecutor);
+        pluginCommand.setTabCompleter(tabExecutor);
       });
   }
 
