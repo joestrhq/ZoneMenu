@@ -69,7 +69,7 @@ public class ZoneMenuPlugin extends JavaPlugin implements Listener {
   public WorldEditPlugin worldEditPlugin;
   public WorldGuardPlugin worldGuardPlugin;
 
-  private Map<String, TabExecutor> commandMap = new HashMap<>();
+  private final Map<String, TabExecutor> commandMap = new HashMap<>();
 
   @Override
   public void onEnable() {
