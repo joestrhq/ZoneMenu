@@ -49,12 +49,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class FindPlayerInteract implements Listener {
+public class PlayerInteractZoneFind implements Listener {
 
   private ZoneMenuPlugin zoneMenuPlugin;
   private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
-  public FindPlayerInteract(ZoneMenuPlugin zonemenu) {
+  public PlayerInteractZoneFind(ZoneMenuPlugin zonemenu) {
     this.zoneMenuPlugin = zonemenu;
     this.zoneMenuPlugin.getServer().getPluginManager().registerEvents(this, this.zoneMenuPlugin);
   }
