@@ -32,6 +32,7 @@ import at.joestr.zonemenu.util.ZoneMenuManager;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
 import at.joestr.zonemenu.util.ZoneMenuSignType;
 import at.joestr.zonemenu.util.ZoneMenuToolType;
+import at.joestr.zonemenu.util.ZoneMenuUtils;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldguard.LocalPlayer;
@@ -204,8 +205,7 @@ public class CommandZoneCreate implements TabExecutor {
       }
 
       ProtectedCuboidRegion protectedCuboidRegion = new ProtectedCuboidRegion(
-        (AppConfiguration.getInstance().getString(CurrentEntries.CONF_ZONE_ID.toString()))
-          .replace("{creator}", player.getName()).replace("{count}", "" + zoneCounter++),
+        ZoneMenuUtils.createRegionNameFor(player.getName(), zoneCounter++),
         selectedRegion.getMinimumPoint(), selectedRegion.getMaximumPoint());
 
       LocalPlayer wrapedPlayer = ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapPlayer(player);

@@ -8,8 +8,6 @@ area_max: 10000
 have_max: 5
 area_max_claimable: 10000
 priority: 1
-zone_id: '{creator}+{count}'
-subzone_id: '{parent}-{count}'
 # Updater config
 updater:
   enabled: true

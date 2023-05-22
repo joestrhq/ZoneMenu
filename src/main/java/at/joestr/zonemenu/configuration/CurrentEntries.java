@@ -42,8 +42,6 @@ public enum CurrentEntries {
   CONF_HAVE_MAX("have_max"),
   CONF_AREA_MAX_CLAIMABLE("area_max_claimable"),
   CONF_PRIORITY("priority"),
-  CONF_ZONE_ID("zone_id"),
-  CONF_SUBZONE_ID("subzone_id"),
   CONF_UPDATER_ENABLED("updater.enabled"),
   CONF_UPDATER_DOWNLOADTOPLUGINUPDATEFOLDER("updater.downloadToPluginUpdateFolder"),
   CONF_UPDATER_TARGETURL("updater.targetUrl"),

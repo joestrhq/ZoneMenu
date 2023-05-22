@@ -23,7 +23,6 @@
 //
 package at.joestr.zonemenu.command;
 
-import at.joestr.javacommon.configuration.AppConfiguration;
 import at.joestr.javacommon.configuration.LanguageConfiguration;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
@@ -31,6 +30,7 @@ import at.joestr.zonemenu.util.ZoneMenuManager;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
 import at.joestr.zonemenu.util.ZoneMenuSignType;
 import at.joestr.zonemenu.util.ZoneMenuToolType;
+import at.joestr.zonemenu.util.ZoneMenuUtils;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldguard.WorldGuard;
@@ -182,8 +182,7 @@ public class CommandZoneSubcreate implements TabExecutor {
       }
 
       ProtectedCuboidRegion protectedCuboidRegion = new ProtectedCuboidRegion(
-        (AppConfiguration.getInstance().getString(CurrentEntries.CONF_SUBZONE_ID.toString()))
-          .replace("{parent}", protectedRegion.getId()).replace("{count}", "" + subZoneCounter++),
+        ZoneMenuUtils.createSubregionNameFor(protectedRegion.getId(), subZoneCounter++),
         selectedRegion.getMinimumPoint(), selectedRegion.getMaximumPoint());
       try {
         protectedCuboidRegion.setParent(protectedRegion);
