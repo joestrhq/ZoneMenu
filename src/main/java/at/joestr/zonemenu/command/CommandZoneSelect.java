@@ -58,12 +58,27 @@ public class CommandZoneSelect implements TabExecutor {
       return true;
     }
 
+    Player player = (Player) sender;
+
+    if (args.length == 0) {
+      LocalSession session
+        = WorldEdit
+          .getInstance()
+          .getSessionManager()
+          .get(BukkitAdapter.adapt(player));
+
+      session.getRegionSelector(BukkitAdapter.adapt(player.getWorld())).clear();
+      session.dispatchCUISelection(BukkitAdapter.adapt(player));
+
+      // TODO: send message that selection was cleared
+      return true;
+    }
+
     if (args.length != 1) {
       return false;
     }
 
     String targetZoneName = args[0];
-    Player player = (Player) sender;
 
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 

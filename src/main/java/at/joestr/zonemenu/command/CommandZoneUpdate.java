@@ -37,7 +37,7 @@ import org.bukkit.entity.Player;
 
 public class CommandZoneUpdate implements TabExecutor {
 
-  private static final Logger LOG = Logger.getLogger(CommandZoneUnselect.class.getName());
+  private static final Logger LOG = Logger.getLogger(CommandZoneUpdate.class.getName());
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

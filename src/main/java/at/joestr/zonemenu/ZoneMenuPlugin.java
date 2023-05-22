@@ -37,7 +37,6 @@ import at.joestr.zonemenu.command.CommandZoneList;
 import at.joestr.zonemenu.command.CommandZoneRemovemember;
 import at.joestr.zonemenu.command.CommandZoneSelect;
 import at.joestr.zonemenu.command.CommandZoneSubcreate;
-import at.joestr.zonemenu.command.CommandZoneUnselect;
 import at.joestr.zonemenu.command.CommandZoneUpdate;
 import at.joestr.zonemenu.event.playerinteract.PlayerInteractZoneCreate;
 import at.joestr.zonemenu.event.playerinteract.PlayerInteractZoneFind;
@@ -97,7 +96,6 @@ public class ZoneMenuPlugin extends JavaPlugin implements Listener {
     this.commandMap.put("zone-delete", new CommandZoneDelete());
     this.commandMap.put("zone-list", new CommandZoneList());
     this.commandMap.put("zone-select", new CommandZoneSelect());
-    this.commandMap.put("zone-unselect", new CommandZoneUnselect());
     this.commandMap.put("zone-update", new CommandZoneUpdate());
     this.registerCommands();
 

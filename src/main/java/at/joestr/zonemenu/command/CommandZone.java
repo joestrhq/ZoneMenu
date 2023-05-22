@@ -182,16 +182,6 @@ public class CommandZone implements TabExecutor {
         .send();
     }
 
-    if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_UNSELECT.toString())) {
-      new MessageHelper(languageResolverFunction)
-        .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_SELECT.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-        .showPrefix(true)
-        .receiver(player)
-        .send();
-    }
-
     if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_UPDATE.toString())) {
       new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
