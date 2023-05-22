@@ -85,7 +85,7 @@ public class CommandZone implements TabExecutor {
     if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_FIND.toString())) {
       new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_INFO.toString())
+        .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_FIND.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
         .showPrefix(true)
         .receiver(player)
