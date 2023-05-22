@@ -49,12 +49,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class CreatePlayerInteract implements Listener {
+public class PlayerInteractZoneSubcreate implements Listener {
 
   private ZoneMenuPlugin zoneMenuPlugin;
   private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
-  public CreatePlayerInteract(ZoneMenuPlugin zonemenu) {
+  public PlayerInteractZoneSubcreate(ZoneMenuPlugin zonemenu) {
 
     this.zoneMenuPlugin = zonemenu;
     this.zoneMenuPlugin.getServer().getPluginManager().registerEvents(this, this.zoneMenuPlugin);
@@ -62,6 +62,7 @@ public class CreatePlayerInteract implements Listener {
 
   @EventHandler
   public void onInteract(PlayerInteractEvent event) {
+
     Player player = event.getPlayer();
 
     if (!ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
@@ -72,50 +73,54 @@ public class CreatePlayerInteract implements Listener {
 
     boolean hasStickInMainHand = player.getInventory().getItemInMainHand().getType() == Material.STICK;
     boolean isToolTypeSign = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == ZoneMenuToolType.SIGN;
-    boolean isSignTypeZone = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getSignType() == ZoneMenuSignType.ZONE;
+    boolean isSignTypeSubZone = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getSignType() == ZoneMenuSignType.SUBZONE;
 
-    if (!(hasStickInMainHand && isToolTypeSign && isSignTypeZone)) {
+    if (!(hasStickInMainHand && isToolTypeSign && isSignTypeSubZone)) {
       return;
     }
 
     if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-      if (event.getClickedBlock().getLocation().equals(zoneMenuPlayer.getCreateCorner1())) {
+
+      if (event.getClickedBlock().getLocation().equals(zoneMenuPlayer.getSubcreateCorner1())) {
         event.setCancelled(true);
         return;
       }
 
       event.setCancelled(true);
 
-      zoneMenuPlayer.setCreateWorld(event.getClickedBlock().getLocation().getWorld());
-      ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner1(), player);
-      zoneMenuPlayer.setCreateCorner1(event.getClickedBlock().getLocation());
-      ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner1(), player, (byte) 10);
+      zoneMenuPlayer.setSubcreateWorld(event.getClickedBlock().getLocation().getWorld());
+      ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.reset(
+        zoneMenuPlayer.getSubcreateCorner1(),
+        player
+      );
+      zoneMenuPlayer.setSubcreateCorner1(event.getClickedBlock().getLocation());
+      ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.create(
+        zoneMenuPlayer.getSubcreateCorner1(),
+        player,
+        Material.GLOWSTONE,
+        (byte) 0
+      );
 
-      boolean createWorldIsPresent = zoneMenuPlayer.getCreateWorld() != null;
-      boolean createCorner1IsPresent = zoneMenuPlayer.getCreateCorner1() != null;
-      boolean createCorner2IsPresent = zoneMenuPlayer.getCreateCorner2() != null;
+      boolean subcreateWorldIsPresent = zoneMenuPlayer.getSubcreateWorld() != null;
+      boolean isSubcreateCorner1Present = zoneMenuPlayer.getSubcreateCorner1() != null;
+      boolean isSubcreateCorner2Present = zoneMenuPlayer.getSubcreateCorner2() != null;
 
-      if (createWorldIsPresent && createCorner1IsPresent && createCorner2IsPresent) {
-        ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner2(), player);
-        ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner2(), player, (byte) 2);
+      if (subcreateWorldIsPresent && isSubcreateCorner1Present && isSubcreateCorner2Present) {
 
-        ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner3(), player);
-        Location loc = zoneMenuPlayer.getCreateCorner1().clone();
-        loc.setX(zoneMenuPlayer.getCreateCorner2().getX());
-        zoneMenuPlayer.setCreateCorner3(loc);
-        ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(loc, player, (byte) 0);
+        ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.reset(
+          zoneMenuPlayer.getSubcreateCorner2(),
+          player
+        );
+        ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.create(
+          zoneMenuPlayer.getSubcreateCorner2(),
+          player,
+          Material.SEA_LANTERN,
+          (byte) 0
+        );
 
-        ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner4(), player);
-        loc = zoneMenuPlayer.getCreateCorner1().clone();
-        loc.setZ(zoneMenuPlayer.getCreateCorner2().getZ());
-        zoneMenuPlayer.setCreateCorner4(loc);
-        ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(loc, player, (byte) 0);
-
-        World playerworld = zoneMenuPlayer.getCreateWorld();
-        Location playerpos1 = zoneMenuPlayer.getCreateCorner1().clone();
-        playerpos1.setY(playerworld.getMinHeight());
-        Location playerpos2 = zoneMenuPlayer.getCreateCorner2().clone();
-        playerpos2.setY(playerworld.getMaxHeight());
+        World playerworld = zoneMenuPlayer.getSubcreateWorld();
+        Location playerpos1 = zoneMenuPlayer.getSubcreateCorner1().clone();
+        Location playerpos2 = zoneMenuPlayer.getSubcreateCorner2().clone();
 
         LocalSession session
           = WorldEdit
@@ -138,8 +143,8 @@ public class CreatePlayerInteract implements Listener {
         session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
         new MessageHelper(languageResolverFunction)
-          .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_EVT_SIGN_FIRST.toString())
+          .locale(LocaleHelper.resolve(player.getLocale()))
           .receiver(player)
           .send();
 
@@ -149,61 +154,47 @@ public class CreatePlayerInteract implements Listener {
 
         try {
           new MessageHelper(languageResolverFunction)
-            .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_EVT_SIGN_AREA.toString())
-            .modify(message -> message.replace("%area", areaValue))
+            .locale(LocaleHelper.resolve(player.getLocale()))
+            .modify((message) -> message.replace("%area", areaValue))
             .receiver(player)
             .sendActionBar();
         } catch (Exception ex) {
-          Logger.getLogger(CreatePlayerInteract.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(PlayerInteractZoneSubcreate.class.getName()).log(Level.SEVERE, null, ex);
         }
       } else {
         new MessageHelper(languageResolverFunction)
-          .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_EVT_SIGN_FIRST.toString())
+          .locale(LocaleHelper.resolve(player.getLocale()))
           .receiver(player)
           .send();
       }
     }
 
     if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-      if (event.getClickedBlock().getLocation().equals(zoneMenuPlayer.getCreateCorner2())) {
+
+      if (event.getClickedBlock().getLocation().equals(zoneMenuPlayer.getSubcreateCorner2())) {
         event.setCancelled(true);
         return;
       }
 
+      zoneMenuPlayer.setSubcreateWorld(event.getClickedBlock().getLocation().getWorld());
       event.setCancelled(true);
+      ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner2(), player);
+      zoneMenuPlayer.setSubcreateCorner2(event.getClickedBlock().getLocation());
+      ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner2(), player,
+        Material.SEA_LANTERN, (byte) 0);
 
-      zoneMenuPlayer.setCreateWorld(event.getClickedBlock().getLocation().getWorld());
-      ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner2(), player);
-      zoneMenuPlayer.setCreateCorner2(event.getClickedBlock().getLocation());
-      ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner2(), player, (byte) 2);
+      if ((zoneMenuPlayer.getSubcreateWorld() != null) && (zoneMenuPlayer.getSubcreateCorner1() != null)
+        && (zoneMenuPlayer.getSubcreateCorner2() != null)) {
 
-      boolean createWorldIsPresent = zoneMenuPlayer.getCreateWorld() != null;
-      boolean createCorner1IsPresent = zoneMenuPlayer.getCreateCorner1() != null;
-      boolean createCorner2IsPresent = zoneMenuPlayer.getCreateCorner2() != null;
+        ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.reset(zoneMenuPlayer.getSubcreateCorner1(), player);
+        ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner1(), player,
+          Material.GLOWSTONE, (byte) 0);
 
-      if (createWorldIsPresent && createCorner1IsPresent && createCorner2IsPresent) {
-        ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner1(), player);
-        ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner1(), player, (byte) 10);
-
-        ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner3(), player);
-        Location loc = zoneMenuPlayer.getCreateCorner1().clone();
-        loc.setX(zoneMenuPlayer.getCreateCorner2().getX());
-        zoneMenuPlayer.setCreateCorner3(loc);
-        ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(loc, player, (byte) 0);
-
-        ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner4(), player);
-        loc = zoneMenuPlayer.getCreateCorner1().clone();
-        loc.setZ(zoneMenuPlayer.getCreateCorner2().getZ());
-        zoneMenuPlayer.setCreateCorner4(loc);
-        ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(loc, player, (byte) 0);
-
-        World playerworld = zoneMenuPlayer.getCreateWorld();
-        Location playerpos1 = zoneMenuPlayer.getCreateCorner1().clone();
-        playerpos1.setY(playerworld.getMinHeight());
-        Location playerpos2 = zoneMenuPlayer.getCreateCorner2().clone();
-        playerpos2.setY(playerworld.getMaxHeight());
+        World playerworld = zoneMenuPlayer.getSubcreateWorld();
+        Location playerpos1 = zoneMenuPlayer.getSubcreateCorner1().clone();
+        Location playerpos2 = zoneMenuPlayer.getSubcreateCorner2().clone();
 
         LocalSession session
           = WorldEdit
@@ -226,8 +217,8 @@ public class CreatePlayerInteract implements Listener {
         session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
         new MessageHelper(languageResolverFunction)
+          .path(CurrentEntries.LANG_EVT_SIGN_FIRST.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
-          .path(CurrentEntries.LANG_EVT_SIGN_SECOND.toString())
           .receiver(player)
           .send();
 
@@ -237,18 +228,18 @@ public class CreatePlayerInteract implements Listener {
 
         try {
           new MessageHelper(languageResolverFunction)
-            .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_EVT_SIGN_AREA.toString())
+            .locale(LocaleHelper.resolve(player.getLocale()))
             .modify((message) -> message.replace("%area", areaValue))
             .receiver(player)
             .sendActionBar();
         } catch (Exception ex) {
-          Logger.getLogger(CreatePlayerInteract.class.getName()).log(Level.SEVERE, null, ex);
+          Logger.getLogger(PlayerInteractZoneSubcreate.class.getName()).log(Level.SEVERE, null, ex);
         }
       } else {
         new MessageHelper(languageResolverFunction)
+          .path(CurrentEntries.LANG_EVT_SIGN_FIRST.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
-          .path(CurrentEntries.LANG_EVT_SIGN_SECOND.toString())
           .receiver(player)
           .send();
       }

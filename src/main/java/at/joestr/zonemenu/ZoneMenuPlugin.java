@@ -39,9 +39,9 @@ import at.joestr.zonemenu.command.CommandZoneSelect;
 import at.joestr.zonemenu.command.CommandZoneSubcreate;
 import at.joestr.zonemenu.command.CommandZoneUnselect;
 import at.joestr.zonemenu.command.CommandZoneUpdate;
-import at.joestr.zonemenu.event.playerinteract.CreatePlayerInteract;
-import at.joestr.zonemenu.event.playerinteract.FindPlayerInteract;
-import at.joestr.zonemenu.event.playerinteract.SubcreatePlayerInteract;
+import at.joestr.zonemenu.event.playerinteract.PlayerInteractZoneCreate;
+import at.joestr.zonemenu.event.playerinteract.PlayerInteractZoneFind;
+import at.joestr.zonemenu.event.playerinteract.PlayerInteractZoneSubcreate;
 import at.joestr.zonemenu.listener.PlayerChangedWorld;
 import at.joestr.zonemenu.listener.PlayerMove;
 import at.joestr.zonemenu.listener.PlayerQuit;
@@ -101,9 +101,9 @@ public class ZoneMenuPlugin extends JavaPlugin implements Listener {
     this.commandMap.put("zone-update", new CommandZoneUpdate());
     this.registerCommands();
 
-    new FindPlayerInteract(this);
-    new CreatePlayerInteract(this);
-    new SubcreatePlayerInteract(this);
+    new PlayerInteractZoneFind(this);
+    new PlayerInteractZoneCreate(this);
+    new PlayerInteractZoneSubcreate(this);
     new PlayerQuit(this);
     new PlayerChangedWorld(this);
     new PlayerMove(this);
