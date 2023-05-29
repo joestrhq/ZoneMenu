@@ -114,12 +114,26 @@ public enum CurrentEntries {
   LANG_CMD_ZONE_UPDATE_DOWNLOADED("command.zone-update.downloaded"),
   LANG_EVT_FIND_FOUND("events.find.found"),
   LANG_EVT_FIND_NONE("events.find.none"),
-  LANG_EVT_SIGN_FIRST("events.sign.first"),
-  LANG_EVT_SIGN_SECOND("events.sign.second"),
   /**
-   * Placeholders: %area
+   * Placeholders: %prefix
    */
-  LANG_EVT_SIGN_AREA("events.sign.area"),
+  LANG_EVT_SIGN_FIRST_POSITION("events.sign.first"),
+  /**
+   * Placeholders: %prefix
+   */
+  LANG_EVT_SIGN_SECOND_POSITION("events.sign.second"),
+  /**
+   * Placeholders: %prefix, %area
+   */
+  LANG_EVT_SIGN_AREA_NOTE("events.sign.area_note"),
+  /**
+   * Placeholders: %prefix
+   */
+  LANG_EVT_SIGN_CREATION_NOTE("events.sign.creation_note"),
+  /**
+   * Placeholders: %prefix
+   */
+  LANG_EVT_SIGN_SUBCREATION_NOTE("events.sign.subcreation_note"),
   // Permissions
   PERM_CMD_ZONE("zonemenu.commands.zone"),
   PERM_CMD_ZONE_FIND("zonemenu.commands.zone-find"),
