@@ -117,11 +117,11 @@ public enum CurrentEntries {
   /**
    * Placeholders: %prefix
    */
-  LANG_EVT_SIGN_FIRST_POSITION("events.sign.first"),
+  LANG_EVT_SIGN_FIRST_POSITION("events.sign.first_position"),
   /**
    * Placeholders: %prefix
    */
-  LANG_EVT_SIGN_SECOND_POSITION("events.sign.second"),
+  LANG_EVT_SIGN_SECOND_POSITION("events.sign.second_position"),
   /**
    * Placeholders: %prefix, %area
    */
