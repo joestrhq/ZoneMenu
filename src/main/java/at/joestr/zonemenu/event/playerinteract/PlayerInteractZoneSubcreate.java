@@ -143,9 +143,10 @@ public class PlayerInteractZoneSubcreate implements Listener {
         session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
         new MessageHelper(languageResolverFunction)
-          .path(CurrentEntries.LANG_EVT_SIGN_FIRST.toString())
+          .path(CurrentEntries.LANG_EVT_SIGN_FIRST_POSITION.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
           .receiver(player)
+          .showPrefix(true)
           .send();
 
         String areaValue = Integer.toString(
@@ -154,18 +155,26 @@ public class PlayerInteractZoneSubcreate implements Listener {
 
         try {
           new MessageHelper(languageResolverFunction)
-            .path(CurrentEntries.LANG_EVT_SIGN_AREA.toString())
+            .path(CurrentEntries.LANG_EVT_SIGN_AREA_NOTE.toString())
             .locale(LocaleHelper.resolve(player.getLocale()))
+            .showPrefix(true)
             .modify((message) -> message.replace("%area", areaValue))
             .receiver(player)
-            .sendActionBar();
+            .send();
+          new MessageHelper(languageResolverFunction)
+            .path(CurrentEntries.LANG_EVT_SIGN_SUBCREATION_NOTE.toString())
+            .showPrefix(true)
+            .locale(LocaleHelper.resolve(player.getLocale()))
+            .receiver(player)
+            .send();
         } catch (Exception ex) {
           Logger.getLogger(PlayerInteractZoneSubcreate.class.getName()).log(Level.SEVERE, null, ex);
         }
       } else {
         new MessageHelper(languageResolverFunction)
-          .path(CurrentEntries.LANG_EVT_SIGN_FIRST.toString())
+          .path(CurrentEntries.LANG_EVT_SIGN_FIRST_POSITION.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
+          .showPrefix(true)
           .receiver(player)
           .send();
       }
@@ -217,8 +226,9 @@ public class PlayerInteractZoneSubcreate implements Listener {
         session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
         new MessageHelper(languageResolverFunction)
-          .path(CurrentEntries.LANG_EVT_SIGN_FIRST.toString())
+          .path(CurrentEntries.LANG_EVT_SIGN_FIRST_POSITION.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
+          .showPrefix(true)
           .receiver(player)
           .send();
 
@@ -228,18 +238,26 @@ public class PlayerInteractZoneSubcreate implements Listener {
 
         try {
           new MessageHelper(languageResolverFunction)
-            .path(CurrentEntries.LANG_EVT_SIGN_AREA.toString())
+            .path(CurrentEntries.LANG_EVT_SIGN_AREA_NOTE.toString())
             .locale(LocaleHelper.resolve(player.getLocale()))
+            .showPrefix(true)
             .modify((message) -> message.replace("%area", areaValue))
             .receiver(player)
-            .sendActionBar();
+            .send();
+          new MessageHelper(languageResolverFunction)
+            .path(CurrentEntries.LANG_EVT_SIGN_SUBCREATION_NOTE.toString())
+            .showPrefix(true)
+            .locale(LocaleHelper.resolve(player.getLocale()))
+            .receiver(player)
+            .send();
         } catch (Exception ex) {
           Logger.getLogger(PlayerInteractZoneSubcreate.class.getName()).log(Level.SEVERE, null, ex);
         }
       } else {
         new MessageHelper(languageResolverFunction)
-          .path(CurrentEntries.LANG_EVT_SIGN_FIRST.toString())
+          .path(CurrentEntries.LANG_EVT_SIGN_FIRST_POSITION.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
+          .showPrefix(true)
           .receiver(player)
           .send();
       }

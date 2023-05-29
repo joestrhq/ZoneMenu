@@ -79,6 +79,8 @@ events:
     found: '[""%prefix,{"text":"Zone(s) found: ","color":"green"},{"text":"%zonenameslist","color":"gray"}]'
     none: '[""%prefix,{"text":"No zone found!","color":"red"}]'
   sign:
-    first: '[""%prefix,{"text":"First","color":"dark_purple"},{"text":" position marked","color":"aqua"}]'
-    second: '[""%prefix,{"text":"Second","color":"light_purple"},{"text":" position marked","color":"aqua"}]'
-    area: '[""%prefix,{"text":"Area: ","color":"aqua"},{"text":"%area","color":"gray"}]'
+    first_position: '[""%prefix,{"text":"First","color":"dark_purple"},{"text":" position marked","color":"aqua"}]'
+    second_postion: '[""%prefix,{"text":"Second","color":"light_purple"},{"text":" position marked","color":"aqua"}]'
+    area_note: '[""%prefix,{"text":"Area: ","color":"aqua"},{"text":"%area","color":"gray"}]'
+    creation_note: '[""%prefix,{"text":"Click ","color":"aqua"},{"text":"» here","underlined":true,"color":"gray ","clickEvent":{"action":"run_command","value":"/zone-create"},"hoverEvent":{"action":"show_text","contents":"/zone-create"}},{"text":" to create the zone.","color":"aqua"}]'
+    subcreation_note: '[""%prefix,{"text":"Click ","color":"aqua"},{"text":"» here","underlined":true,"color":"gray ","clickEvent":{"action":"run_command","value":"/zone-subcreate"},"hoverEvent":{"action":"show_text","contents":"/zone-subcreate"}},{"text":" to create the sub-zone.","color":"aqua"}]'
