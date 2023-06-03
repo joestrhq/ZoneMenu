@@ -28,6 +28,7 @@ import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
+import at.joestr.zonemenu.util.ZoneMenuUtils;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -51,10 +53,12 @@ import org.bukkit.entity.Player;
 
 public class CommandZoneAddmember implements TabExecutor {
 
+  private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
+
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (!(sender instanceof Player)) {
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(Locale.ENGLISH)
         .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -71,6 +75,7 @@ public class CommandZoneAddmember implements TabExecutor {
     Player player = (Player) sender;
 
     final String zoneName = args[0];
+    final String regionName = ZoneMenuUtils.zoneToRegionName(zoneName);
     final String playerName = args[1];
 
     ZoneMenuManager.getInstance()
@@ -79,7 +84,7 @@ public class CommandZoneAddmember implements TabExecutor {
         false,
         (protectedRegions, thrownError) -> {
           if (protectedRegions.isEmpty()) {
-            new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+            new MessageHelper(languageResolverFunction)
               .locale(LocaleHelper.resolve(player.getLocale()))
               .path(CurrentEntries.LANG_GEN_NO_ZONE.toString())
               .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -92,13 +97,13 @@ public class CommandZoneAddmember implements TabExecutor {
           ProtectedRegion targetRegion = null;
 
           for (ProtectedRegion region : protectedRegions) {
-            if (region.getId().equalsIgnoreCase(zoneName)) {
+            if (region.getId().equalsIgnoreCase(regionName)) {
               targetRegion = region;
             }
           }
 
           if (targetRegion == null) {
-            new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+            new MessageHelper(languageResolverFunction)
               .locale(LocaleHelper.resolve(player.getLocale()))
               .path(CurrentEntries.LANG_GEN_NOT_EXISTING_ZONE.toString())
               .modify((msg) -> msg.replace("%zonename", zoneName))
@@ -117,7 +122,7 @@ public class CommandZoneAddmember implements TabExecutor {
             .wrapOfflinePlayer(Bukkit.getServer().getOfflinePlayer(playerName));
 
           if (targetRegionMembers.contains(wrapedPlayer)) {
-            new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+            new MessageHelper(languageResolverFunction)
               .locale(LocaleHelper.resolve(player.getLocale()))
               .path(CurrentEntries.LANG_CMD_ZONE_ADDMEMBER_ALREADY_MEMBER.toString())
               .modify((msg) -> msg.replace("%playername", playerName))
@@ -144,7 +149,7 @@ public class CommandZoneAddmember implements TabExecutor {
             new FutureCallback<DefaultDomain>() {
             @Override
             public void onSuccess(DefaultDomain result) {
-              new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+              new MessageHelper(languageResolverFunction)
                 .locale(LocaleHelper.resolve(player.getLocale()))
                 .path(CurrentEntries.LANG_CMD_ZONE_ADDMEMBER_SUCCESS.toString())
                 .modify((msg) -> msg.replace("%playername", playerName))
@@ -156,7 +161,7 @@ public class CommandZoneAddmember implements TabExecutor {
 
             @Override
             public void onFailure(Throwable throwable) {
-              new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+              new MessageHelper(languageResolverFunction)
                 .locale(LocaleHelper.resolve(player.getLocale()))
                 .path(
                   CurrentEntries.LANG_CMD_ZONE_ADDMEMBER_PLAYER_DOES_NOT_EXIST
@@ -191,8 +196,8 @@ public class CommandZoneAddmember implements TabExecutor {
     }
 
     if (args.length <= 1) {
-      for (ProtectedRegion pr : ZoneMenuManager.getInstance().getRegions(player, false)) {
-        result.add(pr.getId().replace("+", "#").replace("-", "."));
+      for (ProtectedRegion region : ZoneMenuManager.getInstance().getRegions(player, false)) {
+        result.add(ZoneMenuUtils.regionToZoneName(region.getId()));
       }
 
       if (args.length == 1) {
@@ -208,7 +213,7 @@ public class CommandZoneAddmember implements TabExecutor {
           .map(Player::getName)
           .collect(Collectors.toList()));
 
-      if (args.length == 1) {
+      if (args.length == 2) {
         result.removeIf((s) -> s.startsWith(args[1]));
       }
 
