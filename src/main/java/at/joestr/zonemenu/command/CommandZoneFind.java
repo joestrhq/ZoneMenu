@@ -32,6 +32,7 @@ import at.joestr.zonemenu.util.ZoneMenuPlayer;
 import at.joestr.zonemenu.util.ZoneMenuToolType;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiFunction;
 import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -43,6 +44,7 @@ import org.bukkit.inventory.ItemStack;
 public class CommandZoneFind implements TabExecutor {
 
   private static final Logger LOG = Logger.getLogger(CommandZoneFind.class.getName());
+  private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -74,7 +76,7 @@ public class CommandZoneFind implements TabExecutor {
         player.getInventory().addItem(new ItemStack[]{new ItemStack(Material.STICK, 1)});
       }
 
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_FIND_TOGGLED_ON.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -84,7 +86,7 @@ public class CommandZoneFind implements TabExecutor {
     } else {
       ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(null);
 
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_FIND_TOGGLED_OFF.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
