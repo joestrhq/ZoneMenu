@@ -34,6 +34,8 @@ import com.sk89q.worldguard.protection.managers.RemovalStrategy;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiFunction;
+import java.util.logging.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -41,10 +43,13 @@ import org.bukkit.entity.Player;
 
 public class CommandZoneDelete implements TabExecutor {
 
+  private static final Logger LOG = Logger.getLogger(CommandZoneDelete.class.getName());
+  private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
+
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (!(sender instanceof Player)) {
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(Locale.ENGLISH)
         .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -65,7 +70,7 @@ public class CommandZoneDelete implements TabExecutor {
       ProtectedRegion protectedRegion = null;
 
       if (t.isEmpty()) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_GEN_NO_ZONE.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -82,8 +87,8 @@ public class CommandZoneDelete implements TabExecutor {
       }
 
       if (protectedRegion == null) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
-          .locale(Locale.ENGLISH)
+        new MessageHelper(languageResolverFunction)
+          .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_GEN_NOT_EXISTING_ZONE.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
           .showPrefix(true)
@@ -102,8 +107,8 @@ public class CommandZoneDelete implements TabExecutor {
           RemovalStrategy.REMOVE_CHILDREN
         );
 
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
-        .locale(Locale.ENGLISH)
+      new MessageHelper(languageResolverFunction)
+        .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_DELETE_SUCCESS.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
         .showPrefix(true)
