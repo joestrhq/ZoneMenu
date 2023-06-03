@@ -29,6 +29,7 @@ import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.javacommon.spigotutils.SpigotUtils;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
+import at.joestr.zonemenu.util.ZoneMenuUtils;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.BooleanFlag;
 import com.sk89q.worldguard.protection.flags.DoubleFlag;
@@ -48,6 +49,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiFunction;
 import java.util.logging.Logger;
 import org.bukkit.GameMode;
 import org.bukkit.WeatherType;
@@ -60,11 +62,12 @@ import org.bukkit.entity.Player;
 public class CommandZoneFlag implements TabExecutor {
 
   private static final Logger LOG = Logger.getLogger(CommandZoneFlag.class.getName());
+  private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (!(sender instanceof Player)) {
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(Locale.ENGLISH)
         .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -81,13 +84,14 @@ public class CommandZoneFlag implements TabExecutor {
     }
 
     String zoneName = parsedArgs.get(0);
+    String regionName = ZoneMenuUtils.zoneToRegionName(zoneName);
     String flagName = parsedArgs.get(1);
     String flagValue = parsedArgs.get(2);
     Player player = (Player) sender;
 
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
       if (t.isEmpty()) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_GEN_NO_ZONE.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -100,14 +104,14 @@ public class CommandZoneFlag implements TabExecutor {
       final ArrayList<ProtectedRegion> protectedRegions = new ArrayList<>();
 
       for (ProtectedRegion protectedRegion_ : t) {
-        if (protectedRegion_.getId().equalsIgnoreCase(zoneName)) {
+        if (protectedRegion_.getId().equalsIgnoreCase(regionName)) {
           protectedRegions.add(protectedRegion_);
           break;
         }
       }
 
       if (protectedRegions.isEmpty()) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_GEN_NOT_EXISTING_ZONE.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -159,16 +163,16 @@ public class CommandZoneFlag implements TabExecutor {
             );
           }
 
-          new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%zonename", zoneName))
+            .modify(s -> s.replace("%oldvalue", previousFlagValue))
+            .modify(s -> s.replace("%newvalue", flagValue))
             .prefixPath(CurrentEntries.LANG_PREFIX.toString())
             .showPrefix(true)
             .receiver(sender)
-            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
-            .modify(s -> s.replace("%zonename", protectedRegion.getId()))
-            .modify(s -> s.replace("%oldvalue", previousFlagValue))
-            .modify(s -> s.replace("%newvalue", flagValue))
             .send();
         } catch (InvalidFlagFormat exception) {
           return;
@@ -203,16 +207,16 @@ public class CommandZoneFlag implements TabExecutor {
                     .build()));
             }
 
-            new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+            new MessageHelper(languageResolverFunction)
               .locale(LocaleHelper.resolve(player.getLocale()))
               .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+              .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+              .modify(s -> s.replace("%zonename", zoneName))
+              .modify(s -> s.replace("%oldvalue", previousFlagValue))
+              .modify(s -> s.replace("%newvalue", flagValue))
               .prefixPath(CurrentEntries.LANG_PREFIX.toString())
               .showPrefix(true)
               .receiver(sender)
-              .modify(s -> s.replace("%flagname", matchedFlag.getName()))
-              .modify(s -> s.replace("%zonename", protectedRegion.getId()))
-              .modify(s -> s.replace("%oldvalue", previousFlagValue))
-              .modify(s -> s.replace("%newvalue", flagValue))
               .send();
           } catch (InvalidFlagFormat e) {
             return;
@@ -247,16 +251,16 @@ public class CommandZoneFlag implements TabExecutor {
                   .build()));
           }
 
-          new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%zonename", zoneName))
+            .modify(s -> s.replace("%oldvalue", previousFlagValue))
+            .modify(s -> s.replace("%newvalue", flagValue))
             .prefixPath(CurrentEntries.LANG_PREFIX.toString())
             .showPrefix(true)
             .receiver(sender)
-            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
-            .modify(s -> s.replace("%zonename", protectedRegion.getId()))
-            .modify(s -> s.replace("%oldvalue", previousFlagValue))
-            .modify(s -> s.replace("%newvalue", flagValue))
             .send();
         } catch (InvalidFlagFormat e) {
           return;
@@ -288,16 +292,16 @@ public class CommandZoneFlag implements TabExecutor {
                   .build()));
           }
 
-          new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%zonename", zoneName))
+            .modify(s -> s.replace("%oldvalue", previousFlagValue))
+            .modify(s -> s.replace("%newvalue", flagValue))
             .prefixPath(CurrentEntries.LANG_PREFIX.toString())
             .showPrefix(true)
             .receiver(sender)
-            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
-            .modify(s -> s.replace("%zonename", protectedRegion.getId()))
-            .modify(s -> s.replace("%oldvalue", previousFlagValue))
-            .modify(s -> s.replace("%newvalue", flagValue))
             .send();
         } catch (InvalidFlagFormat e) {
           return;
@@ -329,16 +333,16 @@ public class CommandZoneFlag implements TabExecutor {
                   .build()));
           }
 
-          new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%zonename", zoneName))
+            .modify(s -> s.replace("%oldvalue", previousFlagValue))
+            .modify(s -> s.replace("%newvalue", flagValue))
             .prefixPath(CurrentEntries.LANG_PREFIX.toString())
             .showPrefix(true)
             .receiver(sender)
-            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
-            .modify(s -> s.replace("%zonename", protectedRegion.getId()))
-            .modify(s -> s.replace("%oldvalue", previousFlagValue))
-            .modify(s -> s.replace("%newvalue", flagValue))
             .send();
         } catch (InvalidFlagFormat e) {
           return;
@@ -369,16 +373,16 @@ public class CommandZoneFlag implements TabExecutor {
                   .build()));
           }
 
-          new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%zonename", zoneName))
+            .modify(s -> s.replace("%oldvalue", previousFlagValue))
+            .modify(s -> s.replace("%newvalue", flagValue))
             .prefixPath(CurrentEntries.LANG_PREFIX.toString())
             .showPrefix(true)
             .receiver(sender)
-            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
-            .modify(s -> s.replace("%zonename", protectedRegion.getId()))
-            .modify(s -> s.replace("%oldvalue", previousFlagValue))
-            .modify(s -> s.replace("%newvalue", flagValue))
             .send();
         } catch (InvalidFlagFormat e) {
           return;
@@ -410,16 +414,16 @@ public class CommandZoneFlag implements TabExecutor {
                   .build()));
           }
 
-          new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%zonename", zoneName))
+            .modify(s -> s.replace("%oldvalue", previousFlagValue))
+            .modify(s -> s.replace("%newvalue", flagValue))
             .prefixPath(CurrentEntries.LANG_PREFIX.toString())
             .showPrefix(true)
             .receiver(sender)
-            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
-            .modify(s -> s.replace("%zonename", protectedRegion.getId()))
-            .modify(s -> s.replace("%oldvalue", previousFlagValue))
-            .modify(s -> s.replace("%newvalue", flagValue))
             .send();
         } catch (InvalidFlagFormat e) {
           return;
@@ -450,16 +454,16 @@ public class CommandZoneFlag implements TabExecutor {
                   .build()));
           }
 
-          new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+          new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%zonename", zoneName))
+            .modify(s -> s.replace("%oldvalue", previousFlagValue))
+            .modify(s -> s.replace("%newvalue", flagValue))
             .prefixPath(CurrentEntries.LANG_PREFIX.toString())
             .showPrefix(true)
             .receiver(sender)
-            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
-            .modify(s -> s.replace("%zonename", protectedRegion.getId()))
-            .modify(s -> s.replace("%oldvalue", previousFlagValue))
-            .modify(s -> s.replace("%newvalue", flagValue))
             .send();
         } catch (InvalidFlagFormat e) {
           return;
@@ -469,7 +473,6 @@ public class CommandZoneFlag implements TabExecutor {
       }
 
       if (matchedFlag instanceof EnumFlag<?>) {
-
         if (Flags.GAME_MODE
           .getName()
           .equalsIgnoreCase(((EnumFlag<?>) matchedFlag).getName())) {
@@ -495,16 +498,16 @@ public class CommandZoneFlag implements TabExecutor {
                     .build()));
             }
 
-            new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+            new MessageHelper(languageResolverFunction)
               .locale(LocaleHelper.resolve(player.getLocale()))
               .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+              .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+              .modify(s -> s.replace("%zonename", zoneName))
+              .modify(s -> s.replace("%oldvalue", previousFlagValue))
+              .modify(s -> s.replace("%newvalue", flagValue))
               .prefixPath(CurrentEntries.LANG_PREFIX.toString())
               .showPrefix(true)
               .receiver(sender)
-              .modify(s -> s.replace("%flagname", matchedFlag.getName()))
-              .modify(s -> s.replace("%zonename", protectedRegion.getId()))
-              .modify(s -> s.replace("%oldvalue", previousFlagValue))
-              .modify(s -> s.replace("%newvalue", flagValue))
               .send();
           } catch (InvalidFlagFormat e) {
             return;
@@ -540,16 +543,16 @@ public class CommandZoneFlag implements TabExecutor {
                     .build()));
             }
 
-            new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+            new MessageHelper(languageResolverFunction)
               .locale(LocaleHelper.resolve(player.getLocale()))
               .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
+              .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+              .modify(s -> s.replace("%zonename", zoneName))
+              .modify(s -> s.replace("%oldvalue", previousFlagValue))
+              .modify(s -> s.replace("%newvalue", flagValue))
               .prefixPath(CurrentEntries.LANG_PREFIX.toString())
               .showPrefix(true)
               .receiver(sender)
-              .modify(s -> s.replace("%flagname", matchedFlag.getName()))
-              .modify(s -> s.replace("%zonename", protectedRegion.getId()))
-              .modify(s -> s.replace("%oldvalue", previousFlagValue))
-              .modify(s -> s.replace("%newvalue", flagValue))
               .send();
           } catch (InvalidFlagFormat e) {
             return;
