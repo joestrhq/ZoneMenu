@@ -30,6 +30,7 @@ import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiFunction;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -37,10 +38,12 @@ import org.bukkit.entity.Player;
 
 public class CommandZoneCancel implements TabExecutor {
 
+  private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
+
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (!(sender instanceof Player)) {
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(Locale.ENGLISH)
         .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -57,7 +60,7 @@ public class CommandZoneCancel implements TabExecutor {
     Player player = (Player) sender;
 
     if (!ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_CANCEL_NOT_RUNNING.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -68,7 +71,7 @@ public class CommandZoneCancel implements TabExecutor {
     }
 
     if (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == null) {
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_CANCEL_NOT_RUNNING.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -81,7 +84,7 @@ public class CommandZoneCancel implements TabExecutor {
     ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setSignType(null);
     ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(null);
 
-    new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+    new MessageHelper(languageResolverFunction)
       .locale(LocaleHelper.resolve(player.getLocale()))
       .path(CurrentEntries.LANG_CMD_ZONE_CANCEL_CANCEL.toString())
       .prefixPath(CurrentEntries.LANG_PREFIX.toString())
