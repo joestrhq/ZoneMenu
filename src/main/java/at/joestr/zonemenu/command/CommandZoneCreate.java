@@ -44,6 +44,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiFunction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Material;
@@ -55,10 +56,13 @@ import org.bukkit.inventory.ItemStack;
 
 public class CommandZoneCreate implements TabExecutor {
 
+  private static final Logger LOG = Logger.getLogger(CommandZoneCreate.class.getName());
+  private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
+
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (!(sender instanceof Player)) {
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(Locale.ENGLISH)
         .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -161,7 +165,7 @@ public class CommandZoneCreate implements TabExecutor {
 
       if (zoneArea + selectionArea
         > AppConfiguration.getInstance().getInt(CurrentEntries.CONF_AREA_MAX_CLAIMABLE.toString())) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_CMD_ZONE_CREATE_AREA_OVER.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -172,7 +176,7 @@ public class CommandZoneCreate implements TabExecutor {
       }
 
       if (zoneCounter > AppConfiguration.getInstance().getInt(CurrentEntries.CONF_HAVE_MAX.toString())) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_CMD_ZONE_CREATE_HAVE_OVER_EQUAL.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -183,7 +187,7 @@ public class CommandZoneCreate implements TabExecutor {
       }
 
       if (selectionArea < AppConfiguration.getInstance().getInt(CurrentEntries.CONF_AREA_MIN.toString())) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_CMD_ZONE_CREATE_AREA_UNDER.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -194,7 +198,7 @@ public class CommandZoneCreate implements TabExecutor {
       }
 
       if (selectionArea > AppConfiguration.getInstance().getInt(CurrentEntries.CONF_AREA_MAX.toString())) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_CMD_ZONE_CREATE_AREA_OVER.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -212,7 +216,7 @@ public class CommandZoneCreate implements TabExecutor {
       RegionManager regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld()));
 
       if (regionContainer.overlapsUnownedRegion(protectedCuboidRegion, wrapedPlayer)) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_CMD_ZONE_CREATE_OVERLAPS_UNOWNED.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -265,10 +269,10 @@ public class CommandZoneCreate implements TabExecutor {
 
       ZoneMenuManager.getInstance().clearUpZoneMenuPlayer(player);
 
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_CREATE_CREATED.toString())
-        .modify((s) -> s.replace("%zonename", protectedCuboidRegion.getId()))
+        .modify((s) -> s.replace("%zonename", ZoneMenuUtils.regionToZoneName(protectedCuboidRegion.getId())))
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
         .showPrefix(true)
         .receiver(player)
@@ -277,7 +281,6 @@ public class CommandZoneCreate implements TabExecutor {
 
     return true;
   }
-  private static final Logger LOG = Logger.getLogger(CommandZoneCreate.class.getName());
 
   @Override
   public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
