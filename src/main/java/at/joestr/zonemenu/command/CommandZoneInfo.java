@@ -28,6 +28,7 @@ import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
+import at.joestr.zonemenu.util.ZoneMenuUtils;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -68,6 +69,7 @@ public class CommandZoneInfo implements TabExecutor {
     }
 
     String zoneName = args[0];
+    String regionName = ZoneMenuUtils.zoneToRegionName(zoneName);
 
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
       if (t.isEmpty()) {
@@ -84,7 +86,7 @@ public class CommandZoneInfo implements TabExecutor {
       final ArrayList<ProtectedRegion> protectedRegions = new ArrayList<>();
 
       for (ProtectedRegion protectedRegion_ : t) {
-        if (protectedRegion_.getId().equalsIgnoreCase(zoneName)) {
+        if (protectedRegion_.getId().equalsIgnoreCase(regionName)) {
           protectedRegions.add(protectedRegion_);
           break;
         }
