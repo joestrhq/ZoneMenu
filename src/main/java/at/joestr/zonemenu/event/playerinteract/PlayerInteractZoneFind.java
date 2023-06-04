@@ -111,6 +111,8 @@ public class PlayerInteractZoneFind implements Listener {
         new MessageHelper(languageResolverFunction)
           .path(CurrentEntries.LANG_EVT_FIND_NONE.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
           .receiver(player)
           .send();
       } else {
@@ -121,6 +123,8 @@ public class PlayerInteractZoneFind implements Listener {
           .path(CurrentEntries.LANG_EVT_FIND_FOUND.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
           .modify((s) -> s.replace("%zonenameslist", foundRegionsString))
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
           .receiver(player)
           .send();
       }
