@@ -28,11 +28,13 @@ import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
+import at.joestr.zonemenu.util.ZoneMenuUtils;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiFunction;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -41,6 +43,7 @@ import org.bukkit.entity.Player;
 public class CommandZoneList implements TabExecutor {
 
   private static final Logger LOG = Logger.getLogger(CommandZoneList.class.getName());
+  private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -64,7 +67,7 @@ public class CommandZoneList implements TabExecutor {
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
       if (t.isEmpty()) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+        new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_GEN_NO_ZONE.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -74,24 +77,14 @@ public class CommandZoneList implements TabExecutor {
         return;
       }
 
-      StringBuilder sregionString = new StringBuilder();
+      String commaSeperatedRegions = t.stream()
+        .map((region) -> ZoneMenuUtils.regionToZoneName(region.getId()))
+        .collect(Collectors.joining(", "));
 
-      Iterator<ProtectedRegion> iterator = t.iterator();
-
-      while (iterator.hasNext()) {
-        ProtectedRegion protectedRegion_ = iterator.next();
-
-        if (iterator.hasNext()) {
-          sregionString.append(protectedRegion_.getId()).append(", ");
-        } else {
-          sregionString.append(protectedRegion_.getId());
-        }
-      }
-
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_LIST_LIST.toString())
-        .modify(s -> s.replace("%list", sregionString.toString()))
+        .modify(s -> s.replace("%list", commaSeperatedRegions))
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
         .showPrefix(true)
         .receiver(sender)
