@@ -24,6 +24,7 @@
 package at.joestr.zonemenu.command;
 
 import at.joestr.javacommon.configuration.LanguageConfiguration;
+import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
@@ -31,6 +32,7 @@ import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiFunction;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -41,11 +43,12 @@ import org.bukkit.entity.Player;
 public class CommandZoneRemovemember implements TabExecutor {
 
   private static final Logger LOG = Logger.getLogger(CommandZoneRemovemember.class.getName());
+  private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (!(sender instanceof Player)) {
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(Locale.ENGLISH)
         .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -67,8 +70,8 @@ public class CommandZoneRemovemember implements TabExecutor {
       ProtectedRegion protectedregion = null;
 
       if (t.isEmpty()) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
-          .locale(Locale.ENGLISH)
+        new MessageHelper(languageResolverFunction)
+          .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_GEN_NO_ZONE.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
           .showPrefix(true)
@@ -84,8 +87,8 @@ public class CommandZoneRemovemember implements TabExecutor {
       }
 
       if (protectedregion == null) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
-          .locale(Locale.ENGLISH)
+        new MessageHelper(languageResolverFunction)
+          .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_GEN_NOT_EXISTING_ZONE.toString())
           .modify(s -> s.replace("%zonename", zoneName))
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -95,13 +98,13 @@ public class CommandZoneRemovemember implements TabExecutor {
         return;
       }
 
-      DefaultDomain domainmembers = protectedregion.getMembers();
+      DefaultDomain domainMembers = protectedregion.getMembers();
 
-      if (!domainmembers.contains(
+      if (!domainMembers.contains(
         ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapOfflinePlayer(Bukkit.getServer().getOfflinePlayer(targetPlayerName)))) {
 
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
-          .locale(Locale.ENGLISH)
+        new MessageHelper(languageResolverFunction)
+          .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_CMD_ZONE_REMOVEMEMBER_NOT_A_MEMBER.toString())
           .modify(s -> s.replace("%playername", targetPlayerName))
           .modify(s -> s.replace("%zonename", zoneName))
@@ -112,12 +115,12 @@ public class CommandZoneRemovemember implements TabExecutor {
         return;
       }
 
-      domainmembers.removePlayer(
+      domainMembers.removePlayer(
         ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapOfflinePlayer(Bukkit.getServer().getOfflinePlayer(targetPlayerName)));
-      protectedregion.setMembers(domainmembers);
+      protectedregion.setMembers(domainMembers);
 
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
-        .locale(Locale.ENGLISH)
+      new MessageHelper(languageResolverFunction)
+        .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_REMOVEMEMBER_SUCCESS.toString())
         .modify(s -> s.replace("%playername", targetPlayerName))
         .modify(s -> s.replace("%zonename", zoneName))
