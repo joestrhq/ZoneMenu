@@ -29,6 +29,7 @@ import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiFunction;
 import java.util.logging.Logger;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -38,6 +39,7 @@ import org.bukkit.entity.Player;
 public class CommandZoneUpdate implements TabExecutor {
 
   private static final Logger LOG = Logger.getLogger(CommandZoneUpdate.class.getName());
+  private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -46,7 +48,7 @@ public class CommandZoneUpdate implements TabExecutor {
     }
 
     if (!(sender instanceof Player)) {
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .showPrefix(true)
         .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
         .locale(Locale.ENGLISH)
@@ -57,7 +59,7 @@ public class CommandZoneUpdate implements TabExecutor {
 
     Player player = (Player) sender;
 
-    new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+    new MessageHelper(languageResolverFunction)
       .showPrefix(true)
       .path(CurrentEntries.LANG_CMD_ZONE_UPDATE_ASYNCSTART.toString())
       .locale(LocaleHelper.resolve(player.getLocale()))
