@@ -52,6 +52,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class PlayerInteractZoneCreate implements Listener {
 
   private ZoneMenuPlugin zoneMenuPlugin;
+  private static final Logger LOG = Logger.getLogger(PlayerInteractZoneCreate.class.getName());
   private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
   public PlayerInteractZoneCreate(ZoneMenuPlugin zonemenu) {
@@ -140,6 +141,8 @@ public class PlayerInteractZoneCreate implements Listener {
         new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_EVT_SIGN_FIRST_POSITION.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
           .receiver(player)
           .send();
 
@@ -152,22 +155,26 @@ public class PlayerInteractZoneCreate implements Listener {
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_EVT_SIGN_AREA_NOTE.toString())
             .modify(message -> message.replace("%area", areaValue))
+            .prefixPath(CurrentEntries.LANG_PREFIX.toString())
             .showPrefix(true)
             .receiver(player)
             .send();
           new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_EVT_SIGN_CREATION_NOTE.toString())
+            .prefixPath(CurrentEntries.LANG_PREFIX.toString())
             .showPrefix(true)
             .receiver(player)
             .send();
         } catch (Exception ex) {
-          Logger.getLogger(PlayerInteractZoneCreate.class.getName()).log(Level.SEVERE, null, ex);
+          LOG.log(Level.SEVERE, null, ex);
         }
       } else {
         new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_EVT_SIGN_FIRST_POSITION.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
           .receiver(player)
           .send();
       }
@@ -235,6 +242,7 @@ public class PlayerInteractZoneCreate implements Listener {
         new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_EVT_SIGN_SECOND_POSITION.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
           .showPrefix(true)
           .receiver(player)
           .send();
@@ -248,22 +256,25 @@ public class PlayerInteractZoneCreate implements Listener {
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_EVT_SIGN_AREA_NOTE.toString())
             .modify(message -> message.replace("%area", areaValue))
+            .prefixPath(CurrentEntries.LANG_PREFIX.toString())
             .showPrefix(true)
             .receiver(player)
             .send();
           new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_EVT_SIGN_CREATION_NOTE.toString())
+            .prefixPath(CurrentEntries.LANG_PREFIX.toString())
             .showPrefix(true)
             .receiver(player)
             .send();
         } catch (Exception ex) {
-          Logger.getLogger(PlayerInteractZoneCreate.class.getName()).log(Level.SEVERE, null, ex);
+          LOG.log(Level.SEVERE, null, ex);
         }
       } else {
         new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_EVT_SIGN_SECOND_POSITION.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
           .showPrefix(true)
           .receiver(player)
           .send();
