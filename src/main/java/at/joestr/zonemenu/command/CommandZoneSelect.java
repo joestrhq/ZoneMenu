@@ -24,9 +24,11 @@
 package at.joestr.zonemenu.command;
 
 import at.joestr.javacommon.configuration.LanguageConfiguration;
+import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
+import at.joestr.zonemenu.util.ZoneMenuUtils;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -34,6 +36,7 @@ import com.sk89q.worldedit.regions.selector.CuboidRegionSelector;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.BiFunction;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -44,11 +47,12 @@ import org.bukkit.entity.Player;
 public class CommandZoneSelect implements TabExecutor {
 
   private static final Logger LOG = Logger.getLogger(CommandZoneSelect.class.getName());
+  private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
   @Override
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     if (!(sender instanceof Player)) {
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
+      new MessageHelper(languageResolverFunction)
         .locale(Locale.ENGLISH)
         .path(CurrentEntries.LANG_GEN_NOT_A_PLAYER.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
@@ -79,14 +83,15 @@ public class CommandZoneSelect implements TabExecutor {
     }
 
     String targetZoneName = args[0];
+    String targetRegionName = ZoneMenuUtils.zoneToRegionName(targetZoneName);
 
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
 
       ProtectedRegion protectedregion = null;
 
       if (t.isEmpty()) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
-          .locale(Locale.ENGLISH)
+        new MessageHelper(languageResolverFunction)
+          .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_GEN_NO_ZONE.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
           .showPrefix(true)
@@ -96,14 +101,14 @@ public class CommandZoneSelect implements TabExecutor {
       }
 
       for (ProtectedRegion pr : t) {
-        if (pr.getId().replace("+", "#").replace("-", ".").equalsIgnoreCase(targetZoneName)) {
+        if (pr.getId().equalsIgnoreCase(targetRegionName)) {
           protectedregion = pr;
         }
       }
 
       if (protectedregion == null) {
-        new MessageHelper(LanguageConfiguration.getInstance().getResolver())
-          .locale(Locale.ENGLISH)
+        new MessageHelper(languageResolverFunction)
+          .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_GEN_NOT_EXISTING_ZONE.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
           .showPrefix(true)
@@ -138,8 +143,8 @@ public class CommandZoneSelect implements TabExecutor {
 
       session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
-      new MessageHelper(LanguageConfiguration.getInstance().getResolver())
-        .locale(Locale.ENGLISH)
+      new MessageHelper(languageResolverFunction)
+        .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_SELECT_SUCCESS.toString())
         .modify(s -> s.replace("%zonename", targetZoneName))
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
