@@ -30,6 +30,7 @@ import at.joestr.javacommon.spigotutils.SpigotUtils;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
 import at.joestr.zonemenu.util.ZoneMenuUtils;
+import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.flags.BooleanFlag;
 import com.sk89q.worldguard.protection.flags.DoubleFlag;
@@ -50,6 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.BiFunction;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.GameMode;
 import org.bukkit.WeatherType;
@@ -88,9 +90,11 @@ public class CommandZoneFlag implements TabExecutor {
     String flagName = parsedArgs.get(1);
     String flagValue = parsedArgs.get(2);
     Player player = (Player) sender;
+    LocalPlayer worldGuardLocalPlayer
+      = ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapPlayer(player);
 
-    ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
-      if (t.isEmpty()) {
+    ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> foundRegions, Throwable u) -> {
+      if (foundRegions.isEmpty()) {
         new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_GEN_NO_ZONE.toString())
@@ -101,16 +105,16 @@ public class CommandZoneFlag implements TabExecutor {
         return;
       }
 
-      final ArrayList<ProtectedRegion> protectedRegions = new ArrayList<>();
+      final ArrayList<ProtectedRegion> targetRegions = new ArrayList<>();
 
-      for (ProtectedRegion protectedRegion_ : t) {
-        if (protectedRegion_.getId().equalsIgnoreCase(regionName)) {
-          protectedRegions.add(protectedRegion_);
+      for (ProtectedRegion foundRegion : foundRegions) {
+        if (foundRegion.getId().equalsIgnoreCase(regionName)) {
+          targetRegions.add(foundRegion);
           break;
         }
       }
 
-      if (protectedRegions.isEmpty()) {
+      if (targetRegions.isEmpty()) {
         new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
           .path(CurrentEntries.LANG_GEN_NOT_EXISTING_ZONE.toString())
@@ -121,9 +125,9 @@ public class CommandZoneFlag implements TabExecutor {
         return;
       }
 
-      ProtectedRegion protectedRegion = protectedRegions.get(0);
+      ProtectedRegion targetRegion = targetRegions.get(0);
 
-      Flag<?> matchedFlag
+      Flag<?> fuzzyMatchedFlag
         = Flags.fuzzyMatchFlag(
           WorldGuard.getInstance().getFlagRegistry(), flagName);
 
@@ -137,27 +141,25 @@ public class CommandZoneFlag implements TabExecutor {
       //            arguments[2])));
       // }
       // If the matched flag is a StateFlag
-      if (matchedFlag instanceof StateFlag) {
+      if (fuzzyMatchedFlag instanceof StateFlag) {
 
-        StateFlag stateFlag_ = (StateFlag) matchedFlag;
-        StateFlag.State previousFlag
-          = (StateFlag.State) protectedRegion.getFlag(matchedFlag);
+        StateFlag matchedFlag = (StateFlag) fuzzyMatchedFlag;
+        StateFlag.State previousFlagState
+          = (StateFlag.State) targetRegion.getFlag(fuzzyMatchedFlag);
         String previousFlagValue
-          = previousFlag != null ? previousFlag.toString() : "";
+          = previousFlagState != null ? previousFlagState.toString() : "";
 
         try {
           if (flagValue.equalsIgnoreCase("null")) {
-            protectedRegion.setFlag(stateFlag_, null);
+            targetRegion.setFlag(matchedFlag, null);
           } else {
-            protectedRegion.setFlag(
-              stateFlag_,
-              stateFlag_.parseInput(
+            targetRegion.setFlag(
+              matchedFlag,
+              matchedFlag.parseInput(
                 FlagContext.create()
-                  .setSender(
-                    ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapCommandSender(
-                      player))
+                  .setSender(worldGuardLocalPlayer)
                   .setInput(flagValue)
-                  .setObject("region", protectedRegion)
+                  .setObject("region", targetRegion)
                   .build()
               )
             );
@@ -166,7 +168,7 @@ public class CommandZoneFlag implements TabExecutor {
           new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
-            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%flagname", fuzzyMatchedFlag.getName()))
             .modify(s -> s.replace("%zonename", zoneName))
             .modify(s -> s.replace("%oldvalue", previousFlagValue))
             .modify(s -> s.replace("%newvalue", flagValue))
@@ -175,42 +177,48 @@ public class CommandZoneFlag implements TabExecutor {
             .receiver(sender)
             .send();
         } catch (InvalidFlagFormat exception) {
-          return;
+          String logMessage = new StringBuilder()
+            .append("Error parsing flag value '")
+            .append(flagValue)
+            .append("' for flag '")
+            .append(matchedFlag.getName())
+            .append("' of type '")
+            .append(matchedFlag.getClass().getName())
+            .append("'!")
+            .toString();
+          LOG.log(Level.SEVERE, logMessage, exception);
         }
+      } else if (fuzzyMatchedFlag instanceof SetFlag<?>) {
+        String setFlagName = ((SetFlag<?>) fuzzyMatchedFlag).getName();
 
-        return;
-      }
-
-      if (matchedFlag instanceof SetFlag<?>) {
-        if (Flags.DENY_SPAWN
-          .getName()
-          .equalsIgnoreCase(((SetFlag<?>) matchedFlag).getName())) {
-
-          SetFlag<EntityType> setFlag_ = (SetFlag<EntityType>) matchedFlag;
-          EntityType previousFlag = (EntityType) protectedRegion.getFlag(matchedFlag);
+        if (Flags.DENY_SPAWN.getName().equalsIgnoreCase(setFlagName)) {
+          SetFlag<EntityType> matchedFlag
+            = (SetFlag<EntityType>) fuzzyMatchedFlag;
+          EntityType previousFlag
+            = (EntityType) targetRegion.getFlag(fuzzyMatchedFlag);
           String previousFlagValue
             = previousFlag != null ? previousFlag.toString() : "";
 
           try {
             if (flagValue.equalsIgnoreCase("null")) {
-              protectedRegion.setFlag(setFlag_, null);
+              targetRegion.setFlag(matchedFlag, null);
             } else {
-              protectedRegion.setFlag(
-                setFlag_,
-                setFlag_.parseInput(
+              targetRegion.setFlag(
+                matchedFlag,
+                matchedFlag.parseInput(
                   FlagContext.create()
                     .setSender(
                       ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapCommandSender(
                         player))
                     .setInput(flagValue)
-                    .setObject("region", protectedRegion)
+                    .setObject("region", targetRegion)
                     .build()));
             }
 
             new MessageHelper(languageResolverFunction)
               .locale(LocaleHelper.resolve(player.getLocale()))
               .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
-              .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+              .modify(s -> s.replace("%flagname", fuzzyMatchedFlag.getName()))
               .modify(s -> s.replace("%zonename", zoneName))
               .modify(s -> s.replace("%oldvalue", previousFlagValue))
               .modify(s -> s.replace("%newvalue", flagValue))
@@ -218,43 +226,48 @@ public class CommandZoneFlag implements TabExecutor {
               .showPrefix(true)
               .receiver(sender)
               .send();
-          } catch (InvalidFlagFormat e) {
-            return;
+          } catch (InvalidFlagFormat exception) {
+            String logMessage = new StringBuilder()
+              .append("Error parsing flag value '")
+              .append(flagValue)
+              .append("' for flag '")
+              .append(matchedFlag.getName())
+              .append("' of type '")
+              .append(matchedFlag.getClass().getName())
+              .append("'!")
+              .toString();
+            LOG.log(Level.SEVERE, logMessage, exception);
           }
-
-          return;
         }
 
         Type type
-          = ((ParameterizedType) matchedFlag.getClass().getGenericSuperclass())
+          = ((ParameterizedType) fuzzyMatchedFlag.getClass().getGenericSuperclass())
             .getActualTypeArguments()[0];
 
-        SetFlag<Type> setFlag_ = (SetFlag<Type>) matchedFlag;
-        Type previousFlag = (Type) protectedRegion.getFlag(matchedFlag);
+        SetFlag<Type> matchedFlag = (SetFlag<Type>) fuzzyMatchedFlag;
+        Type previousFlag = (Type) targetRegion.getFlag(fuzzyMatchedFlag);
         String previousFlagValue
           = previousFlag != null ? previousFlag.toString() : "";
 
         try {
           if (flagValue.equalsIgnoreCase("null")) {
-            protectedRegion.setFlag(setFlag_, null);
+            targetRegion.setFlag(matchedFlag, null);
           } else {
 
-            protectedRegion.setFlag(
-              setFlag_,
-              setFlag_.parseInput(
+            targetRegion.setFlag(
+              matchedFlag,
+              matchedFlag.parseInput(
                 FlagContext.create()
-                  .setSender(
-                    ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapCommandSender(
-                      player))
+                  .setSender(worldGuardLocalPlayer)
                   .setInput(flagValue)
-                  .setObject("region", protectedRegion)
+                  .setObject("region", targetRegion)
                   .build()));
           }
 
           new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
-            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%flagname", fuzzyMatchedFlag.getName()))
             .modify(s -> s.replace("%zonename", zoneName))
             .modify(s -> s.replace("%oldvalue", previousFlagValue))
             .modify(s -> s.replace("%newvalue", flagValue))
@@ -262,40 +275,42 @@ public class CommandZoneFlag implements TabExecutor {
             .showPrefix(true)
             .receiver(sender)
             .send();
-        } catch (InvalidFlagFormat e) {
-          return;
+        } catch (InvalidFlagFormat exception) {
+          String logMessage = new StringBuilder()
+            .append("Error parsing flag value '")
+            .append(flagValue)
+            .append("' for flag '")
+            .append(matchedFlag.getName())
+            .append("' of type '")
+            .append(matchedFlag.getClass().getName())
+            .append("'!")
+            .toString();
+          LOG.log(Level.SEVERE, logMessage, exception);
         }
-
-        return;
-      }
-
-      if (matchedFlag instanceof StringFlag) {
-        StringFlag stringFlag_ = (StringFlag) matchedFlag;
-        String previousFlag = (String) protectedRegion.getFlag(matchedFlag);
+      } else if (fuzzyMatchedFlag instanceof StringFlag) {
+        StringFlag matchedFlag = (StringFlag) fuzzyMatchedFlag;
+        String previousFlag = (String) targetRegion.getFlag(fuzzyMatchedFlag);
         String previousFlagValue
           = previousFlag != null ? previousFlag.toString() : "";
 
         try {
           if (flagValue.equalsIgnoreCase("null")) {
-            protectedRegion.setFlag(stringFlag_, null);
+            targetRegion.setFlag(matchedFlag, null);
           } else {
-
-            protectedRegion.setFlag(
-              stringFlag_,
-              stringFlag_.parseInput(
+            targetRegion.setFlag(
+              matchedFlag,
+              matchedFlag.parseInput(
                 FlagContext.create()
-                  .setSender(
-                    ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapCommandSender(
-                      player))
+                  .setSender(worldGuardLocalPlayer)
                   .setInput(flagValue)
-                  .setObject("region", protectedRegion)
+                  .setObject("region", targetRegion)
                   .build()));
           }
 
           new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
-            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%flagname", fuzzyMatchedFlag.getName()))
             .modify(s -> s.replace("%zonename", zoneName))
             .modify(s -> s.replace("%oldvalue", previousFlagValue))
             .modify(s -> s.replace("%newvalue", flagValue))
@@ -303,40 +318,42 @@ public class CommandZoneFlag implements TabExecutor {
             .showPrefix(true)
             .receiver(sender)
             .send();
-        } catch (InvalidFlagFormat e) {
-          return;
+        } catch (InvalidFlagFormat exception) {
+          String logMessage = new StringBuilder()
+            .append("Error parsing flag value '")
+            .append(flagValue)
+            .append("' for flag '")
+            .append(matchedFlag.getName())
+            .append("' of type '")
+            .append(matchedFlag.getClass().getName())
+            .append("'!")
+            .toString();
+          LOG.log(Level.SEVERE, logMessage, exception);
         }
-
-        return;
-      }
-
-      if (matchedFlag instanceof BooleanFlag) {
-        BooleanFlag booleanFlag_ = (BooleanFlag) matchedFlag;
-        Boolean previousFlag = (Boolean) protectedRegion.getFlag(matchedFlag);
+      } else if (fuzzyMatchedFlag instanceof BooleanFlag) {
+        BooleanFlag matchedFlag = (BooleanFlag) fuzzyMatchedFlag;
+        Boolean previousFlag = (Boolean) targetRegion.getFlag(fuzzyMatchedFlag);
         String previousFlagValue
           = previousFlag != null ? previousFlag.toString() : "";
 
         try {
           if (flagValue.equalsIgnoreCase("null")) {
-            protectedRegion.setFlag(booleanFlag_, null);
+            targetRegion.setFlag(matchedFlag, null);
           } else {
-
-            protectedRegion.setFlag(
-              booleanFlag_,
-              booleanFlag_.parseInput(
+            targetRegion.setFlag(
+              matchedFlag,
+              matchedFlag.parseInput(
                 FlagContext.create()
-                  .setSender(
-                    ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapCommandSender(
-                      player))
+                  .setSender(worldGuardLocalPlayer)
                   .setInput(flagValue)
-                  .setObject("region", protectedRegion)
+                  .setObject("region", targetRegion)
                   .build()));
           }
 
           new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
-            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%flagname", fuzzyMatchedFlag.getName()))
             .modify(s -> s.replace("%zonename", zoneName))
             .modify(s -> s.replace("%oldvalue", previousFlagValue))
             .modify(s -> s.replace("%newvalue", flagValue))
@@ -344,39 +361,42 @@ public class CommandZoneFlag implements TabExecutor {
             .showPrefix(true)
             .receiver(sender)
             .send();
-        } catch (InvalidFlagFormat e) {
-          return;
+        } catch (InvalidFlagFormat exception) {
+          String logMessage = new StringBuilder()
+            .append("Error parsing flag value '")
+            .append(flagValue)
+            .append("' for flag '")
+            .append(matchedFlag.getName())
+            .append("' of type '")
+            .append(matchedFlag.getClass().getName())
+            .append("'!")
+            .toString();
+          LOG.log(Level.SEVERE, logMessage, exception);
         }
-
-        return;
-      }
-
-      if (matchedFlag instanceof IntegerFlag) {
-        IntegerFlag integerFlag_ = (IntegerFlag) matchedFlag;
-        Integer previousFlag = (Integer) protectedRegion.getFlag(matchedFlag);
+      } else if (fuzzyMatchedFlag instanceof IntegerFlag) {
+        IntegerFlag matchedFlag = (IntegerFlag) fuzzyMatchedFlag;
+        Integer previousFlag = (Integer) targetRegion.getFlag(fuzzyMatchedFlag);
         String previousFlagValue
           = previousFlag != null ? previousFlag.toString() : "";
 
         try {
           if (flagValue.equalsIgnoreCase("null")) {
-            protectedRegion.setFlag(integerFlag_, null);
+            targetRegion.setFlag(matchedFlag, null);
           } else {
-            protectedRegion.setFlag(
-              integerFlag_,
-              integerFlag_.parseInput(
+            targetRegion.setFlag(
+              matchedFlag,
+              matchedFlag.parseInput(
                 FlagContext.create()
-                  .setSender(
-                    ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapCommandSender(
-                      player))
+                  .setSender(worldGuardLocalPlayer)
                   .setInput(flagValue)
-                  .setObject("region", protectedRegion)
+                  .setObject("region", targetRegion)
                   .build()));
           }
 
           new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
-            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%flagname", fuzzyMatchedFlag.getName()))
             .modify(s -> s.replace("%zonename", zoneName))
             .modify(s -> s.replace("%oldvalue", previousFlagValue))
             .modify(s -> s.replace("%newvalue", flagValue))
@@ -384,40 +404,43 @@ public class CommandZoneFlag implements TabExecutor {
             .showPrefix(true)
             .receiver(sender)
             .send();
-        } catch (InvalidFlagFormat e) {
-          return;
+        } catch (InvalidFlagFormat exception) {
+          String logMessage = new StringBuilder()
+            .append("Error parsing flag value '")
+            .append(flagValue)
+            .append("' for flag '")
+            .append(matchedFlag.getName())
+            .append("' of type '")
+            .append(matchedFlag.getClass().getName())
+            .append("'!")
+            .toString();
+          LOG.log(Level.SEVERE, logMessage, exception);
         }
-
-        return;
-      }
-
-      if (matchedFlag instanceof DoubleFlag) {
-        DoubleFlag doubleFlag_ = (DoubleFlag) matchedFlag;
-        Double previousFlag = (Double) protectedRegion.getFlag(matchedFlag);
+      } else if (fuzzyMatchedFlag instanceof DoubleFlag) {
+        DoubleFlag matchedFlag = (DoubleFlag) fuzzyMatchedFlag;
+        Double previousFlag = (Double) targetRegion.getFlag(fuzzyMatchedFlag);
         String previousFlagValue
           = previousFlag != null ? previousFlag.toString() : "";
 
         try {
           if (flagValue.equalsIgnoreCase("null")) {
-            protectedRegion.setFlag(doubleFlag_, null);
+            targetRegion.setFlag(matchedFlag, null);
           } else {
 
-            protectedRegion.setFlag(
-              doubleFlag_,
-              doubleFlag_.parseInput(
+            targetRegion.setFlag(
+              matchedFlag,
+              matchedFlag.parseInput(
                 FlagContext.create()
-                  .setSender(
-                    ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapCommandSender(
-                      player))
+                  .setSender(worldGuardLocalPlayer)
                   .setInput(flagValue)
-                  .setObject("region", protectedRegion)
+                  .setObject("region", targetRegion)
                   .build()));
           }
 
           new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
-            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%flagname", fuzzyMatchedFlag.getName()))
             .modify(s -> s.replace("%zonename", zoneName))
             .modify(s -> s.replace("%oldvalue", previousFlagValue))
             .modify(s -> s.replace("%newvalue", flagValue))
@@ -425,39 +448,43 @@ public class CommandZoneFlag implements TabExecutor {
             .showPrefix(true)
             .receiver(sender)
             .send();
-        } catch (InvalidFlagFormat e) {
-          return;
+        } catch (InvalidFlagFormat exception) {
+          String logMessage = new StringBuilder()
+            .append("Error parsing flag value '")
+            .append(flagValue)
+            .append("' for flag '")
+            .append(matchedFlag.getName())
+            .append("' of type '")
+            .append(matchedFlag.getClass().getName())
+            .append("'!")
+            .toString();
+          LOG.log(Level.SEVERE, logMessage, exception);
         }
-
-        return;
-      }
-
-      if (matchedFlag instanceof LocationFlag) {
-        LocationFlag locationFlag_ = (LocationFlag) matchedFlag;
-        com.sk89q.worldedit.util.Location previousFlag = (com.sk89q.worldedit.util.Location) protectedRegion.getFlag(matchedFlag);
+      } else if (fuzzyMatchedFlag instanceof LocationFlag) {
+        LocationFlag matchedFlag = (LocationFlag) fuzzyMatchedFlag;
+        com.sk89q.worldedit.util.Location previousFlag
+          = (com.sk89q.worldedit.util.Location) targetRegion.getFlag(fuzzyMatchedFlag);
         String previousFlagValue
           = previousFlag != null ? previousFlag.toString() : "";
 
         try {
           if (flagValue.equalsIgnoreCase("null")) {
-            protectedRegion.setFlag(locationFlag_, null);
+            targetRegion.setFlag(matchedFlag, null);
           } else {
-            protectedRegion.setFlag(
-              locationFlag_,
-              locationFlag_.parseInput(
+            targetRegion.setFlag(
+              matchedFlag,
+              matchedFlag.parseInput(
                 FlagContext.create()
-                  .setSender(
-                    ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapCommandSender(
-                      player))
+                  .setSender(worldGuardLocalPlayer)
                   .setInput(flagValue)
-                  .setObject("region", protectedRegion)
+                  .setObject("region", targetRegion)
                   .build()));
           }
 
           new MessageHelper(languageResolverFunction)
             .locale(LocaleHelper.resolve(player.getLocale()))
             .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
-            .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+            .modify(s -> s.replace("%flagname", fuzzyMatchedFlag.getName()))
             .modify(s -> s.replace("%zonename", zoneName))
             .modify(s -> s.replace("%oldvalue", previousFlagValue))
             .modify(s -> s.replace("%newvalue", flagValue))
@@ -465,43 +492,48 @@ public class CommandZoneFlag implements TabExecutor {
             .showPrefix(true)
             .receiver(sender)
             .send();
-        } catch (InvalidFlagFormat e) {
-          return;
+        } catch (InvalidFlagFormat exception) {
+          String logMessage = new StringBuilder()
+            .append("Error parsing flag value '")
+            .append(flagValue)
+            .append("' for flag '")
+            .append(matchedFlag.getName())
+            .append("' of type '")
+            .append(matchedFlag.getClass().getName())
+            .append("'!")
+            .toString();
+          LOG.log(Level.SEVERE, logMessage, exception);
         }
+      } else if (fuzzyMatchedFlag instanceof EnumFlag<?>) {
+        String fuzzyMatchedFlagName
+          = ((EnumFlag<?>) fuzzyMatchedFlag).getName();
 
-        return;
-      }
-
-      if (matchedFlag instanceof EnumFlag<?>) {
-        if (Flags.GAME_MODE
-          .getName()
-          .equalsIgnoreCase(((EnumFlag<?>) matchedFlag).getName())) {
-
-          EnumFlag<GameMode> enumFlag_ = (EnumFlag<GameMode>) matchedFlag;
-          GameMode previousFlag = (GameMode) protectedRegion.getFlag(matchedFlag);
+        if (Flags.GAME_MODE.getName().equalsIgnoreCase(fuzzyMatchedFlagName)) {
+          EnumFlag<GameMode> matchedFlag
+            = (EnumFlag<GameMode>) fuzzyMatchedFlag;
+          GameMode previousFlag
+            = (GameMode) targetRegion.getFlag(fuzzyMatchedFlag);
           String previousFlagValue
             = previousFlag != null ? previousFlag.toString() : "";
 
           try {
             if (flagValue.equalsIgnoreCase("null")) {
-              protectedRegion.setFlag(enumFlag_, null);
+              targetRegion.setFlag(matchedFlag, null);
             } else {
-              protectedRegion.setFlag(
-                enumFlag_,
-                enumFlag_.parseInput(
+              targetRegion.setFlag(
+                matchedFlag,
+                matchedFlag.parseInput(
                   FlagContext.create()
-                    .setSender(
-                      ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapCommandSender(
-                        player))
+                    .setSender(worldGuardLocalPlayer)
                     .setInput(flagValue)
-                    .setObject("region", protectedRegion)
+                    .setObject("region", targetRegion)
                     .build()));
             }
 
             new MessageHelper(languageResolverFunction)
               .locale(LocaleHelper.resolve(player.getLocale()))
               .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
-              .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+              .modify(s -> s.replace("%flagname", fuzzyMatchedFlag.getName()))
               .modify(s -> s.replace("%zonename", zoneName))
               .modify(s -> s.replace("%oldvalue", previousFlagValue))
               .modify(s -> s.replace("%newvalue", flagValue))
@@ -509,44 +541,43 @@ public class CommandZoneFlag implements TabExecutor {
               .showPrefix(true)
               .receiver(sender)
               .send();
-          } catch (InvalidFlagFormat e) {
-            return;
+          } catch (InvalidFlagFormat exception) {
+            String logMessage = new StringBuilder()
+              .append("Error parsing flag value '")
+              .append(flagValue)
+              .append("' for flag '")
+              .append(matchedFlag.getName())
+              .append("' of type '")
+              .append(matchedFlag.getClass().getName())
+              .append("'!")
+              .toString();
+            LOG.log(Level.SEVERE, logMessage, exception);
           }
-
-          return;
-        }
-
-        if (Flags.WEATHER_LOCK
-          .getName()
-          .equalsIgnoreCase(((EnumFlag<?>) matchedFlag).getName())) {
-
-          EnumFlag<WeatherType> enumFlag_ = (EnumFlag<WeatherType>) matchedFlag;
+        } else if (Flags.WEATHER_LOCK.getName().equalsIgnoreCase(fuzzyMatchedFlagName)) {
+          EnumFlag<WeatherType> matchedFlag = (EnumFlag<WeatherType>) fuzzyMatchedFlag;
           WeatherType previousFlag
-            = (WeatherType) protectedRegion.getFlag(matchedFlag);
+            = (WeatherType) targetRegion.getFlag(fuzzyMatchedFlag);
           String previousFlagValue
             = previousFlag != null ? previousFlag.toString() : "";
 
           try {
             if (flagValue.equalsIgnoreCase("null")) {
-              protectedRegion.setFlag(enumFlag_, null);
+              targetRegion.setFlag(matchedFlag, null);
             } else {
-
-              protectedRegion.setFlag(
-                enumFlag_,
-                enumFlag_.parseInput(
+              targetRegion.setFlag(
+                matchedFlag,
+                matchedFlag.parseInput(
                   FlagContext.create()
-                    .setSender(
-                      ZoneMenuManager.getInstance().getWorldGuardPlugin().wrapCommandSender(
-                        player))
+                    .setSender(worldGuardLocalPlayer)
                     .setInput(flagValue)
-                    .setObject("region", protectedRegion)
+                    .setObject("region", targetRegion)
                     .build()));
             }
 
             new MessageHelper(languageResolverFunction)
               .locale(LocaleHelper.resolve(player.getLocale()))
               .path(CurrentEntries.LANG_CMD_ZONE_FLAG_CHANGED.toString())
-              .modify(s -> s.replace("%flagname", matchedFlag.getName()))
+              .modify(s -> s.replace("%flagname", fuzzyMatchedFlag.getName()))
               .modify(s -> s.replace("%zonename", zoneName))
               .modify(s -> s.replace("%oldvalue", previousFlagValue))
               .modify(s -> s.replace("%newvalue", flagValue))
@@ -554,8 +585,17 @@ public class CommandZoneFlag implements TabExecutor {
               .showPrefix(true)
               .receiver(sender)
               .send();
-          } catch (InvalidFlagFormat e) {
-            return;
+          } catch (InvalidFlagFormat exception) {
+            String logMessage = new StringBuilder()
+              .append("Error parsing flag value '")
+              .append(flagValue)
+              .append("' for flag '")
+              .append(matchedFlag.getName())
+              .append("' of type '")
+              .append(matchedFlag.getClass().getName())
+              .append("'!")
+              .toString();
+            LOG.log(Level.SEVERE, logMessage, exception);
           }
         }
       }
