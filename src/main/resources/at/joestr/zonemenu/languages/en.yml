@@ -7,7 +7,7 @@ generic:
 commands:
   zone:
     header: '[""%prefix,{"text":"What are you going to do? ","color":"gray"}]'
-    message_find: '[""%prefix,{"text":"» "},{"text":"Look for a free place","color":"gray","clickEvent":{"action":"run_command","value":"/zone-find"},"hoverEvent":{"action":"show_text","contents":"/zone-find"}}]'
+    message_find: '[""%prefix,{"text":"» "},{"text":"Look for a free place","color":"gray","clickEvent":{"action":"run_command","value":"/zone-find on"},"hoverEvent":{"action":"show_text","contents":"/zone-find on"}}]'
     message_create: '[""%prefix,{"text":"» "},{"text":"Create a new zone","color":"gray","clickEvent":{"action":"run_command","value":"/zone-create"},"hoverEvent":{"action":"show_text","contents":"/zone-create"}}]'
     message_subcreate: '[""%prefix,{"text":"» "},{"text":"Create a new subzone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-subcreate"},"hoverEvent":{"action":"show_text","contents":"/zone-subcreate <zone>"}}]'
     message_list: '[""%prefix,{"text":"» "},{"text":"List all yout zones","color":"gray","clickEvent":{"action":"run_command","value":"/zone-list"},"hoverEvent":{"action":"show_text","contents":"/zone-list"}}]'
@@ -20,8 +20,10 @@ commands:
     message_select: '[""%prefix,{"text":"» "},{"text":"Select a zone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-select "},"hoverEvent":{"action":"show_text","contents":"/zone-select [zone]"}},{"text":" / ","color":"gray"},{"text":"Clear selection","color":"gray","clickEvent":{"action":"run_command","value":"/zone-select"},"hoverEvent":{"action":"show_text","contents":"/zone-select"}}]'
     message_update: '[""%prefix,{"text":"» "},{"text":"Update the plugin","color":"gray","clickEvent":{"action":"run_command","value":"/zone-update "},"hoverEvent":{"action":"show_text","contents":"/zone-select"}}]'
   zone-find:
+    show_state_on: '[""%prefix,{"text":"Find mode is ","color":"aqua"},{"text":" active","color":"green"},{"text":"!","color":"aqua"}]'
+    show_state_off: '[""%prefix,{"text":"Find mode is ","color":"aqua"},{"text":" inactive","color":"red"},{"text":"!","color":"aqua"}]'
     toggled_on: '[""%prefix,{"text":"Use the stick to look for a free place by ","color":"aqua"},{"text":"left-","color":"gray"},{"text":" and ","color":"aqua"},{"text":"right-click","color":"gray"},{"text":".","color":"aqua"}]'
-    toggled_off: '[""%prefix,{"text":"Find mode tuned off!", "color":"aqua"}}]]'
+    toggled_off: '[""%prefix,{"text":"Find mode tuned off!","color":"aqua"}]'
   zone-create:
     sign: '[""%prefix,{"text":"Use the stick to sign the","color":"aqua"},{"text":" first","color":"dark_purple"},{"text":" point by","color":"aqua"},{"text":" left-","color":"gray"},{"text":" and the","color":"aqua"},{"text":" second","color":"light_purple"},{"text":" point by","color":"aqua"},{"text":" right-click","color":"gray"},{"text":".","color":"aqua"}]'
     not_signed: '[""%prefix,{"text":"Zone not signed.","color":"red"}]'
@@ -80,7 +82,7 @@ events:
     none: '[""%prefix,{"text":"No zone found!","color":"red"}]'
   sign:
     first_position: '[""%prefix,{"text":"First","color":"dark_purple"},{"text":" position marked","color":"aqua"}]'
-    second_postion: '[""%prefix,{"text":"Second","color":"light_purple"},{"text":" position marked","color":"aqua"}]'
+    second_position: '[""%prefix,{"text":"Second","color":"light_purple"},{"text":" position marked","color":"aqua"}]'
     area_note: '[""%prefix,{"text":"Area: ","color":"aqua"},{"text":"%area","color":"gray"}]'
-    creation_note: '[""%prefix,{"text":"Click ","color":"aqua"},{"text":"» here","underlined":true,"color":"gray ","clickEvent":{"action":"run_command","value":"/zone-create"},"hoverEvent":{"action":"show_text","contents":"/zone-create"}},{"text":" to create the zone.","color":"aqua"}]'
+    creation_note: '[""%prefix,{"text":"Click ","color":"aqua"},{"text":"» here","underlined":true,"color":"gray","clickEvent":{"action":"run_command","value":"/zone-create"},"hoverEvent":{"action":"show_text","contents":"/zone-create"}},{"text":" to create the zone.","color":"aqua"}]'
     subcreation_note: '[""%prefix,{"text":"Click ","color":"aqua"},{"text":"» here","underlined":true,"color":"gray ","clickEvent":{"action":"run_command","value":"/zone-subcreate"},"hoverEvent":{"action":"show_text","contents":"/zone-subcreate"}},{"text":" to create the sub-zone.","color":"aqua"}]'

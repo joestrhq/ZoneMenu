@@ -30,6 +30,7 @@ import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
 import at.joestr.zonemenu.util.ZoneMenuToolType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.BiFunction;
@@ -59,7 +60,7 @@ public class CommandZoneFind implements TabExecutor {
       return true;
     }
 
-    if (args.length != 0) {
+    if (args.length != 1) {
       return false;
     }
 
@@ -67,9 +68,7 @@ public class CommandZoneFind implements TabExecutor {
 
     ZoneMenuManager.getInstance().zoneMenuPlayers.putIfAbsent(player, new ZoneMenuPlayer(player));
 
-    boolean isFindModeActive = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == ZoneMenuToolType.FIND;
-
-    if (!isFindModeActive) {
+    if (args[0].equals("on")) {
       ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(ZoneMenuToolType.FIND);
 
       if (!player.getInventory().contains(Material.STICK)) {
@@ -83,7 +82,8 @@ public class CommandZoneFind implements TabExecutor {
         .showPrefix(true)
         .receiver(sender)
         .send();
-    } else {
+      return true;
+    } else if (args[0].equals("off")) {
       ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(null);
 
       new MessageHelper(languageResolverFunction)
@@ -93,13 +93,48 @@ public class CommandZoneFind implements TabExecutor {
         .showPrefix(true)
         .receiver(sender)
         .send();
-    }
+      return true;
+    } else if (args[0].equals("state")) {
+      boolean isFindModeActive = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == ZoneMenuToolType.FIND;
 
-    return true;
+      if (isFindModeActive) {
+        new MessageHelper(languageResolverFunction)
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_FIND_SHOW_STATE_ON.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(sender)
+          .send();
+      } else {
+        new MessageHelper(languageResolverFunction)
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_FIND_SHOW_STATE_OFF.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(sender)
+          .send();
+      }
+
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @Override
   public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-    return List.of();
+    List<String> results = new ArrayList<>();
+
+    if (args.length <= 1) {
+      results.addAll(List.of("on", "off", "state"));
+
+      if (args.length == 1) {
+        results.removeIf(x -> !x.startsWith(args[0]));
+      }
+
+      return results;
+    }
+
+    return results;
   }
 }
