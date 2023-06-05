@@ -67,6 +67,8 @@ public enum CurrentEntries {
   LANG_CMD_ZONE_X_MSG_DELETE("commands.zone.message_delete"),
   LANG_CMD_ZONE_X_MSG_SELECT("commands.zone.message_select"),
   LANG_CMD_ZONE_X_MSG_UPDATE("commands.zone.message_update"),
+  LANG_CMD_ZONE_FIND_SHOW_STATE_ON("commands.zone-find.show_state_on"),
+  LANG_CMD_ZONE_FIND_SHOW_STATE_OFF("commands.zone-find.show_state_off"),
   LANG_CMD_ZONE_FIND_TOGGLED_ON("commands.zone-find.toggled_on"),
   LANG_CMD_ZONE_FIND_TOGGLED_OFF("commands.zone-find.toggled_off"),
   LANG_CMD_ZONE_CREATE_SIGN("commands.zone-create.sign"),
