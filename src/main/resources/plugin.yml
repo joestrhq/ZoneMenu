@@ -18,7 +18,7 @@ commands:
     description: Search for a zone.
     permission: zonemenu.commands.zone-find
     permission-message: '§cYou are lacking permission §fzonemenu.commands.zone-find§c!'
-    usage: '§cSyntax error! Use: §f/<command> <on|off|state>'
+    usage: '§cSyntax error! Use: §f/<command>'
   zone-create:
     description: Creates a zone.
     permission: zonemenu.commands.zone-create

@@ -25,10 +25,9 @@ package at.joestr.zonemenu.listener;
 
 import at.joestr.javacommon.configuration.LanguageConfiguration;
 import at.joestr.javacommon.spigotutils.MessageHelper;
-import at.joestr.zonemenu.ZoneMenuPlugin;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
-import at.joestr.zonemenu.util.ZoneMenuToolType;
+import at.joestr.zonemenu.util.ZoneMenuMode;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -47,13 +46,9 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 public class PlayerMove implements Listener {
 
-  private ZoneMenuPlugin zoneMenuPlugin;
   private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
-  public PlayerMove(ZoneMenuPlugin zonemenu) {
-
-    this.zoneMenuPlugin = zonemenu;
-    this.zoneMenuPlugin.getServer().getPluginManager().registerEvents(this, this.zoneMenuPlugin);
+  public PlayerMove() {
   }
 
   @EventHandler
@@ -63,7 +58,7 @@ public class PlayerMove implements Listener {
       return;
     }
 
-    if (!ZoneMenuManager.getInstance().zoneMenuPlayers.get(event.getPlayer()).getToolType().equals(ZoneMenuToolType.FIND)) {
+    if (!ZoneMenuManager.getInstance().zoneMenuPlayers.get(event.getPlayer()).getToolType().equals(ZoneMenuMode.FIND)) {
       return;
     }
 
@@ -80,7 +75,7 @@ public class PlayerMove implements Listener {
       String regions = regionNames.stream().collect(Collectors.joining(", "));
 
       if (regions.isEmpty()) {
-        String text = new MessageHelper(languageResolverFunction).path(CurrentEntries.LANG_EVT_FIND_NONE.toString()).rawString();
+        String text = new MessageHelper(languageResolverFunction).path(CurrentEntries.LANG_EVT_FIND_FOUND_NONE.toString()).rawString();
         ZoneMenuManager.getInstance().zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setColor(BarColor.GREEN);
         ZoneMenuManager.getInstance().zoneMenuPlayers.get(event.getPlayer()).getZoneFindBossbar().setTitle(ChatColor.translateAlternateColorCodes('&', text));
       } else {

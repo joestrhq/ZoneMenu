@@ -54,47 +54,149 @@ public enum CurrentEntries {
   LANG_GEN_WAIT_MESSAGE("generic.wait_message"),
   LANG_GEN_NO_ZONE("generic.no_zone"),
   LANG_GEN_NOT_EXISTING_ZONE("generic.not_exisiting_zone"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_X_HEADER("commands.zone.header"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_X_MSG_FIND("commands.zone.message_find"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_X_MSG_CREATE("commands.zone.message_create"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_X_MSG_SUBCREATE("commands.zone.message_subcreate"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_X_MSG_LIST("commands.zone.message_list"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_X_MSG_CANCEL("commands.zone.message_cancel"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_X_MSG_ADDMEMBER("commands.zone.message_addmember"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_X_MSG_REMOVEMEMBER("commands.zone.message_removemember"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_X_MSG_FLAG("commands.zone.message_flag"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_X_MSG_INFO("commands.zone.message_info"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_X_MSG_DELETE("commands.zone.message_delete"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_X_MSG_SELECT("commands.zone.message_select"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_X_MSG_UPDATE("commands.zone.message_update"),
-  LANG_CMD_ZONE_FIND_SHOW_STATE_ON("commands.zone-find.show_state_on"),
-  LANG_CMD_ZONE_FIND_SHOW_STATE_OFF("commands.zone-find.show_state_off"),
-  LANG_CMD_ZONE_FIND_TOGGLED_ON("commands.zone-find.toggled_on"),
-  LANG_CMD_ZONE_FIND_TOGGLED_OFF("commands.zone-find.toggled_off"),
-  LANG_CMD_ZONE_CREATE_SIGN("commands.zone-create.sign"),
-  LANG_CMD_ZONE_CREATE_NOT_SIGNED("commands.zone-create.not_signed"),
+  /**
+   * Placeholders: %prefix
+   */
+  LANG_CMD_ZONE_FIND_ACTIVATED("commands.zone-find.activated"),
+  /**
+   * Placeholders: %prefix
+   */
+  LANG_CMD_ZONE_CREATE_ACTIVATED("commands.zone-create.activated"),
+  /**
+   * Placeholders: %prefix
+   */
+  LANG_CMD_ZONE_CREATE_SELECTION_INCOMPLETE("commands.zone-create.selection_incomplete"),
+  /**
+   * Placeholders: %prefix, %lengthmin, %widthmin, %lengthmax, %widthmax
+   */
   LANG_CMD_ZONE_CREATE_WIDTH_LENGTH_LIMIT("commands.zone-create.width_length_limit"),
+  /**
+   * Placeholders: %prefix, %area
+   */
   LANG_CMD_ZONE_CREATE_AREA_UNDER("commands.zone-create.area_under"),
+  /**
+   * Placeholders: %prefix, %area
+   */
   LANG_CMD_ZONE_CREATE_AREA_OVER("commands.zone-create.area_over"),
+  /**
+   * Placeholders: %prefix, %area, %count
+   */
   LANG_CMD_ZONE_CREATE_HAVE_OVER_EQUAL("commands.zone-create.have_over_equal"),
+  /**
+   * Placeholders: %prefix, %area
+   */
   LANG_CMD_ZONE_CREATE_OVERLAPS_UNOWNED("commands.zone-create.overlaps_unowned"),
+  /**
+   * Placeholders: %prefix, %zonename
+   */
   LANG_CMD_ZONE_CREATE_CREATED("commands.zone-create.created"),
-  LANG_CMD_ZONE_SUBCREATE_SIGN("commands.zone-subcreate.sign"),
+  /**
+   * Placeholders: %prefix
+   */
+  LANG_CMD_ZONE_SUBCREATE_ACTIVATED("commands.zone-subcreate.activated"),
+  /**
+   * Placeholders: %prefix, %zonename
+   */
   LANG_CMD_ZONE_SUBCREATE_NOT_IN_ZONE("commands.zone-subcreate.not_in_zone"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_SUBCREATE_CIRCULAR("commands.zone-subcreate.circular"),
+  /**
+   * Placeholders: %prefix, %zonename
+   */
   LANG_CMD_ZONE_SUBCREATE_CREATED("command.zone-subcreate.created"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_CANCEL_NOT_RUNNING("commands.zone-cancel.not_running"),
-  LANG_CMD_ZONE_CANCEL_CANCEL("commands.zone-cancel.cancel"),
+  /**
+   * Placeholders: %prefix
+   */
+  LANG_CMD_ZONE_CANCEL_SUCCESS("commands.zone-cancel.success"),
+  /**
+   * Placeholders: %prefix, %list
+   */
   LANG_CMD_ZONE_LIST_LIST("commands.zone-list.list"),
+  /**
+   * Placeholders: %prefix, %playername
+   */
   LANG_CMD_ZONE_ADDMEMBER_PLAYER_DOES_NOT_EXIST("commands.zone-addmember.player_does_not_exist"),
-  LANG_CMD_ZONE_ADDMEMBER_ALREADY_MEMBER("commands.zone-addmember.already_member"),
+  /**
+   * Placeholders: %prefix, %playername, %zonename
+   */
+  LANG_CMD_ZONE_ADDMEMBER_ALREADY_A_MEMBER("commands.zone-addmember.already_a_member"),
+  /**
+   * Placeholders: %prefix, %playername, %zonename
+   */
   LANG_CMD_ZONE_ADDMEMBER_SUCCESS("commands.zone-addmember.success"),
   /**
-   * Placeholders: %zonename, %playername
+   * Placeholders: %prefix, %playername, %zonename
    */
   LANG_CMD_ZONE_REMOVEMEMBER_NOT_A_MEMBER("commands.zone-removemember.not_a_member"),
+  /**
+   * Placeholders: %prefix, %playername, %zonename
+   */
   LANG_CMD_ZONE_REMOVEMEMBER_SUCCESS("commands.zone-removemember.success"),
+  /**
+   * Placeholders: %prefix, %flagname
+   */
   LANG_CMD_ZONE_FLAG_NOT_FOUND("commands.zone-flag.not_found"),
+  /**
+   * Placeholders: %prefix, %flagname, %zonename, %oldvalue, %newvalue
+   */
   LANG_CMD_ZONE_FLAG_CHANGED("commands.zone-flag.changed"),
   LANG_CMD_ZONE_INFO_ID("commands.zone-info.id"),
   LANG_CMD_ZONE_INFO_PRIORITY("commands.zone-info.priority"),
@@ -107,7 +209,7 @@ public enum CurrentEntries {
   LANG_CMD_ZONE_INFO_AREA("commands.zone-info.area"),
   LANG_CMD_ZONE_DELETE_SUCCESS("commands.zone-delete.success"),
   LANG_CMD_ZONE_SELECT_SUCCESS("commands.zone-select.success"),
-  LANG_CMD_ZONE_UNSELECT_SUCCESS("commands.zone-unselect.success"),
+  LANG_CMD_ZONE_SELECT_SELECTION_CLEARED("commands.zone-select.selection_cleared"),
   LANG_CMD_ZONE_UPDATE_OFF("commands.zone-update.off"),
   LANG_CMD_ZONE_UPDATE_ASYNCSTART("commands.zone-update.asyncstart"),
   LANG_CMD_ZONE_UPDATE_ERROR("commands.zone-update.error"),
@@ -115,27 +217,47 @@ public enum CurrentEntries {
   LANG_CMD_ZONE_UPDATE_AVAILABLE("commands.zone-update.available"),
   LANG_CMD_ZONE_UPDATE_DOWNLOADED("command.zone-update.downloaded"),
   LANG_EVT_FIND_FOUND("events.find.found"),
-  LANG_EVT_FIND_NONE("events.find.none"),
+  LANG_EVT_FIND_FOUND_NONE("events.find.found_none"),
   /**
    * Placeholders: %prefix
    */
-  LANG_EVT_SIGN_FIRST_POSITION("events.sign.first_position"),
+  LANG_EVT_CREATION_FIRST_POSITION("events.creation.first_position"),
   /**
    * Placeholders: %prefix
    */
-  LANG_EVT_SIGN_SECOND_POSITION("events.sign.second_position"),
+  LANG_EVT_CREATION_SECOND_POSITION("events.creation.second_position"),
   /**
-   * Placeholders: %prefix, %area
+   * Placeholders: %prefix, %area, %length, %width
    */
-  LANG_EVT_SIGN_AREA_NOTE("events.sign.area_note"),
+  LANG_EVT_CREATION_AREA_NOTE("events.creation.area_note"),
+  /**
+   * Placeholders: %prefix, %volume, %length, %width, %height
+   */
+  LANG_EVT_CREATION_VOLUME_NOTE("events.creation.volume_note"),
   /**
    * Placeholders: %prefix
    */
-  LANG_EVT_SIGN_CREATION_NOTE("events.sign.creation_note"),
+  LANG_EVT_CREATION_CREATION_NOTE("events.creation.creation_note"),
   /**
    * Placeholders: %prefix
    */
-  LANG_EVT_SIGN_SUBCREATION_NOTE("events.sign.subcreation_note"),
+  LANG_EVT_SUBCREATION_FIRST_POSITION("events.subcreation.first_position"),
+  /**
+   * Placeholders: %prefix
+   */
+  LANG_EVT_SUBCREATION_SECOND_POSITION("events.subcreation.second_position"),
+  /**
+   * Placeholders: %prefix, %area, %length, %width
+   */
+  LANG_EVT_SUBCREATION_AREA_NOTE("events.subcreation.area_note"),
+  /**
+   * Placeholders: %prefix, %volume, %length, %width, %height
+   */
+  LANG_EVT_SUBCREATION_VOLUME_NOTE("events.subcreation.volume_note"),
+  /**
+   * Placeholders: %prefix
+   */
+  LANG_EVT_SUBCREATION_SUBCREATION_NOTE("events.subcreation.subcreation_note"),
   // Permissions
   PERM_CMD_ZONE("zonemenu.commands.zone"),
   PERM_CMD_ZONE_FIND("zonemenu.commands.zone-find"),
@@ -148,7 +270,6 @@ public enum CurrentEntries {
   PERM_CMD_ZONE_INFO("zonemenu.commands.zone-info"),
   PERM_CMD_ZONE_DELETE("zonemenu.commands.zone-delete"),
   PERM_CMD_ZONE_SELECT("zonemenu.commands.zone-select"),
-  PERM_CMD_ZONE_UNSELECT("zonemenu.commands.zone-unselect"),
   PERM_CMD_ZONE_UPDATE("zonemenu.commands.zone-update");
 
   private final String text;

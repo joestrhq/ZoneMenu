@@ -32,9 +32,7 @@ public class ZoneMenuPlayer {
 
   private Player player = null;
 
-  private ZoneMenuToolType toolType = null;
-
-  private ZoneMenuSignType signType = null;
+  private ZoneMenuMode mode = null;
 
   private Location findLocation = null;
 
@@ -79,41 +77,22 @@ public class ZoneMenuPlayer {
   }
 
   /**
-   * Gets the {@link at.joestr.zonemenu.util.ZoneMenuSignType ZoneMenuSignType}.
+   * Gets the {@link at.joestr.zonemenu.util.ZoneMenuMode ZoneMenuToolType}.
    *
-   * @return {@link at.joestr.zonemenu.util.ZoneMenuSignType ZoneMenuSignType}
+   * @return {@link at.joestr.zonemenu.util.ZoneMenuMode ZoneMenuToolType}
    */
-  public ZoneMenuSignType getSignType() {
-    return signType;
+  public ZoneMenuMode getToolType() {
+    return mode;
   }
 
   /**
-   * Sets the {@link at.joestr.zonemenu.util.ZoneMenuSignType ZoneMenuSignType}.
+   * Sets the {@link at.joestr.zonemenu.util.ZoneMenuMode ZoneMenuToolType}.
    *
-   * @param signType A {@link at.joestr.zonemenu.util.ZoneMenuSignType
-   *            ZoneMenuSignType}.
-   */
-  public void setSignType(ZoneMenuSignType signType) {
-    this.signType = signType;
-  }
-
-  /**
-   * Gets the {@link at.joestr.zonemenu.util.ZoneMenuToolType ZoneMenuToolType}.
-   *
-   * @return {@link at.joestr.zonemenu.util.ZoneMenuToolType ZoneMenuToolType}
-   */
-  public ZoneMenuToolType getToolType() {
-    return toolType;
-  }
-
-  /**
-   * Sets the {@link at.joestr.zonemenu.util.ZoneMenuToolType ZoneMenuToolType}.
-   *
-   * @param toolType A {@link at.joestr.zonemenu.util.ZoneMenuToolType
+   * @param toolType A {@link at.joestr.zonemenu.util.ZoneMenuMode
    *            ZoneMenuToolType}.
    */
-  public void setToolType(ZoneMenuToolType toolType) {
-    this.toolType = toolType;
+  public void setToolType(ZoneMenuMode toolType) {
+    this.mode = toolType;
   }
 
   /**

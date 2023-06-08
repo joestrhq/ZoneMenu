@@ -28,9 +28,8 @@ import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
+import at.joestr.zonemenu.util.ZoneMenuMode;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
-import at.joestr.zonemenu.util.ZoneMenuSignType;
-import at.joestr.zonemenu.util.ZoneMenuToolType;
 import at.joestr.zonemenu.util.ZoneMenuUtils;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.Region;
@@ -86,20 +85,16 @@ public class CommandZoneSubcreate implements TabExecutor {
         }
 
         if (ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
-          ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(ZoneMenuToolType.SIGN);
-          ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setSignType(ZoneMenuSignType.SUBZONE);
+          ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(ZoneMenuMode.SUBCREATE);
         } else {
           ZoneMenuPlayer zoneMenuPlayer = new ZoneMenuPlayer(player);
-
-          zoneMenuPlayer.setToolType(ZoneMenuToolType.SIGN);
-          zoneMenuPlayer.setSignType(ZoneMenuSignType.SUBZONE);
-
+          zoneMenuPlayer.setToolType(ZoneMenuMode.SUBCREATE);
           ZoneMenuManager.getInstance().zoneMenuPlayers.put(player, zoneMenuPlayer);
         }
 
         new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
-          .path(CurrentEntries.LANG_CMD_ZONE_SUBCREATE_SIGN.toString())
+          .path(CurrentEntries.LANG_CMD_ZONE_SUBCREATE_ACTIVATED.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
           .showPrefix(true)
           .receiver(sender)
@@ -111,8 +106,7 @@ public class CommandZoneSubcreate implements TabExecutor {
         return;
       }
 
-      if (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN
-        || ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.SUBZONE) {
+      if (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() != ZoneMenuMode.SUBCREATE) {
         return;
       }
 
@@ -216,7 +210,9 @@ public class CommandZoneSubcreate implements TabExecutor {
 
       protectedCuboidRegion.setOwners(domain);
       protectedCuboidRegion.setPriority(protectedRegion.getPriority() + 1);
-      WorldGuard.getInstance().getPlatform().getRegionContainer().get(BukkitAdapter.adapt(player.getWorld())).addRegion(protectedCuboidRegion);
+      WorldGuard.getInstance().getPlatform().getRegionContainer()
+        .get(BukkitAdapter.adapt(player.getWorld()))
+        .addRegion(protectedCuboidRegion);
       ZoneMenuManager.getInstance().clearUpZoneMenuPlayer(player);
 
       new MessageHelper(languageResolverFunction)

@@ -29,9 +29,8 @@ import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
+import at.joestr.zonemenu.util.ZoneMenuMode;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
-import at.joestr.zonemenu.util.ZoneMenuSignType;
-import at.joestr.zonemenu.util.ZoneMenuToolType;
 import at.joestr.zonemenu.util.ZoneMenuUtils;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.regions.Region;
@@ -79,13 +78,11 @@ public class CommandZoneCreate implements TabExecutor {
     Player player = (Player) sender;
 
     if (ZoneMenuManager.getInstance().zoneMenuPlayers.containsKey(player)) {
-      ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(ZoneMenuToolType.SIGN);
-      ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setSignType(ZoneMenuSignType.ZONE);
+      ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(ZoneMenuMode.CREATE);
     } else {
       ZoneMenuPlayer zoneMenuPlayer = new ZoneMenuPlayer(player);
 
-      zoneMenuPlayer.setToolType(ZoneMenuToolType.SIGN);
-      zoneMenuPlayer.setSignType(ZoneMenuSignType.ZONE);
+      zoneMenuPlayer.setToolType(ZoneMenuMode.CREATE);
 
       ZoneMenuManager.getInstance().zoneMenuPlayers.put(player, zoneMenuPlayer);
     }
@@ -99,7 +96,7 @@ public class CommandZoneCreate implements TabExecutor {
 
       new MessageHelper(LanguageConfiguration.getInstance().getResolver())
         .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_CREATE_SIGN.toString())
+        .path(CurrentEntries.LANG_CMD_ZONE_CREATE_ACTIVATED.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
         .showPrefix(true)
         .receiver(sender)
@@ -123,8 +120,7 @@ public class CommandZoneCreate implements TabExecutor {
         return;
       }
 
-      if (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() != ZoneMenuToolType.SIGN
-        || ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getSignType() != ZoneMenuSignType.ZONE) {
+      if (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() != ZoneMenuMode.CREATE) {
         return;
       }
 

@@ -40,7 +40,6 @@ public class ZoneMenuCreateCorner {
    * @param plugin A {@link org.bukkit.plugin.Plugin plugin}.
    */
   public ZoneMenuCreateCorner(Plugin plugin) {
-
     this.plugin = plugin;
   }
 

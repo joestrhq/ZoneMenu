@@ -26,11 +26,10 @@ package at.joestr.zonemenu.event.playerinteract;
 import at.joestr.javacommon.configuration.LanguageConfiguration;
 import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
-import at.joestr.zonemenu.ZoneMenuPlugin;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
+import at.joestr.zonemenu.util.ZoneMenuMode;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
-import at.joestr.zonemenu.util.ZoneMenuToolType;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
@@ -51,12 +50,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class PlayerInteractZoneFind implements Listener {
 
-  private ZoneMenuPlugin zoneMenuPlugin;
   private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
-  public PlayerInteractZoneFind(ZoneMenuPlugin zonemenu) {
-    this.zoneMenuPlugin = zonemenu;
-    this.zoneMenuPlugin.getServer().getPluginManager().registerEvents(this, this.zoneMenuPlugin);
+  public PlayerInteractZoneFind() {
   }
 
   @EventHandler
@@ -71,7 +67,7 @@ public class PlayerInteractZoneFind implements Listener {
     ZoneMenuPlayer zoneMenuPlayer = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player);
 
     boolean hasStickInMainHand = player.getInventory().getItemInMainHand().getType() == Material.STICK;
-    boolean isToolTypeFind = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == ZoneMenuToolType.FIND;
+    boolean isToolTypeFind = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == ZoneMenuMode.FIND;
 
     if (!(hasStickInMainHand && isToolTypeFind)) {
       return;
@@ -109,7 +105,7 @@ public class PlayerInteractZoneFind implements Listener {
 
       if (foundRegions.isEmpty()) {
         new MessageHelper(languageResolverFunction)
-          .path(CurrentEntries.LANG_EVT_FIND_NONE.toString())
+          .path(CurrentEntries.LANG_EVT_FIND_FOUND_NONE.toString())
           .locale(LocaleHelper.resolve(player.getLocale()))
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
           .showPrefix(true)

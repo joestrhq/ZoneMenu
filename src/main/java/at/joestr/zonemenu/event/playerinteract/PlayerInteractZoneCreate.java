@@ -26,19 +26,17 @@ package at.joestr.zonemenu.event.playerinteract;
 import at.joestr.javacommon.configuration.LanguageConfiguration;
 import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
-import at.joestr.zonemenu.ZoneMenuPlugin;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
+import at.joestr.zonemenu.util.ZoneMenuMode;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
-import at.joestr.zonemenu.util.ZoneMenuSignType;
-import at.joestr.zonemenu.util.ZoneMenuToolType;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.selector.CuboidRegionSelector;
 import java.util.Locale;
 import java.util.function.BiFunction;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -51,14 +49,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class PlayerInteractZoneCreate implements Listener {
 
-  private ZoneMenuPlugin zoneMenuPlugin;
   private static final Logger LOG = Logger.getLogger(PlayerInteractZoneCreate.class.getName());
   private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
 
-  public PlayerInteractZoneCreate(ZoneMenuPlugin zonemenu) {
-
-    this.zoneMenuPlugin = zonemenu;
-    this.zoneMenuPlugin.getServer().getPluginManager().registerEvents(this, this.zoneMenuPlugin);
+  public PlayerInteractZoneCreate() {
   }
 
   @EventHandler
@@ -72,10 +66,9 @@ public class PlayerInteractZoneCreate implements Listener {
     ZoneMenuPlayer zoneMenuPlayer = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player);
 
     boolean hasStickInMainHand = player.getInventory().getItemInMainHand().getType() == Material.STICK;
-    boolean isToolTypeSign = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == ZoneMenuToolType.SIGN;
-    boolean isSignTypeZone = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getSignType() == ZoneMenuSignType.ZONE;
+    boolean isCreationModeActive = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == ZoneMenuMode.CREATE;
 
-    if (!(hasStickInMainHand && isToolTypeSign && isSignTypeZone)) {
+    if (!(hasStickInMainHand && isCreationModeActive)) {
       return;
     }
 
@@ -91,6 +84,21 @@ public class PlayerInteractZoneCreate implements Listener {
       ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner1(), player);
       zoneMenuPlayer.setCreateCorner1(event.getClickedBlock().getLocation());
       ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner1(), player, (byte) 10);
+
+      World playerworld = zoneMenuPlayer.getCreateWorld();
+      Location playerpos1 = zoneMenuPlayer.getCreateCorner1().clone();
+      playerpos1.setY(playerworld.getMinHeight());
+
+      new MessageHelper(languageResolverFunction)
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_EVT_CREATION_FIRST_POSITION.toString())
+        .modify(message -> message.replace("%pos_x", Integer.toString(playerpos1.getBlockX())))
+        .modify(message -> message.replace("%pos_y", Integer.toString(playerpos1.getBlockY())))
+        .modify(message -> message.replace("%pos_z", Integer.toString(playerpos1.getBlockZ())))
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(player)
+        .send();
 
       boolean isCreationWorldPresent = zoneMenuPlayer.getCreateWorld() != null;
       boolean isCreationCorner1Present = zoneMenuPlayer.getCreateCorner1() != null;
@@ -112,9 +120,6 @@ public class PlayerInteractZoneCreate implements Listener {
         zoneMenuPlayer.setCreateCorner4(loc);
         ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(loc, player, (byte) 0);
 
-        World playerworld = zoneMenuPlayer.getCreateWorld();
-        Location playerpos1 = zoneMenuPlayer.getCreateCorner1().clone();
-        playerpos1.setY(playerworld.getMinHeight());
         Location playerpos2 = zoneMenuPlayer.getCreateCorner2().clone();
         playerpos2.setY(playerworld.getMaxHeight());
 
@@ -138,41 +143,37 @@ public class PlayerInteractZoneCreate implements Listener {
 
         session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
+        Region playerSelection = ZoneMenuManager.getInstance().getPlayerSelection(player);
+        int selectionLength = playerSelection.getLength();
+        int selectionWidth = playerSelection.getWidth();
+        int selectionHeight = playerSelection.getHeight();
+        long area = selectionLength * selectionWidth;
+        long volume = selectionLength * selectionWidth * selectionHeight;
+
         new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
-          .path(CurrentEntries.LANG_EVT_SIGN_FIRST_POSITION.toString())
+          .path(CurrentEntries.LANG_EVT_CREATION_AREA_NOTE.toString())
+          .modify(message -> message.replace("%length", Integer.toString(selectionLength)))
+          .modify(message -> message.replace("%width", Integer.toString(selectionWidth)))
+          .modify(message -> message.replace("%area", Long.toString(area)))
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
           .showPrefix(true)
           .receiver(player)
           .send();
-
-        String areaValue = Integer.toString(
-          ZoneMenuManager.getInstance().getPlayerSelection(player).getLength()
-          * ZoneMenuManager.getInstance().getPlayerSelection(player).getWidth());
-
-        try {
-          new MessageHelper(languageResolverFunction)
-            .locale(LocaleHelper.resolve(player.getLocale()))
-            .path(CurrentEntries.LANG_EVT_SIGN_AREA_NOTE.toString())
-            .modify(message -> message.replace("%area", areaValue))
-            .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-            .showPrefix(true)
-            .receiver(player)
-            .send();
-          new MessageHelper(languageResolverFunction)
-            .locale(LocaleHelper.resolve(player.getLocale()))
-            .path(CurrentEntries.LANG_EVT_SIGN_CREATION_NOTE.toString())
-            .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-            .showPrefix(true)
-            .receiver(player)
-            .send();
-        } catch (Exception ex) {
-          LOG.log(Level.SEVERE, null, ex);
-        }
-      } else {
         new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
-          .path(CurrentEntries.LANG_EVT_SIGN_FIRST_POSITION.toString())
+          .path(CurrentEntries.LANG_EVT_CREATION_VOLUME_NOTE.toString())
+          .modify(message -> message.replace("%length", Integer.toString(selectionLength)))
+          .modify(message -> message.replace("%width", Integer.toString(selectionWidth)))
+          .modify(message -> message.replace("%height", Integer.toString(selectionHeight)))
+          .modify(message -> message.replace("%volume", Long.toString(volume)))
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
+        new MessageHelper(languageResolverFunction)
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_EVT_CREATION_CREATION_NOTE.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
           .showPrefix(true)
           .receiver(player)
@@ -192,6 +193,21 @@ public class PlayerInteractZoneCreate implements Listener {
       ZoneMenuManager.getInstance().zoneMenuCreateCorner.reset(zoneMenuPlayer.getCreateCorner2(), player);
       zoneMenuPlayer.setCreateCorner2(event.getClickedBlock().getLocation());
       ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(zoneMenuPlayer.getCreateCorner2(), player, (byte) 2);
+
+      World playerworld = zoneMenuPlayer.getCreateWorld();
+      Location playerpos2 = zoneMenuPlayer.getCreateCorner2().clone();
+      playerpos2.setY(playerworld.getMaxHeight());
+
+      new MessageHelper(languageResolverFunction)
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_EVT_CREATION_SECOND_POSITION.toString())
+        .modify(message -> message.replace("%pos_x", Integer.toString(playerpos2.getBlockX())))
+        .modify(message -> message.replace("%pos_y", Integer.toString(playerpos2.getBlockY())))
+        .modify(message -> message.replace("%pos_z", Integer.toString(playerpos2.getBlockZ())))
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(player)
+        .send();
 
       boolean isCreationWorldPresent = zoneMenuPlayer.getCreateWorld() != null;
       boolean isCreationCorner1Present = zoneMenuPlayer.getCreateCorner1() != null;
@@ -213,11 +229,8 @@ public class PlayerInteractZoneCreate implements Listener {
         zoneMenuPlayer.setCreateCorner4(loc);
         ZoneMenuManager.getInstance().zoneMenuCreateCorner.create(loc, player, (byte) 0);
 
-        World playerworld = zoneMenuPlayer.getCreateWorld();
         Location playerpos1 = zoneMenuPlayer.getCreateCorner1().clone();
         playerpos1.setY(playerworld.getMinHeight());
-        Location playerpos2 = zoneMenuPlayer.getCreateCorner2().clone();
-        playerpos2.setY(playerworld.getMaxHeight());
 
         LocalSession session
           = WorldEdit
@@ -239,41 +252,37 @@ public class PlayerInteractZoneCreate implements Listener {
 
         session.dispatchCUISelection(BukkitAdapter.adapt(player));
 
+        Region playerSelection = ZoneMenuManager.getInstance().getPlayerSelection(player);
+        int selectionLength = playerSelection.getLength();
+        int selectionWidth = playerSelection.getWidth();
+        int selectionHeight = playerSelection.getHeight();
+        long area = selectionLength * selectionWidth;
+        long volume = selectionLength * selectionWidth * selectionHeight;
+
         new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
-          .path(CurrentEntries.LANG_EVT_SIGN_SECOND_POSITION.toString())
+          .path(CurrentEntries.LANG_EVT_CREATION_AREA_NOTE.toString())
+          .modify(message -> message.replace("%length", Integer.toString(selectionLength)))
+          .modify(message -> message.replace("%width", Integer.toString(selectionWidth)))
+          .modify(message -> message.replace("%area", Long.toString(area)))
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
           .showPrefix(true)
           .receiver(player)
           .send();
-
-        String areaValue = Integer.toString(
-          ZoneMenuManager.getInstance().getPlayerSelection(player).getLength()
-          * ZoneMenuManager.getInstance().getPlayerSelection(player).getWidth());
-
-        try {
-          new MessageHelper(languageResolverFunction)
-            .locale(LocaleHelper.resolve(player.getLocale()))
-            .path(CurrentEntries.LANG_EVT_SIGN_AREA_NOTE.toString())
-            .modify(message -> message.replace("%area", areaValue))
-            .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-            .showPrefix(true)
-            .receiver(player)
-            .send();
-          new MessageHelper(languageResolverFunction)
-            .locale(LocaleHelper.resolve(player.getLocale()))
-            .path(CurrentEntries.LANG_EVT_SIGN_CREATION_NOTE.toString())
-            .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-            .showPrefix(true)
-            .receiver(player)
-            .send();
-        } catch (Exception ex) {
-          LOG.log(Level.SEVERE, null, ex);
-        }
-      } else {
         new MessageHelper(languageResolverFunction)
           .locale(LocaleHelper.resolve(player.getLocale()))
-          .path(CurrentEntries.LANG_EVT_SIGN_SECOND_POSITION.toString())
+          .path(CurrentEntries.LANG_EVT_CREATION_VOLUME_NOTE.toString())
+          .modify(message -> message.replace("%length", Integer.toString(selectionLength)))
+          .modify(message -> message.replace("%width", Integer.toString(selectionWidth)))
+          .modify(message -> message.replace("%height", Integer.toString(selectionHeight)))
+          .modify(message -> message.replace("%volume", Long.toString(volume)))
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
+        new MessageHelper(languageResolverFunction)
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_EVT_CREATION_CREATION_NOTE.toString())
           .prefixPath(CurrentEntries.LANG_PREFIX.toString())
           .showPrefix(true)
           .receiver(player)

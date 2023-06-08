@@ -1,3 +1,4 @@
+version: 1
 prefix: ',{"text":"[","color":"dark_gray"},{"text":"ZM","color":"dark_green"},{"text":"]","color":"dark_gray"},{"text":" "}'
 generic:
   not_a_player: '[""%prefix,{"text":"This command can only be used by players!","color":"red"}]'
@@ -6,8 +7,8 @@ generic:
   not_exisiting_zone: '[""%prefix,{"text":"Zone ","color":"red"},{"text":"%zonename","color":"gray"},{"text":" does not exist.","color":"red"}]'
 commands:
   zone:
-    header: '[""%prefix,{"text":"What are you going to do? ","color":"gray"}]'
-    message_find: '[""%prefix,{"text":"» "},{"text":"Look for a free place","color":"gray","clickEvent":{"action":"run_command","value":"/zone-find on"},"hoverEvent":{"action":"show_text","contents":"/zone-find on"}}]'
+    header: '[""%prefix,{"text":"What do you want to do? ","color":"gray"}]'
+    message_find: '[""%prefix,{"text":"» "},{"text":"Look for a free place","color":"gray","clickEvent":{"action":"run_command","value":"/zone-find"},"hoverEvent":{"action":"show_text","contents":"/zone-find"}}]'
     message_create: '[""%prefix,{"text":"» "},{"text":"Create a new zone","color":"gray","clickEvent":{"action":"run_command","value":"/zone-create"},"hoverEvent":{"action":"show_text","contents":"/zone-create"}}]'
     message_subcreate: '[""%prefix,{"text":"» "},{"text":"Create a new subzone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-subcreate"},"hoverEvent":{"action":"show_text","contents":"/zone-subcreate <zone>"}}]'
     message_list: '[""%prefix,{"text":"» "},{"text":"List all yout zones","color":"gray","clickEvent":{"action":"run_command","value":"/zone-list"},"hoverEvent":{"action":"show_text","contents":"/zone-list"}}]'
@@ -20,36 +21,33 @@ commands:
     message_select: '[""%prefix,{"text":"» "},{"text":"Select a zone","color":"gray","clickEvent":{"action":"suggest_command","value":"/zone-select "},"hoverEvent":{"action":"show_text","contents":"/zone-select [zone]"}},{"text":" / ","color":"gray"},{"text":"Clear selection","color":"gray","clickEvent":{"action":"run_command","value":"/zone-select"},"hoverEvent":{"action":"show_text","contents":"/zone-select"}}]'
     message_update: '[""%prefix,{"text":"» "},{"text":"Update the plugin","color":"gray","clickEvent":{"action":"run_command","value":"/zone-update "},"hoverEvent":{"action":"show_text","contents":"/zone-select"}}]'
   zone-find:
-    show_state_on: '[""%prefix,{"text":"Find mode is ","color":"aqua"},{"text":" active","color":"green"},{"text":"!","color":"aqua"}]'
-    show_state_off: '[""%prefix,{"text":"Find mode is ","color":"aqua"},{"text":" inactive","color":"red"},{"text":"!","color":"aqua"}]'
-    toggled_on: '[""%prefix,{"text":"Use the stick to look for a free place by ","color":"aqua"},{"text":"left-","color":"gray"},{"text":" and ","color":"aqua"},{"text":"right-click","color":"gray"},{"text":".","color":"aqua"}]'
-    toggled_off: '[""%prefix,{"text":"Find mode tuned off!","color":"aqua"}]'
+    activated: '[""%prefix,{"text":"Use the stick to look for a free place by ","color":"aqua"},{"text":"left-","color":"gray"},{"text":" and ","color":"aqua"},{"text":"right-click","color":"gray"},{"text":".","color":"aqua"}]'
   zone-create:
-    sign: '[""%prefix,{"text":"Use the stick to sign the","color":"aqua"},{"text":" first","color":"dark_purple"},{"text":" point by","color":"aqua"},{"text":" left-","color":"gray"},{"text":" and the","color":"aqua"},{"text":" second","color":"light_purple"},{"text":" point by","color":"aqua"},{"text":" right-click","color":"gray"},{"text":".","color":"aqua"}]'
-    not_signed: '[""%prefix,{"text":"Zone not signed.","color":"red"}]'
+    activated: '[""%prefix,{"text":"Use the stick to sign the","color":"aqua"},{"text":" first","color":"dark_purple"},{"text":" point by","color":"aqua"},{"text":" left-","color":"gray"},{"text":" and the","color":"aqua"},{"text":" second","color":"light_purple"},{"text":" point by","color":"aqua"},{"text":" right-click","color":"gray"},{"text":".","color":"aqua"}]'
+    selection_incomplete: '[""%prefix,{"text":"Zone selection is incomplete.","color":"red"}]'
     width_length_limit: '[""%prefix,{"text":"Zone must be at least ","color":"red"},{"text":"%lengthmin × %widthmin","color":"gray"},{"text":" blocks and can be ","color":"red"},{"text":"%lengthmax × %widthmax","color":"gray"},{"text":" at maximum.","color":"red"}]'
     area_under: '[""%prefix,{"text":"Minimum area: ","color":"red"},{"text":"%area","color":"gray"}]'
     area_over: '[""%prefix,{"text":"Maximum area: ","color":"red"},{"text":"%area","color":"gray"}]'
-    have_over_equal: '[""%prefix,{"text":"You are already havin an area of ","color":"red"},{"text":"%area","color":"gray"},{"text":" spread over ","color":"red"},{"text":"%count","color":"gray"},{"text":" zones(s)","color":"red"}]'
-    overlaps_unowned: '[""%prefix,{"text":"Zone overlaps with one or more unowned zones!","color":"red"}]'
+    have_over_equal: '[""%prefix,{"text":"You already have an area of ","color":"red"},{"text":"%area","color":"gray"},{"text":" spread over ","color":"red"},{"text":"%count","color":"gray"},{"text":" zones(s)","color":"red"}]'
+    overlaps_unowned: '[""%prefix,{"text":"Zone selection overlaps with one or more unowned zones!","color":"red"}]'
     created: '[""%prefix,{"text":"Zone","color":"green"},{"text":" %zonename","color":"gray"},{"text":" created.","color":"green"}]'
   zone-subcreate:
-    sign: '["",{"text":"Use the stick to sign the first point by ","color":"aqua"},{"text":"left-","color":"gray"},{"text":" and the second point by","color":"aqua"},{"text":" right-click","color":"gray"},{"text":".","color":"aqua"}]'
-    not_in_zone: '["",{"text":"Subzone is not completely in zone","color":"red"},{"text":" %zonename","color":"gray"},{"text":".","color":"red"}]'
+    activated: '["",{"text":"Use the stick to sign the first point by ","color":"aqua"},{"text":"left-","color":"gray"},{"text":" and the second point by","color":"aqua"},{"text":" right-click","color":"gray"},{"text":".","color":"aqua"}]'
+    not_in_zone: '["",{"text":"Subzone selection is not completely in zone ","color":"red"},{"text":"%zonename","color":"gray"},{"text":".","color":"red"}]'
     circular: '["",{"text":"There was a circular inheritance exception.","color":"red"}]'
     created: '[""%prefix,{"text":"Sub zone","color":"green"},{"text":" %zonename","color":"gray"},{"text":" created.","color":"green"}]'
   zone-cancel:
-    not_running: '[""%prefix,{"text":"No zone creation is running!","color":"red"}]'
-    cancel: '[""%prefix,{"text":"Zone creation canelled.","color":"green"}]'
+    not_running: '[""%prefix,{"text":"Zone creation is not running!","color":"red"}]'
+    success: '[""%prefix,{"text":"Zone creation canelled.","color":"green"}]'
   zone-list:
     list: '[""%prefix,{"text":"List of all your zones: ","color":"aqua"},{"text":"%list","color":"gray"}]'
   zone-addmember:
     player_does_not_exist: '[""%prefix,{"text":"%playername","color":"gray"},{"text":" does not exist.","color":"red"}]'
-    already_member: '[""%prefix,{"text":"%playername","color":"gray"},{"text":" is already a member at zone","color":"red"},{"text":" %zonename","color":"gray"},{"text":".","color":"red"}]'
+    already_a_member: '[""%prefix,{"text":"%playername","color":"gray"},{"text":" is already a member at zone","color":"red"},{"text":" %zonename","color":"gray"},{"text":".","color":"red"}]'
     success: '[""%prefix,{"text":"%playername","color":"gray"},{"text":" is now a member of zone ","color":"green"},{"text":"%zonename","color":"gray"},{"text":".","color":"green"}]'
   zone-removemember:
-    unknownplayer: '[""%prefix,{"text":"%playername","color":"gray"},{"text":" is not a member at zone ","color":"red"},{"text":"%zonename","color":"gray"},{"text":".","color":"red"}]'
-    removemember: '[""%prefix,{"text":"%playername","color":"gray"},{"text":" is no longer a member at zone ","color":"green"},{"text":"%zonename","color":"gray"},{"text":".","color":"green"}]'
+    not_a_member: '[""%prefix,{"text":"%playername","color":"gray"},{"text":" is not a member at zone ","color":"red"},{"text":"%zonename","color":"gray"},{"text":".","color":"red"}]'
+    success: '[""%prefix,{"text":"%playername","color":"gray"},{"text":" is no longer a member at zone ","color":"green"},{"text":"%zonename","color":"gray"},{"text":".","color":"green"}]'
   zone-flag:
     not_found: '[""%prefix,{"text":"Flag ","color":"red"},{"text":"%flagname","color":"gray"},{"text":" does not exist.","color":"red"}]'
     changed: '[""%prefix,{"text":"Flag ","color":"green"},{"text":"%flagname","color":"gray"},{"text":" at zone ","color":"green"},{"text":"%zonename","color":"gray"},{"text":" changed to from ","color":"green"},{"text":"%oldvalue","color":"gray"},{"text":" to ","color":"green"},{"text":"%newvalue","color":"gray"},{"text":".","color":"green"}]'
@@ -64,11 +62,10 @@ commands:
     end: '[""%prefix,{"text":"Ending","color":"purple"},{"text":" point:","color":"aqua"},{"text":" X: %xcoord","color":"gray"},{"text":" /","color":"aqua"},{"text":" Z: %zcoord","color":"gray"}]'
     area: '[""%prefix,{"text":"Area: ","color":"aqua"},{"text":"%area","color":"gray"}]'
   zone-delete:
-    deleted: '[""%prefix,{"text":"Zone ","color":"red"},{"text":"%zonename","color":"gray"},{"text":" deleted.","color":"red"}]'
+    success: '[""%prefix,{"text":"Zone ","color":"red"},{"text":"%zonename","color":"gray"},{"text":" deleted.","color":"red"}]'
   zone-select:
+    selection_cleared: '[""%prefix,{"text":"Zone unselected.","color":"green"}]'
     success: '[""%prefix,{"text":"Zone ","color":"green"},{"text":"%zonename","color":"gray"},{"text":" selected.","color":"green"}]'
-  zone-unselect:
-    success: '[""%prefix,{"text":"Zone unselected.","color":"green"}]'
   zone-update:
     false: '[""%prefix,{"text":"Updates are turned off!","color":"red"}]'
     asyncstart: '[""%prefix,{"text":"Checking for updates ...","color":"aqua"}]'
@@ -79,10 +76,17 @@ commands:
 events:
   find:
     found: '[""%prefix,{"text":"Zone(s) found: ","color":"green"},{"text":"%zonenameslist","color":"gray"}]'
-    none: '[""%prefix,{"text":"No zone found!","color":"red"}]'
-  sign:
-    first_position: '[""%prefix,{"text":"First","color":"dark_purple"},{"text":" position marked","color":"aqua"}]'
-    second_position: '[""%prefix,{"text":"Second","color":"light_purple"},{"text":" position marked","color":"aqua"}]'
-    area_note: '[""%prefix,{"text":"Area: ","color":"aqua"},{"text":"%area","color":"gray"}]'
-    creation_note: '[""%prefix,{"text":"Click ","color":"aqua"},{"text":"» here","underlined":true,"color":"gray","clickEvent":{"action":"run_command","value":"/zone-create"},"hoverEvent":{"action":"show_text","contents":"/zone-create"}},{"text":" to create the zone.","color":"aqua"}]'
-    subcreation_note: '[""%prefix,{"text":"Click ","color":"aqua"},{"text":"» here","underlined":true,"color":"gray ","clickEvent":{"action":"run_command","value":"/zone-subcreate"},"hoverEvent":{"action":"show_text","contents":"/zone-subcreate"}},{"text":" to create the sub-zone.","color":"aqua"}]'
+    found_none: '[""%prefix,{"text":"No zone found!","color":"red"}]'
+  creation:
+    first_position: '[""%prefix,{"text":"First","color":"dark_purple"},{"text":" position marked at ","color":"aqua"},{"text":"XYZ","color":"gray"},{"text":": ","color":"aqua"},{"text":"%pos_x/%pos_y/%pos_z","color":"gray"},{"text":".","color":"aqua"}]'
+    second_position: '[""%prefix,{"text":"Second","color":"light_purple"},{"text":" position marked at ","color":"aqua"},{"text":"XYZ","color":"gray"},{"text":": ","color":"aqua"},{"text":"%pos_x/%pos_y/%pos_z","color":"gray"},{"text":".","color":"aqua"}]'
+    area_note: '[""%prefix,{"text":"Area: ","color":"aqua"},{"text":"%length","color":"gray"},{"text":" × ","color":"aqua"},{"text":"%width","color":"gray"},{"text":" = ","color":"aqua"},{"text":"%area","color":"gray"},{"text":" Blocks ","color":"aqua"}]'
+    volume_note: '[""%prefix,{"text":"Volume: ","color":"aqua"},{"text":"%length","color":"gray"},{"text":" × ","color":"aqua"},{"text":"%width","color":"gray"},{"text":" × ","color":"aqua"},{"text":"%height","color":"gray"},{"text":" = ","color":"aqua"},{"text":"%volume","color":"gray"},{"text":" Blocks ","color":"aqua"}]'
+    creation_note: '[""%prefix,{"text":"Click ","color":"aqua"},{"text":"» here","color":"gray","clickEvent":{"action":"run_command","value":"/zone-create"},"hoverEvent":{"action":"show_text","contents":"/zone-create"}},{"text":" to create the zone.","color":"aqua"}]'
+  subcreation:
+    first_position: '[""%prefix,{"text":"First","color":"dark_purple"},{"text":" position marked at ","color":"aqua"},{"text":"XYZ","color":"gray"},{"text":": ","color":"aqua"},{"text":"%pos_x/%pos_y/%pos_z","color":"gray"},{"text":".","color":"aqua"}]'
+    second_position: '[""%prefix,{"text":"Second","color":"light_purple"},{"text":" position marked at ","color":"aqua"},{"text":"XYZ","color":"gray"},{"text":": ","color":"aqua"},{"text":"%pos_x/%pos_y/%pos_z","color":"gray"},{"text":".","color":"aqua"}]'
+    area_note: '[""%prefix,{"text":"Area: ","color":"aqua"},{"text":"%length","color":"gray"},{"text":" × ","color":"aqua"},{"text":"%width","color":"gray"},{"text":" = ","color":"aqua"},{"text":"%area","color":"gray"},{"text":" Blocks ","color":"aqua"}]'
+    volume_note: '[""%prefix,{"text":"Volume: ","color":"aqua"},{"text":"%length","color":"gray"},{"text":" × ","color":"aqua"},{"text":"%width","color":"gray"},{"text":" × ","color":"aqua"},{"text":"%height","color":"gray"},{"text":" = ","color":"aqua"},{"text":"%volume","color":"gray"},{"text":" Blocks ","color":"aqua"}]'
+    subcreation_note: '[""%prefix,{"text":"Click ","color":"aqua"},{"text":"» here","color":"gray ","clickEvent":{"action":"run_command","value":"/zone-subcreate"},"hoverEvent":{"action":"show_text","contents":"/zone-subcreate"}},{"text":" to create the sub-zone.","color":"aqua"}]'
+    

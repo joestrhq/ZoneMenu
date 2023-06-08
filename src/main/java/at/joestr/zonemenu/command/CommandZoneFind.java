@@ -28,19 +28,16 @@ import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
+import at.joestr.zonemenu.util.ZoneMenuMode;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
-import at.joestr.zonemenu.util.ZoneMenuToolType;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.logging.Logger;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class CommandZoneFind implements TabExecutor {
 
@@ -60,81 +57,28 @@ public class CommandZoneFind implements TabExecutor {
       return true;
     }
 
-    if (args.length != 1) {
+    if (args.length != 0) {
       return false;
     }
 
     Player player = (Player) sender;
 
     ZoneMenuManager.getInstance().zoneMenuPlayers.putIfAbsent(player, new ZoneMenuPlayer(player));
+    ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(ZoneMenuMode.FIND);
 
-    if (args[0].equals("on")) {
-      ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(ZoneMenuToolType.FIND);
+    new MessageHelper(languageResolverFunction)
+      .locale(LocaleHelper.resolve(player.getLocale()))
+      .path(CurrentEntries.LANG_CMD_ZONE_FIND_ACTIVATED.toString())
+      .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+      .showPrefix(true)
+      .receiver(sender)
+      .send();
 
-      if (!player.getInventory().contains(Material.STICK)) {
-        player.getInventory().addItem(new ItemStack[]{new ItemStack(Material.STICK, 1)});
-      }
-
-      new MessageHelper(languageResolverFunction)
-        .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_FIND_TOGGLED_ON.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-        .showPrefix(true)
-        .receiver(sender)
-        .send();
-      return true;
-    } else if (args[0].equals("off")) {
-      ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(null);
-
-      new MessageHelper(languageResolverFunction)
-        .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_FIND_TOGGLED_OFF.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-        .showPrefix(true)
-        .receiver(sender)
-        .send();
-      return true;
-    } else if (args[0].equals("state")) {
-      boolean isFindModeActive = ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == ZoneMenuToolType.FIND;
-
-      if (isFindModeActive) {
-        new MessageHelper(languageResolverFunction)
-          .locale(LocaleHelper.resolve(player.getLocale()))
-          .path(CurrentEntries.LANG_CMD_ZONE_FIND_SHOW_STATE_ON.toString())
-          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-          .showPrefix(true)
-          .receiver(sender)
-          .send();
-      } else {
-        new MessageHelper(languageResolverFunction)
-          .locale(LocaleHelper.resolve(player.getLocale()))
-          .path(CurrentEntries.LANG_CMD_ZONE_FIND_SHOW_STATE_OFF.toString())
-          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-          .showPrefix(true)
-          .receiver(sender)
-          .send();
-      }
-
-      return true;
-    } else {
-      return false;
-    }
+    return true;
   }
 
   @Override
   public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-    List<String> results = new ArrayList<>();
-
-    if (args.length <= 1) {
-      results.addAll(List.of("on", "off", "state"));
-
-      if (args.length == 1) {
-        results.removeIf(x -> !x.startsWith(args[0]));
-      }
-
-      return results;
-    }
-
-    return results;
+    return List.of();
   }
 }

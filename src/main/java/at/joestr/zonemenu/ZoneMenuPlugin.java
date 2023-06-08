@@ -50,7 +50,9 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
@@ -69,6 +71,7 @@ public class ZoneMenuPlugin extends JavaPlugin implements Listener {
   public WorldGuardPlugin worldGuardPlugin;
 
   private final Map<String, TabExecutor> commandMap = new HashMap<>();
+  private final List<Listener> eventListeners = new ArrayList<>();
 
   @Override
   public void onEnable() {
@@ -99,12 +102,13 @@ public class ZoneMenuPlugin extends JavaPlugin implements Listener {
     this.commandMap.put("zone-update", new CommandZoneUpdate());
     this.registerCommands();
 
-    new PlayerInteractZoneFind(this);
-    new PlayerInteractZoneCreate(this);
-    new PlayerInteractZoneSubcreate(this);
-    new PlayerQuit(this);
-    new PlayerChangedWorld(this);
-    new PlayerMove(this);
+    this.eventListeners.add(new PlayerInteractZoneFind());
+    this.eventListeners.add(new PlayerInteractZoneCreate());
+    this.eventListeners.add(new PlayerInteractZoneSubcreate());
+    this.eventListeners.add(new PlayerQuit());
+    this.eventListeners.add(new PlayerChangedWorld());
+    this.eventListeners.add(new PlayerMove());
+    this.registerEventListeners();
   }
 
   @Override
@@ -114,13 +118,19 @@ public class ZoneMenuPlugin extends JavaPlugin implements Listener {
   private void registerCommands() {
     this.commandMap.forEach(
       (command, tabExecutor) -> {
-        PluginCommand pluginCommand = getCommand(command);
+        PluginCommand pluginCommand = this.getCommand(command);
         if (pluginCommand == null) {
           return;
         }
         pluginCommand.setExecutor(tabExecutor);
         pluginCommand.setTabCompleter(tabExecutor);
       });
+  }
+
+  private void registerEventListeners() {
+    this.eventListeners.forEach(eventListener -> {
+      this.getServer().getPluginManager().registerEvents(eventListener, this);
+    });
   }
 
   private void loadAppConfiguration() {
