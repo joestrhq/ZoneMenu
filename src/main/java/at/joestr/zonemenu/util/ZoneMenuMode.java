@@ -23,6 +23,6 @@
 //
 package at.joestr.zonemenu.util;
 
-public enum ZoneMenuToolType {
-  FIND, SIGN
+public enum ZoneMenuMode {
+  FIND, CREATE, SUBCREATE
 }

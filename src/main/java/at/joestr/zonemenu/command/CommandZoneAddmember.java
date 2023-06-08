@@ -124,7 +124,7 @@ public class CommandZoneAddmember implements TabExecutor {
           if (targetRegionMembers.contains(wrapedPlayer)) {
             new MessageHelper(languageResolverFunction)
               .locale(LocaleHelper.resolve(player.getLocale()))
-              .path(CurrentEntries.LANG_CMD_ZONE_ADDMEMBER_ALREADY_MEMBER.toString())
+              .path(CurrentEntries.LANG_CMD_ZONE_ADDMEMBER_ALREADY_A_MEMBER.toString())
               .modify((msg) -> msg.replace("%playername", playerName))
               .prefixPath(CurrentEntries.LANG_PREFIX.toString())
               .showPrefix(true)

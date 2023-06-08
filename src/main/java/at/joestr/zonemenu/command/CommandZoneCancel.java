@@ -81,12 +81,11 @@ public class CommandZoneCancel implements TabExecutor {
       return true;
     }
 
-    ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setSignType(null);
     ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(null);
 
     new MessageHelper(languageResolverFunction)
       .locale(LocaleHelper.resolve(player.getLocale()))
-      .path(CurrentEntries.LANG_CMD_ZONE_CANCEL_CANCEL.toString())
+      .path(CurrentEntries.LANG_CMD_ZONE_CANCEL_SUCCESS.toString())
       .prefixPath(CurrentEntries.LANG_PREFIX.toString())
       .showPrefix(true)
       .receiver(player)
