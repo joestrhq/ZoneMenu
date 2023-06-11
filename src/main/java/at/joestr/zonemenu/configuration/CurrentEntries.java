@@ -207,6 +207,7 @@ public enum CurrentEntries {
   LANG_CMD_ZONE_INFO_START("commands.zone-info.start"),
   LANG_CMD_ZONE_INFO_END("commands.zone-info.end"),
   LANG_CMD_ZONE_INFO_AREA("commands.zone-info.area"),
+  LANG_CMD_ZONE_INFO_VOLUME("commands.zone-info.volume"),
   LANG_CMD_ZONE_DELETE_SUCCESS("commands.zone-delete.success"),
   LANG_CMD_ZONE_SELECT_SUCCESS("commands.zone-select.success"),
   LANG_CMD_ZONE_SELECT_SELECTION_CLEARED("commands.zone-select.selection_cleared"),
