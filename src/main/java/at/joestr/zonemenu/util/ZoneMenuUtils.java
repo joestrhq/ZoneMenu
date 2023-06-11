@@ -29,7 +29,7 @@ package at.joestr.zonemenu.util;
  */
 public class ZoneMenuUtils {
 
-  public static String RegionFormatZone = "{creator}+{count}";
+  public static String RegionFormatZone = "__zonemenu__{creator}+{count}";
   public static String RegionFormatSubZone = "{parent}-{count}";
 
   public static String createRegionNameFor(String playerName, int count) {
@@ -41,10 +41,10 @@ public class ZoneMenuUtils {
   }
 
   public static String regionToZoneName(String regionName) {
-    return regionName.replace('+', '#').replace('-', '.');
+    return regionName.replace('+', '#').replace('-', '.').replace("__zonemenu__", "");
   }
 
   public static String zoneToRegionName(String zoneName) {
-    return zoneName.replace('#', '+').replace('.', '-');
+    return "__zonemenu__" + zoneName.replace('#', '+').replace('.', '-');
   }
 }

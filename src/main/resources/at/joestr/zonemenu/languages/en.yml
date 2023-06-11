@@ -58,11 +58,12 @@ commands:
     owners: '[""%prefix,{"text":"Owners: ","color":"aqua"},{"text":"%zoneownerslist","color":"gray"}]'
     members: '[""%prefix,{"text":"Members: ","color":"aqua"},{"text":"%zonememberslist","color":"gray"}]'
     flag: '[""%prefix,{"text":"Flag: ","color":"aqua"},{"text":"%flagname","color":"gray"},{"text":" - Flag value: ","color":"aqua"},{"text":"%flagvalue","color":"gray"}]'
-    start: '[""%prefix,{"text":"Starting","color":"yellow"},{"text":" point:","color":"aqua"},{"text":" X: %xcoord","color":"gray"},{"text":" /","color":"aqua"},{"text":" Z: %zcoord","color":"gray"}]'
-    end: '[""%prefix,{"text":"Ending","color":"purple"},{"text":" point:","color":"aqua"},{"text":" X: %xcoord","color":"gray"},{"text":" /","color":"aqua"},{"text":" Z: %zcoord","color":"gray"}]'
+    start: '[""%prefix,{"text":"Starting","color":"dark_purple"},{"text":" point: ","color":"aqua"},{"text":"XYZ","color":"gray"},{"text":": ","color":"aqua"},{"text":"%pos_x/%pos_y/%pos_z","color":"gray"}]'
+    end: '[""%prefix,{"text":"Ending","color":"light_purple"},{"text":" point: ","color":"aqua"},{"text":"XYZ","color":"gray"},{"text":": ","color":"aqua"},{"text":"%pos_x/%pos_y/%pos_z","color":"gray"}]'
     area: '[""%prefix,{"text":"Area: ","color":"aqua"},{"text":"%area","color":"gray"}]'
+    volume: '[""%prefix,{"text":"Volume: ","color":"aqua"},{"text":"%volume","color":"gray"}]'
   zone-delete:
-    success: '[""%prefix,{"text":"Zone ","color":"red"},{"text":"%zonename","color":"gray"},{"text":" deleted.","color":"red"}]'
+    success: '[""%prefix,{"text":"Zone ","color":"green"},{"text":"%zonename","color":"gray"},{"text":" deleted.","color":"red"}]'
   zone-select:
     selection_cleared: '[""%prefix,{"text":"Zone unselected.","color":"green"}]'
     success: '[""%prefix,{"text":"Zone ","color":"green"},{"text":"%zonename","color":"gray"},{"text":" selected.","color":"green"}]'
