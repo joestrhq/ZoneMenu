@@ -110,6 +110,7 @@ public class CommandZoneDelete implements TabExecutor {
       new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
         .path(CurrentEntries.LANG_CMD_ZONE_DELETE_SUCCESS.toString())
+        .modify(s -> s.replace("%zonename", zoneName))
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
         .showPrefix(true)
         .receiver(sender)
