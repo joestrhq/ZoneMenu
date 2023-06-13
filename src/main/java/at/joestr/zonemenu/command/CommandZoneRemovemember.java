@@ -28,8 +28,10 @@ import at.joestr.javacommon.configuration.LocaleHelper;
 import at.joestr.javacommon.spigotutils.MessageHelper;
 import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
+import at.joestr.zonemenu.util.ZoneMenuUtils;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.BiFunction;
@@ -63,6 +65,7 @@ public class CommandZoneRemovemember implements TabExecutor {
     }
 
     String zoneName = args[1];
+    String regionName = ZoneMenuUtils.zoneToRegionName(zoneName);
     String targetPlayerName = args[2];
     Player player = (Player) sender;
 
@@ -81,7 +84,7 @@ public class CommandZoneRemovemember implements TabExecutor {
       }
 
       for (ProtectedRegion pr : t) {
-        if (pr.getId().equalsIgnoreCase(zoneName)) {
+        if (pr.getId().equalsIgnoreCase(regionName)) {
           protectedregion = pr;
         }
       }
@@ -135,6 +138,30 @@ public class CommandZoneRemovemember implements TabExecutor {
 
   @Override
   public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-    return List.of();
+    List<String> result = new ArrayList<>();
+
+    if (!(sender instanceof Player)) {
+      return List.of();
+    }
+
+    Player player = (Player) sender;
+
+    if (!player.hasPermission(CurrentEntries.PERM_CMD_ZONE_ADDMEMBER.toString())) {
+      return List.of();
+    }
+
+    if (args.length <= 1) {
+      for (ProtectedRegion region : ZoneMenuManager.getInstance().getRegions(player, false)) {
+        result.add(ZoneMenuUtils.regionToZoneName(region.getId()));
+      }
+
+      if (args.length == 1) {
+        result.removeIf((s) -> s.startsWith(args[0]));
+      }
+
+      return result;
+    }
+
+    return result;
   }
 }

@@ -109,6 +109,10 @@ public enum CurrentEntries {
   /**
    * Placeholders: %prefix
    */
+  LANG_CMD_ZONE_FIND_ALREADY_ACTIVATED("commands.zone-find.already-activated"),
+  /**
+   * Placeholders: %prefix
+   */
   LANG_CMD_ZONE_FIND_ACTIVATED("commands.zone-find.activated"),
   /**
    * Placeholders: %prefix
@@ -218,7 +222,9 @@ public enum CurrentEntries {
   LANG_CMD_ZONE_UPDATE_AVAILABLE("commands.zone-update.available"),
   LANG_CMD_ZONE_UPDATE_DOWNLOADED("command.zone-update.downloaded"),
   LANG_EVT_FIND_FOUND("events.find.found"),
+  LANG_EVT_FIND_ACTIONBAR_FOUND("events.find.actionbar_found"),
   LANG_EVT_FIND_FOUND_NONE("events.find.found_none"),
+  LANG_EVT_FIND_ACTIONBAR_FOUND_NONE("events.find.actionbar_found_none"),
   /**
    * Placeholders: %prefix
    */
