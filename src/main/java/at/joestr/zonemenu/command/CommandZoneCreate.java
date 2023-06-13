@@ -104,9 +104,6 @@ public class CommandZoneCreate implements TabExecutor {
       return true;
     }
 
-    //if (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == null) {
-    //  return true;
-    //}
     final Region selectedRegion = selectedRegion_;
 
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
@@ -228,34 +225,11 @@ public class CommandZoneCreate implements TabExecutor {
         LOG.log(Level.SEVERE, "", ex);
       }
 
-      // Create a new domain
       DefaultDomain domain = new DefaultDomain();
-
-      // Wrap player and add it to the domain
       domain.addPlayer(wrapedPlayer);
-
-      // Apply the domain to owners
       protectedCuboidRegion.setOwners(domain);
-
-      // Set the priority to the specified value in the config file
       protectedCuboidRegion.setPriority(AppConfiguration.getInstance().getInt(CurrentEntries.CONF_PRIORITY.toString()));
 
-      // Some flags
-      /*
-             * ProtectRegion.setFlag(DefaultFlag.CREEPER_EXPLOSION, StateFlag.State.DENY);
-             * ProtectRegion.setFlag(DefaultFlag.ENDERDRAGON_BLOCK_DAMAGE,
-             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.TNT,
-             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.FIRE_SPREAD,
-             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.OTHER_EXPLOSION,
-             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.ENDER_BUILD,
-             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.GHAST_FIREBALL,
-             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.LAVA_FIRE,
-             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.PVP,
-             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.MOB_DAMAGE,
-             * StateFlag.State.DENY); ProtectRegion.setFlag(DefaultFlag.MOB_SPAWNING,
-             * StateFlag.State.DENY);
-       */
-      // Finally, add the region to worlds region manager
       WorldGuard
         .getInstance()
         .getPlatform()

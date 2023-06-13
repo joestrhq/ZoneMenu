@@ -30,6 +30,7 @@ import at.joestr.zonemenu.configuration.CurrentEntries;
 import at.joestr.zonemenu.util.ZoneMenuManager;
 import at.joestr.zonemenu.util.ZoneMenuMode;
 import at.joestr.zonemenu.util.ZoneMenuPlayer;
+import at.joestr.zonemenu.util.ZoneMenuUtils;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldguard.WorldGuard;
@@ -100,7 +101,7 @@ public class PlayerInteractZoneFind implements Listener {
 
       List<String> foundRegions = new ArrayList<>();
       for (ProtectedRegion region : regiononloc) {
-        foundRegions.add(region.getId().replace("+", "#").replace("-", "."));
+        foundRegions.add(ZoneMenuUtils.regionToZoneName(region.getId()));
       }
 
       if (foundRegions.isEmpty()) {

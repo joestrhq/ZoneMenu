@@ -220,6 +220,30 @@ public class CommandZoneInfo implements TabExecutor {
 
   @Override
   public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-    return List.of();
+    List<String> result = new ArrayList<>();
+
+    if (!(sender instanceof Player)) {
+      return List.of();
+    }
+
+    Player player = (Player) sender;
+
+    if (!player.hasPermission(CurrentEntries.PERM_CMD_ZONE_ADDMEMBER.toString())) {
+      return List.of();
+    }
+
+    if (args.length <= 1) {
+      for (ProtectedRegion region : ZoneMenuManager.getInstance().getRegions(player, false)) {
+        result.add(ZoneMenuUtils.regionToZoneName(region.getId()));
+      }
+
+      if (args.length == 1) {
+        result.removeIf((s) -> s.startsWith(args[0]));
+      }
+
+      return result;
+    }
+
+    return result;
   }
 }

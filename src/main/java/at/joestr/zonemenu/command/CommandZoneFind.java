@@ -64,6 +64,17 @@ public class CommandZoneFind implements TabExecutor {
     Player player = (Player) sender;
 
     ZoneMenuManager.getInstance().zoneMenuPlayers.putIfAbsent(player, new ZoneMenuPlayer(player));
+
+    if (ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).getToolType() == ZoneMenuMode.FIND) {
+      new MessageHelper(languageResolverFunction)
+        .locale(LocaleHelper.resolve(player.getLocale()))
+        .path(CurrentEntries.LANG_CMD_ZONE_FIND_ALREADY_ACTIVATED.toString())
+        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+        .showPrefix(true)
+        .receiver(sender)
+        .send();
+    }
+
     ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(ZoneMenuMode.FIND);
 
     new MessageHelper(languageResolverFunction)

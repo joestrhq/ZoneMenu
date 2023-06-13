@@ -177,11 +177,6 @@ public class ZoneMenuManager {
    */
   public List<ProtectedRegion> getRegions(final Player player, final Boolean showMessage) {
 
-    if (showMessage) {
-
-      // TODO: send wait message
-    }
-
     List<ProtectedRegion> protectedRegions = new ArrayList<>();
     RegionContainer rc = WorldGuard.getInstance().getPlatform().getRegionContainer();
     RegionManager regeionManager = rc.get(BukkitAdapter.adapt(player.getWorld()));
