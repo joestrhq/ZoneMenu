@@ -73,6 +73,7 @@ public class CommandZoneFind implements TabExecutor {
         .showPrefix(true)
         .receiver(sender)
         .send();
+      return true;
     }
 
     ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(ZoneMenuMode.FIND);

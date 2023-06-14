@@ -109,7 +109,7 @@ public enum CurrentEntries {
   /**
    * Placeholders: %prefix
    */
-  LANG_CMD_ZONE_FIND_ALREADY_ACTIVATED("commands.zone-find.already-activated"),
+  LANG_CMD_ZONE_FIND_ALREADY_ACTIVATED("commands.zone-find.already_activated"),
   /**
    * Placeholders: %prefix
    */

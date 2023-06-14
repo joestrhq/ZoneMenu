@@ -228,10 +228,6 @@ public class CommandZoneInfo implements TabExecutor {
 
     Player player = (Player) sender;
 
-    if (!player.hasPermission(CurrentEntries.PERM_CMD_ZONE_ADDMEMBER.toString())) {
-      return List.of();
-    }
-
     if (args.length <= 1) {
       for (ProtectedRegion region : ZoneMenuManager.getInstance().getRegions(player, false)) {
         result.add(ZoneMenuUtils.regionToZoneName(region.getId()));
