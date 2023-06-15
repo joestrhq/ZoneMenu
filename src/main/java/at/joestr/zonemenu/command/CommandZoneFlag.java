@@ -619,8 +619,8 @@ public class CommandZoneFlag implements TabExecutor {
         result.add(ZoneMenuUtils.regionToZoneName(region.getId()));
       }
 
-      if (args.length == 1) {
-        result.removeIf((s) -> s.startsWith(args[0]));
+      if (args.length == 1 && !args[0].isEmpty()) {
+        result.removeIf((s) -> !s.startsWith(args[0]));
       }
 
       return result;
@@ -631,8 +631,8 @@ public class CommandZoneFlag implements TabExecutor {
         result.add(flag.getName());
       }
 
-      if (args.length == 2) {
-        result.removeIf((s) -> s.startsWith(args[1]));
+      if (args.length == 2 && !args[1].isEmpty()) {
+        result.removeIf((s) -> !s.startsWith(args[1]));
       }
 
       return result;

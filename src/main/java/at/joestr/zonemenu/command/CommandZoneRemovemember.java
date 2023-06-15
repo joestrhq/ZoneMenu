@@ -64,9 +64,9 @@ public class CommandZoneRemovemember implements TabExecutor {
       return false;
     }
 
-    String zoneName = args[1];
+    String zoneName = args[0];
     String regionName = ZoneMenuUtils.zoneToRegionName(zoneName);
-    String targetPlayerName = args[2];
+    String targetPlayerName = args[1];
     Player player = (Player) sender;
 
     ZoneMenuManager.getInstance().futuristicRegionProcessing(player, true, (List<ProtectedRegion> t, Throwable u) -> {
@@ -151,8 +151,8 @@ public class CommandZoneRemovemember implements TabExecutor {
         result.add(ZoneMenuUtils.regionToZoneName(region.getId()));
       }
 
-      if (args.length == 1) {
-        result.removeIf((s) -> s.startsWith(args[0]));
+      if (args.length == 1 && !args[0].isEmpty()) {
+        result.removeIf((s) -> !s.startsWith(args[0]));
       }
 
       return result;
