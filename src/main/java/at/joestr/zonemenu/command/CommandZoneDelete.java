@@ -138,8 +138,8 @@ public class CommandZoneDelete implements TabExecutor {
         result.add(ZoneMenuUtils.regionToZoneName(region.getId()));
       }
 
-      if (args.length == 1) {
-        result.removeIf((s) -> s.startsWith(args[0]));
+      if (args.length == 1 && !args[0].isEmpty()) {
+        result.removeIf((s) -> !s.startsWith(args[0]));
       }
 
       return result;
