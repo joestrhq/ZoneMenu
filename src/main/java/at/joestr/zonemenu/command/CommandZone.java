@@ -41,10 +41,12 @@ import org.bukkit.entity.Player;
 
 public class CommandZone implements TabExecutor {
 
-  private final BiFunction<String, Locale, String> languageResolverFunction = LanguageConfiguration.getInstance().getResolver();
+  private final BiFunction<String, Locale, String> languageResolverFunction =
+      LanguageConfiguration.getInstance().getResolver();
 
   @Override
-  public boolean onCommand(CommandSender sender, Command command, String label, String[] args) throws NotImplementedException {
+  public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+      throws NotImplementedException {
     if (sender instanceof Player) {
       return handleCommandExecution((Player) sender, command, label, args);
     } else if (sender instanceof BlockCommandSender) {
@@ -54,12 +56,14 @@ public class CommandZone implements TabExecutor {
     } else if (sender instanceof RemoteConsoleCommandSender) {
       throw new NotImplementedException();
     } else {
-      throw new NotImplementedException("Command execution from neither Player, BlockCommandSender, ConsoleCommandSender nor RemoteConsoleCommandSender is not supported.");
+      throw new NotImplementedException(
+          "Command execution from neither Player, BlockCommandSender, ConsoleCommandSender nor RemoteConsoleCommandSender is not supported.");
     }
   }
 
   @Override
-  public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+  public List<String> onTabComplete(
+      CommandSender sender, Command command, String label, String[] args) {
     if (sender instanceof Player) {
       return handleTabCompletion((Player) sender, command, label, args);
     } else if (sender instanceof BlockCommandSender) {
@@ -69,133 +73,146 @@ public class CommandZone implements TabExecutor {
     } else if (sender instanceof RemoteConsoleCommandSender) {
       throw new NotImplementedException();
     } else {
-      throw new NotImplementedException("Tab completion from neither Player, BlockCommandSender, ConsoleCommandSender nor RemoteConsoleCommandSender is not supported.");
+      throw new NotImplementedException(
+          "Tab completion from neither Player, BlockCommandSender, ConsoleCommandSender nor RemoteConsoleCommandSender is not supported.");
     }
   }
 
-  private boolean handleCommandExecution(Player player, Command command, String label, String[] args) {
+  private boolean handleCommandExecution(
+      Player player, Command command, String label, String[] args) {
     new MessageHelper(languageResolverFunction)
-      .locale(LocaleHelper.resolve(player.getLocale()))
-      .path(CurrentEntries.LANG_CMD_ZONE_X_HEADER.toString())
-      .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-      .showPrefix(true)
-      .receiver(player)
-      .send();
-
-    if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_FIND.toString())) {
-      new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_FIND.toString())
+        .path(CurrentEntries.LANG_CMD_ZONE_X_HEADER.toString())
         .prefixPath(CurrentEntries.LANG_PREFIX.toString())
         .showPrefix(true)
         .receiver(player)
         .send();
+
+    if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_FIND.toString())) {
+      new MessageHelper(languageResolverFunction)
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_FIND.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
     }
 
     if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_CREATE.toString())) {
       new MessageHelper(languageResolverFunction)
-        .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_CREATE.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-        .showPrefix(true)
-        .receiver(player)
-        .send();
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_CREATE.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
     }
 
     if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_SUBCREATE.toString())) {
       new MessageHelper(languageResolverFunction)
-        .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_SUBCREATE.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-        .showPrefix(true)
-        .receiver(player)
-        .send();
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_SUBCREATE.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
     }
 
     if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_CANCEL.toString())) {
       new MessageHelper(languageResolverFunction)
-        .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_CANCEL.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-        .showPrefix(true)
-        .receiver(player)
-        .send();
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_CANCEL.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
+    }
+
+    if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_LIST.toString())) {
+      new MessageHelper(languageResolverFunction)
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_LIST.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
     }
 
     if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_ADDMEMBER.toString())) {
       new MessageHelper(languageResolverFunction)
-        .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_ADDMEMBER.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-        .showPrefix(true)
-        .receiver(player)
-        .send();
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_ADDMEMBER.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
     }
 
     if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_REMOVEMEMBER.toString())) {
       new MessageHelper(languageResolverFunction)
-        .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_REMOVEMEMBER.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-        .showPrefix(true)
-        .receiver(player)
-        .send();
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_REMOVEMEMBER.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
     }
 
     if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_FLAG.toString())) {
       new MessageHelper(languageResolverFunction)
-        .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_FLAG.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-        .showPrefix(true)
-        .receiver(player)
-        .send();
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_FLAG.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
     }
 
     if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_INFO.toString())) {
       new MessageHelper(languageResolverFunction)
-        .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_INFO.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-        .showPrefix(true)
-        .receiver(player)
-        .send();
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_INFO.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
     }
 
     if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_DELETE.toString())) {
       new MessageHelper(languageResolverFunction)
-        .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_DELETE.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-        .showPrefix(true)
-        .receiver(player)
-        .send();
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_DELETE.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
     }
 
     if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_SELECT.toString())) {
       new MessageHelper(languageResolverFunction)
-        .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_SELECT.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-        .showPrefix(true)
-        .receiver(player)
-        .send();
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_SELECT.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
     }
 
     if (player.hasPermission(CurrentEntries.PERM_CMD_ZONE_UPDATE.toString())) {
       new MessageHelper(languageResolverFunction)
-        .locale(LocaleHelper.resolve(player.getLocale()))
-        .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_UPDATE.toString())
-        .prefixPath(CurrentEntries.LANG_PREFIX.toString())
-        .showPrefix(true)
-        .receiver(player)
-        .send();
+          .locale(LocaleHelper.resolve(player.getLocale()))
+          .path(CurrentEntries.LANG_CMD_ZONE_X_MSG_UPDATE.toString())
+          .prefixPath(CurrentEntries.LANG_PREFIX.toString())
+          .showPrefix(true)
+          .receiver(player)
+          .send();
     }
 
     return true;
   }
 
-  private List<String> handleTabCompletion(Player player, Command command, String label, String[] args) {
+  private List<String> handleTabCompletion(
+      Player player, Command command, String label, String[] args) {
     return List.of();
   }
 }
