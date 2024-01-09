@@ -96,7 +96,7 @@ public class PlayerInteractZoneSubcreate implements Listener {
       );
 
       World playerworld = zoneMenuPlayer.getCreateWorld();
-      Location playerpos1 = zoneMenuPlayer.getCreateCorner1().clone();
+      Location playerpos1 = zoneMenuPlayer.getSubcreateCorner1().clone();
 
       new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
@@ -221,7 +221,7 @@ public class PlayerInteractZoneSubcreate implements Listener {
         ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner1(), player,
           Material.GLOWSTONE, (byte) 0);
 
-        Location playerpos1 = zoneMenuPlayer.getSubcreateCorner1().clone();
+        Location playerpos1 = zoneMenuPlayer.getSubcreateCorner2().clone();
 
         LocalSession session
           = WorldEdit
