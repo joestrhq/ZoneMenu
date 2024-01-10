@@ -95,7 +95,7 @@ public class PlayerInteractZoneSubcreate implements Listener {
         (byte) 0
       );
 
-      World playerworld = zoneMenuPlayer.getCreateWorld();
+      World playerworld = zoneMenuPlayer.getSubcreateWorld();
       Location playerpos1 = zoneMenuPlayer.getSubcreateCorner1().clone();
 
       new MessageHelper(languageResolverFunction)
@@ -200,8 +200,8 @@ public class PlayerInteractZoneSubcreate implements Listener {
       ZoneMenuManager.getInstance().zoneMenuSubcreateCorner.create(zoneMenuPlayer.getSubcreateCorner2(), player,
         Material.SEA_LANTERN, (byte) 0);
 
-      World playerworld = zoneMenuPlayer.getCreateWorld();
-      Location playerpos2 = zoneMenuPlayer.getCreateCorner2().clone();
+      World playerworld = zoneMenuPlayer.getSubcreateWorld();
+      Location playerpos2 = zoneMenuPlayer.getSubcreateCorner2().clone();
 
       new MessageHelper(languageResolverFunction)
         .locale(LocaleHelper.resolve(player.getLocale()))
