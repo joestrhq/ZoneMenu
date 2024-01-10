@@ -107,7 +107,7 @@ public enum CurrentEntries {
   /** Placeholders: %prefix */
   LANG_CMD_ZONE_SUBCREATE_CIRCULAR("commands.zone-subcreate.circular"),
   /** Placeholders: %prefix, %zonename */
-  LANG_CMD_ZONE_SUBCREATE_CREATED("command.zone-subcreate.created"),
+  LANG_CMD_ZONE_SUBCREATE_CREATED("commands.zone-subcreate.created"),
   /** Placeholders: %prefix */
   LANG_CMD_ZONE_CANCEL_NOT_RUNNING("commands.zone-cancel.not_running"),
   /** Placeholders: %prefix */
