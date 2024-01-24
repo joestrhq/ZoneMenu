@@ -34,6 +34,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.BiFunction;
 import java.util.logging.Logger;
+import org.bukkit.Bukkit;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -76,7 +81,12 @@ public class CommandZoneFind implements TabExecutor {
       return true;
     }
 
-    ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(ZoneMenuMode.FIND);
+    ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setToolType(
+      ZoneMenuMode.FIND
+    );
+    ZoneMenuManager.getInstance().zoneMenuPlayers.get(player).setZoneFindBossbar(
+      Bukkit.createBossBar("-", BarColor.GREEN, BarStyle.SOLID)
+    );
 
     new MessageHelper(languageResolverFunction)
       .locale(LocaleHelper.resolve(player.getLocale()))
