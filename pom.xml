@@ -77,30 +77,17 @@
     
   <repositories>
     <repository>
-      <id>joestrhq-public-releases-repo</id>
-      <name>joestrhq's public repo for releases</name>
-      <url>https://mvn-repo.joestr.at/repository/releases/</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-        <checksumPolicy>fail</checksumPolicy>
-      </releases>
+      <id>central</id>
+      <layout>default</layout>
+      <url>https://repo1.maven.org/maven2</url>
     </repository>
     <repository>
-      <id>joestrhq-public-snapshots-repo</id>
-      <name>joestrhq's public repo for snapshots</name>
-      <url>https://mvn-repo.joestr.at/repository/snapshots/</url>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-        <checksumPolicy>fail</checksumPolicy>
-      </snapshots>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
+        <id>spigot-repo</id>
+        <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+    </repository>
+    <repository>
+      <id>sk89q-repo</id>
+      <url>https://maven.enginehub.org/repo/</url>
     </repository>
   </repositories>
     
