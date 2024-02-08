@@ -1,0 +1,127 @@
+name: ZoneMenu
+version: ${project.version}
+api-version: 1.19
+description: ZoneMenu enhances the usage of WorldGuard for players.
+author: joestr
+website: https://projects.joestr.at/zonemenu/
+main: at.joestr.zonemenu.ZoneMenuPlugin
+database: false
+depend: [WorldEdit, WorldGuard]
+
+commands:
+  zone:
+    description: Opens the interactive menu.
+    permission: zonemenu.commands.zone
+    permission-message: '§cYou are lacking permission §fzonemenu.commands.zone§c!'
+    usage: '§cSyntax error! Use: §f/<command>'
+  zone-find:
+    description: Search for a zone.
+    permission: zonemenu.commands.zone-find
+    permission-message: '§cYou are lacking permission §fzonemenu.commands.zone-find§c!'
+    usage: '§cSyntax error! Use: §f/<command>'
+  zone-create:
+    description: Creates a zone.
+    permission: zonemenu.commands.zone-create
+    permission-message: '§cYou are lacking permission §fzonemenu.commands.zone-create§c!'
+    usage: '§cSyntax error! Use: §f/<command>'
+  zone-subcreate:
+    description: Creates a subzone.
+    permission: zonemenu.commands.zone-subcreate
+    permission-message: '§cYou are lacking permission §fzonemenu.commands.zone-subcreate§c!'
+    usage: '§cSyntax error! Use: §f/<command> <Zone>'
+  zone-cancel:
+    description: Quits a zone or subzone creation.
+    permission: zonemenu.commands.zone-cancel
+    permission-message: '§cYou are lacking permission §fzonemenu.commands.zone-cancel§c!'
+    usage: '§cSyntax error! Use: §f/<command>'
+  zone-addmember:
+    description: Adds a member to a zone.
+    permission: zonemenu.commands.zone-addmember
+    permission-message: '§cYou are lacking permission §fzonemenu.commands.zone-addmember§c!'
+    usage: '§cSyntax error! Use: §f/<command> <Zone> <Player>'
+  zone-removemember:
+    description: Removes a member to a zone.
+    permission: zonemenu.commands.zone-removemember
+    permission-message: '§cYou are lacking permission §fzonemenu.commands.zone-removemember§c!'
+    usage: '§cSyntax error! Use: §f/<command> <Zone> <Player>'
+  zone-flag:
+    description: Change a flag to another value.
+    permission: zonemenu.commands.zone-flag
+    permission-message: '§cYou are lacking permission §fzonemenu.commands.zone-flag§c!'
+    usage: '§cSyntax error! Use: §f/<command> <Zone> <Flag> <Flag value>'
+  zone-list:
+    description: List all your zones.
+    permission: zonemenu.commands.zone-list
+    permission-message: '§cYou are lacking permission §fzonemenu.commands.zone-list§c!'
+    usage: '§cSyntax error! Use: §f/<command>'
+  zone-info:
+    description: Get information about a zone.
+    permission: zonemenu.commands.zone-info
+    permission-message: '§cYou are lacking permission §fzonemenu.commands.zone-info§c!'
+    usage: '§cSyntax error! Use: §f/<command> <Zone>'
+  zone-delete:
+    description: Delete a zone.
+    permission: zonemenu.commands.zone-delete
+    permission-message: '§cYou are lacking permission §fzonemenu.commands.zone-delete§c!'
+    usage: '§cSyntax error! Use: §f/<command> <Zone>'
+  zone-select:
+    description: Selects a zone.
+    permission: zonemenu.commands.zone-select
+    permission-message: '§cYou are lacking permission §fzonemenu.commands.zone-select§c!'
+    usage: '§cSyntax error! Use: §f/<command> <Zone>'
+  zone-update:
+    description: Updates the plugin.
+    permission: zonemenu.commands.zone-update
+    permission-message: '§cYou are lacking permission §fzonemenu.commands.zone-update§c!'
+    usage: '§cSyntax error! Use: §f/<command>'
+    
+permissions:
+  zonemenu.commands.*:
+    description: Permission to list all possible sub-commands.
+    children:
+      zonemenu.commands.zone: true
+      zonemenu.commands.zone-find: true
+      zonemenu.commands.zone-create: true
+      zonemenu.commands.zone-subcreate: true
+      zonemenu.commands.zone-cancel: true
+      zonemenu.commands.zone-addmember: true
+      zonemenu.commands.zone-removemember: true
+      zonemenu.commands.zone-flag: true
+      zonemenu.commands.zone-list: true
+      zonemenu.commands.zone-info: true
+      zonemenu.commands.zone-delete: true
+      zonemenu.commands.zone-select: true
+      zonemenu.commands.zone-update: true
+  zonemenu.presets.admin:
+    description: Preset for administrative commands.
+    default: op
+    children:
+      zonemenu.commands.zone: true
+      zonemenu.commands.zone-find: true
+      zonemenu.commands.zone-create: true
+      zonemenu.commands.zone-subcreate: true
+      zonemenu.commands.zone-cancel: true
+      zonemenu.commands.zone-addmember: true
+      zonemenu.commands.zone-removemember: true
+      zonemenu.commands.zone-flag: true
+      zonemenu.commands.zone-list: true
+      zonemenu.commands.zone-info: true
+      zonemenu.commands.zone-delete: true
+      zonemenu.commands.zone-select: true
+      zonemenu.commands.zone-update: true
+  zonemenu.presets.admin:
+    description: Preset for player commands.
+    children:
+      zonemenu.commands.zone: true
+      zonemenu.commands.zone-find: true
+      zonemenu.commands.zone-create: true
+      zonemenu.commands.zone-subcreate: true
+      zonemenu.commands.zone-cancel: true
+      zonemenu.commands.zone-addmember: true
+      zonemenu.commands.zone-removemember: true
+      zonemenu.commands.zone-flag: true
+      zonemenu.commands.zone-list: true
+      zonemenu.commands.zone-info: true
+      zonemenu.commands.zone-delete: true
+      zonemenu.commands.zone-select: true
+      zonemenu.commands.zone-update: false
