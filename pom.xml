@@ -4,17 +4,20 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 >
   <modelVersion>4.0.0</modelVersion>
+  
+  <groupId>at.joestr.zonemenu</groupId>
+  <artifactId>parent</artifactId>
+  <version>0.3.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  
+  <modules>
+      <module>dependency-spigot-api</module>
+      <module>dependency-worldedit</module>
+      <module>dependency-worldguard</module>
+      <module>spigot-plugin</module>
+  </modules>
     
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-  </properties>
-    
-  <groupId>at.joestr</groupId>
-  <artifactId>zonemenu</artifactId>
-  <version>0.2.0-SNAPSHOT</version>
-    
-  <name>ZoneMenu</name>
+  <name>ZoneMenu :: Parent</name>
   <description>Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)</description>
   <url>https://joestr.github.io/ZoneMenu/</url>
   <inceptionYear>2017</inceptionYear>
@@ -81,211 +84,5 @@
       <layout>default</layout>
       <url>https://repo1.maven.org/maven2</url>
     </repository>
-    <repository>
-        <id>spigot-repo</id>
-        <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-    </repository>
-    <repository>
-      <id>sk89q-repo</id>
-      <url>https://maven.enginehub.org/repo/</url>
-    </repository>
   </repositories>
-    
-  <dependencies>
-    <dependency>
-      <groupId>at.joestr.javacommon</groupId>
-      <artifactId>configuration</artifactId>
-      <version>0.3.1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>at.joestr.javacommon</groupId>
-      <artifactId>spigotutils</artifactId>
-      <version>0.3.1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>at.joestr.javacommon</groupId>
-      <artifactId>updater</artifactId>
-      <version>0.3.1-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.spigotmc</groupId>
-      <artifactId>spigot-api</artifactId>
-      <version>1.19.2-R0.1-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.sk89q.worldedit</groupId>
-      <artifactId>worldedit-bukkit</artifactId>
-      <version>7.3.0-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.sk89q.worldguard</groupId>
-      <artifactId>worldguard-bukkit</artifactId>
-      <version>7.1.0-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>me.lucko</groupId>
-      <artifactId>commodore</artifactId>
-      <version>1.3</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.vdurmont</groupId>
-      <artifactId>semver4j</artifactId>
-      <version>2.2.0</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
-      <groupId>org.bstats</groupId>
-      <artifactId>bstats-bukkit</artifactId>
-      <version>3.0.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.12.0</version>
-      <scope>compile</scope>
-      <type>jar</type>
-    </dependency>
-  </dependencies>
-    
-  <pluginRepositories>
-    <pluginRepository>
-      <id>joestrhq-public-releases-repo</id>
-      <name>joestrhq's public repo for releases</name>
-      <url>https://mvn-repo.joestr.at/repository/releases/</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-        <checksumPolicy>fail</checksumPolicy>
-      </releases>
-    </pluginRepository>
-    <pluginRepository>
-      <id>joestrhq-public-snapshots-repo</id>
-      <name>joestrhq's public repo for snapshots</name>
-      <url>https://mvn-repo.joestr.at/repository/snapshots/</url>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>always</updatePolicy>
-        <checksumPolicy>fail</checksumPolicy>
-      </snapshots>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </pluginRepository>
-  </pluginRepositories>
-    
-  <build>
-    <resources>
-      <resource>
-        <directory>${project.basedir}/src/main/resources</directory>
-        <includes>
-          <include>**/*.yml</include>
-          <include>**/*.properties</include>
-        </includes>
-        <filtering>true</filtering>
-      </resource>
-    </resources>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>3.2.1</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.3.1</version>
-        <configuration>
-          <doclint>none</doclint>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>3.0.0-M1</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.1</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <artifactSet>
-                <includes>
-                  <include>me.lucko:commodore</include>
-                  <include>com.vdurmont:semver4j</include>
-                  <include>at.joestr.javacommon:configuration</include>
-                  <include>at.joestr.javacommon:spigotutils</include>
-                  <include>at.joestr.javacommon:updater</include>
-                  <include>org.apache.commons:commons-lang3</include>
-                  <include>org.bstats:*</include>
-                </includes>
-              </artifactSet>
-              <relocations>
-                <relocation>
-                  <pattern>me.lucko.commodore</pattern>
-                  <shadedPattern>at.joestr.zonemenu.thirdparty.me.lucko.commodore</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>com.vdurmont.semver4j</pattern>
-                  <shadedPattern>at.joestr.zonemenu.thirdparty.com.vdurmont.semver4j</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>at.joestr.javacommon</pattern>
-                  <shadedPattern>at.joestr.zonemenu.thirdparty.at.joestr.javacommon</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>org.apache.commons</pattern>
-                  <shadedPattern>at.joestr.zonemenu.thirdparty.org.apache.commons</shadedPattern>
-                </relocation>
-                <relocation>
-                  <pattern>org.bstats</pattern>
-                  <shadedPattern>at.joestr.zonemenu.thirdparty.org.bstats</shadedPattern>
-                </relocation>
-              </relocations>
-              <shadedArtifactAttached>true</shadedArtifactAttached>
-              <shadedClassifierName>shaded</shadedClassifierName>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-  
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.1.2</version>
-        <configuration>
-          <configLocation>google_checks.xml</configLocation>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
 </project>
