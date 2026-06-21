@@ -1,86 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
   
-  <groupId>at.joestr.zonemenu</groupId>
-  <artifactId>parent</artifactId>
-  <version>0.3.0-SNAPSHOT</version>
-  <packaging>pom</packaging>
+    <groupId>at.joestr.zonemenu</groupId>
+    <artifactId>parent</artifactId>
+    <version>0.3.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
   
-  <modules>
-    <module>dependency-spigot-api</module>
-    <module>dependency-worldedit</module>
-    <module>dependency-worldguard</module>
-    <module>spigot-plugin</module>
-    <module>documentation</module>
-  </modules>
+    <modules>
+        <module>spigot-plugin</module>
+    </modules>
     
-  <name>ZoneMenu :: Parent</name>
-  <description>Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)</description>
-  <url>https://joestr.github.io/ZoneMenu/</url>
-  <inceptionYear>2017</inceptionYear>
+    <name>ZoneMenu :: Parent</name>
+    <description>Simple, interactive menu for region creation with WorldGuard (and WorldEdit) for players. (Spigot)</description>
+    <url>https://joestr.github.io/ZoneMenu/</url>
+    <inceptionYear>2017</inceptionYear>
     
-  <organization>
-    <name>joestr.at</name>
-    <url>https://www.joestr.at</url>
-  </organization>
+    <organization>
+        <name>joestr.at</name>
+        <url>https://www.joestr.at</url>
+    </organization>
     
-  <licenses>
-    <license>
-      <name>MIT license</name>
-      <distribution>repo</distribution>
-      <url>https://github.com/joestrhq/ZoneMenu/blob/master/LICENSE</url>
-    </license>
-  </licenses>
+    <licenses>
+        <license>
+            <name>MIT license</name>
+            <distribution>repo</distribution>
+            <url>https://github.com/joestrhq/ZoneMenu/blob/master/LICENSE</url>
+        </license>
+    </licenses>
     
-  <developers>
-    <developer>
-      <id>joestr</id>
-      <name>Joel Strasser</name>
-      <email>joelstrasser1@gmail.com</email>
-      <roles>
-        <role>developer</role>
-      </roles>
-      <url>https://www.joestr.priv.at</url>
-      <organization>joestr.at</organization>
-      <organizationUrl>https://www.joestr.at</organizationUrl>
-    </developer>
-  </developers>
+    <developers>
+        <developer>
+            <id>joestr</id>
+            <name>Joel Strasser</name>
+            <email>joelstrasser1@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <url>https://www.joestr.priv.at</url>
+            <organization>joestr.at</organization>
+            <organizationUrl>https://www.joestr.at</organizationUrl>
+        </developer>
+    </developers>
     
-  <scm>
-    <url>https://github.com/joestrhq/ZoneMenu/</url>
-    <connection>scm:git:https://github.com/joestrhq/ZoneMenu.git</connection>
-    <developerConnection>scm:git:https://github.com/joestrhq/ZoneMenu.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
+    <scm>
+        <url>https://github.com/joestrhq/ZoneMenu/</url>
+        <connection>scm:git:https://github.com/joestrhq/ZoneMenu.git</connection>
+        <developerConnection>scm:git:https://github.com/joestrhq/ZoneMenu.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
     
-  <ciManagement>
-    <url>https://ci.joestr.at/</url>
-    <system>gocd</system>
-    <notifiers>
-      <notifier>
-        <type>mail</type>
-        <sendOnSuccess>false</sendOnSuccess>
-        <sendOnWarning>true</sendOnWarning>
-        <sendOnError>true</sendOnError>
-        <sendOnFailure>true</sendOnFailure>
-        <configuration>
-          <address>joelstrasser1@gmail.com</address>
-        </configuration>
-      </notifier>
-    </notifiers>
-  </ciManagement>
+    <ciManagement>
+        <url>https://ci.joestr.at/</url>
+        <system>gocd</system>
+        <notifiers>
+            <notifier>
+                <type>mail</type>
+                <sendOnSuccess>false</sendOnSuccess>
+                <sendOnWarning>true</sendOnWarning>
+                <sendOnError>true</sendOnError>
+                <sendOnFailure>true</sendOnFailure>
+                <configuration>
+                    <address>joelstrasser1@gmail.com</address>
+                </configuration>
+            </notifier>
+        </notifiers>
+    </ciManagement>
     
-  <issueManagement>
-    <system>github</system>
-    <url>https://github.com/joestrhq/ZoneMenu/issues</url>
-  </issueManagement>
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/joestrhq/ZoneMenu/issues</url>
+    </issueManagement>
     
-  <repositories>
-    <repository>
-      <id>central</id>
-      <layout>default</layout>
-      <url>https://repo1.maven.org/maven2</url>
-    </repository>
-  </repositories>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <layout>default</layout>
+            <url>https://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>sonatypeoss-snapshots-repo</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>sonatypeosss01-snapshots-repo</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>spigotmc-snapshots-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>enginehub-mixed-repo</id>
+            <url>https://maven.enginehub.org/repo/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+    </repositories>
 </project>
